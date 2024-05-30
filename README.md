@@ -1,4 +1,4 @@
-# deepfakes
+# Deepfakes
 
 关于视频、图像与音频的深度伪造检测平台
 
