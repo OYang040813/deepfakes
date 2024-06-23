@@ -24,11 +24,33 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+
+<!--        mybatisPlus-->
+		<dependency>
+			<groupId>com.baomidou</groupId>
+			<artifactId>mybatis-plus-boot-starter</artifactId>
+			<version>3.5.1</version>
+		</dependency>
 		<dependency>
 			<groupId>org.mybatis.spring.boot</groupId>
 			<artifactId>mybatis-spring-boot-starter</artifactId>
 			<version>3.0.3</version>
 		</dependency>
+		<dependency>
+			<groupId>org.mybatis.spring.boot</groupId>
+			<artifactId>mybatis-spring-boot-starter-test</artifactId>
+			<version>3.0.3</version>
+			<scope>test</scope>
+		</dependency>
+<!--        mybatisPlus-->
+
+<!--         分页插件pagehelper -->
+		<dependency>
+			<groupId>com.github.pagehelper</groupId>
+			<artifactId>pagehelper-spring-boot-starter</artifactId>
+			<version>2.1.0</version>
+		</dependency>
+<!--         分页插件pagehelper -->
 
 		<!-- 代码生成器 -->
 		<dependency>
@@ -42,6 +64,22 @@
 			<artifactId>freemarker</artifactId>
 			<version>2.3.29</version>
 		</dependency>
+
+<!--		hutool组件以构建Token-->
+		<dependency>
+			<groupId>cn.hutool</groupId>
+			<artifactId>hutool-all</artifactId>
+			<version>5.8.0</version>
+		</dependency>
+<!--		hutool组件以构建Token-->
+
+<!--        auth0包用于Token生成-->
+		<dependency>
+			<groupId>com.auth0</groupId>
+			<artifactId>java-jwt</artifactId>
+			<version>3.10.3</version>
+		</dependency>
+<!--        auth0包用于Token生成-->
 
 		<dependency>
 			<groupId>com.mysql</groupId>
@@ -58,18 +96,15 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.mybatis.spring.boot</groupId>
-			<artifactId>mybatis-spring-boot-starter-test</artifactId>
-			<version>3.0.3</version>
-			<scope>test</scope>
-		</dependency>
+
+<!--		用于自动装配Bean-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-autoconfigure</artifactId>
 			<version>3.2.7-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
+<!--		用于自动装配Bean-->
 
 	<build>
 		<plugins>

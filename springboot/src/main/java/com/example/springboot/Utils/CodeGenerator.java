@@ -48,11 +48,10 @@ public class CodeGenerator {
 
         // 全局配置
         GlobalConfig globalConfig = new GlobalConfig();
-        String projectPath = System.getProperty("user.dir");
-        globalConfig.setOutputDir("D:\\开发工作\\deepfake\\deepfake\\springboot\\src\\main\\java");
+        globalConfig.setOutputDir("D:\\开发工作\\deepfakes\\springboot\\src\\main\\java");
         globalConfig.setAuthor(AUTHOR);
         globalConfig.setOpen(false);
-        globalConfig.setFileOverride(true);
+        globalConfig.setFileOverride(false);
         generator.setGlobalConfig(globalConfig);
 
         // 数据源配置

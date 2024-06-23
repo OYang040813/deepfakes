@@ -9,7 +9,7 @@ spring:
     password: root root  //数据库密码
 
 mybatis:
-  mapper-locations: classpath:mapper/*.xml
+  mapper-locations: D:\开发工作\deepfakes\springboot\src\main\java\com\example\springboot\gen\mapper\xml/*.xml
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: true

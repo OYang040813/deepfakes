@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 * @author oy
 */
     @RestController
-@RequestMapping("/gen/admin")
-        public class AdminController {
+@RequestMapping("/gen/user")
+        public class UserController {
 
     }
 
