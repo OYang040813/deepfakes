@@ -16,41 +16,41 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    IUserService userSevice;
+    IUserService userService;
 
     @PostMapping("/save")
     public Result save(@RequestBody User user){
-        userSevice.save(user);
+        userService.save(user);
         return Result.success();
     }
 
     @DeleteMapping("/delete/{id}")
     public Result delete(@PathVariable Integer id){
-        userSevice.deleteById(id);
+        userService.deleteById(id);
         return Result.success();
     }
 
     @PutMapping("/update")
     public Result update(@RequestBody User user){
-        userSevice.update(user);
+        userService.update(user);
         return Result.success();
     }
 
     @GetMapping("/{id}")
     public Result getById(@PathVariable Integer id){
-        User user = userSevice.getById(id);
+        User user = userService.getById(id);
         return Result.success(user);
     }
 
     @GetMapping("/list")
     public Result list(){
-        List<User> users = userSevice.list();
+        List<User> users = userService.list();
         return Result.success(users);
     }
 
     @GetMapping("/page")
     public Result page(UserPageRequest userPageRequest){
-        return Result.success(userSevice.page(userPageRequest));
+        return Result.success(userService.page(userPageRequest));
     }
 }
 
