@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.springboot.mapper.UserMapper">
+
+    <insert id="save">
+        insert into user(name, phone, email, sex, keynum, age, address, cardnum)
+        values (#{name}, #{phone}, #{email}, #{sex}, #{keynum}, #{age}, #{address}, #{cardnum})
+    </insert>
+
+    <update id="updateById">
+        update user
+        set name       = #{name},
+            phone      = #{phone},
+            email      = #{email},
+            sex        = #{sex},
+            keynum     = #{keynum},
+            age        = #{age},
+            address    = #{address},
+            cardnum    = #{cardnum},
+            updatetime = #{updatetime}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        delete
+        from user
+        where id = #{id}
+    </delete>
+
+    <select id="list" resultType="com.example.springboot.entity.User">
+        select *
+        from user
+    </select>
+
+    <select id="listByCondition" resultType="com.example.springboot.entity.User">
+        select * from user
+        <where>
+            <if test="name != null and name != ''">
+                name like concat('%',#{ name },'%')
+            </if>
+            <if test="phone != null and phone != ''">
+                phone like concat('%',#{ phone }, '%')
+            </if>
+        </where>
+        order by id desc
+    </select>
+    <select id="getById" resultType="com.example.springboot.entity.User">
+        select *
+        from user
+        where id = #{id}
+    </select>
+    <select id="getByName" resultType="com.example.springboot.entity.User">
+        select *
+        from user
+        where name = #{name}
+    </select>
+
+</mapper>
+

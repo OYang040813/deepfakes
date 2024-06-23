@@ -13,20 +13,20 @@ public class Result {
     private Object data; //数据库返回的数据类
     private String msg; //给予错误信息
 
-    public static Result success(){
+    public static Result success() {
         Result result = new Result();
         result.setCode(SUCCESS_CODE);
         return result;
     }
 
-    public static Result success(Object data){
+    public static Result success(Object data) {
         Result result = new Result();
         result.setCode(SUCCESS_CODE);
         result.setData(data);
         return result;
     }
 
-    public static Result error(String msg){
+    public static Result error(String msg) {
         Result result = new Result();
         result.setCode(ERROR_CODE);
         result.setMsg(msg);
