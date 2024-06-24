@@ -20,7 +20,7 @@
             placeholder="请输入密码"
           ></el-input>
         </el-form-item>
-        <el-form-item>
+        <el-form-item class="custom-button-position">
           <el-button type="primary" size="medium">登录</el-button>
         </el-form-item>
       </el-form>
@@ -47,14 +47,15 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+
 .login_container {
   width: 100%;
   height: 100vh;
   background-color: rgba(242, 242, 242, 1);
-  background-image: url(../../assets/login_bg.jpg);
+  background-image: url(../../assets/login.png);
   background-position: center bottom;
   background-repeat: no-repeat;
-  background-size: 1278px 559px;
+  background-size: 1380px 660px;
   border: none;
   border-radius: 0px;
   display: flex;
@@ -78,6 +79,11 @@ export default {
       margin-top:50px;
       margin-bottom: 30px;
       text-align: center;
+    }
+    .custom-button-position {
+      /* 你可以通过调整这些值来设置按钮的位置 */
+      margin-top: 20px;
+      margin-left: 120px;
     }
   }
 }
