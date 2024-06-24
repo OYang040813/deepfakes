@@ -15,7 +15,7 @@ import java.util.List;
  * @author oy
  */
 @RestController
-@RequestMapping("/gen/user")
+@RequestMapping("/user")
 public class UserController {
 
     @Autowired

@@ -2,5 +2,56 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.springboot.mapper.VidioMapper">
 
+    <insert id="save">
+        insert into vidio(name, pid, createtime, size, path, status, updatetime)
+        values (#{name}, #{pid}, #{createtime}, #{size}, #{path}, #{status}, #{updatetime})
+    </insert>
+
+    <update id="updateById">
+        update vidio
+        set name          = #{name},
+            pid           = #{pid},
+            createtime    = #{createtime},
+            size          = #{size},
+            path          = #{path},
+            status        = #{status},
+            updatetime    = #{updatetime}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        delete
+        from vidio
+        where id = #{id}
+    </delete>
+
+    <select id="list" resultType="com.example.springboot.entity.Vidio">
+        select *
+        from vidio
+    </select>
+
+    <select id="listByCondition" resultType="com.example.springboot.entity.Vidio">
+        select * from vidio
+        <where>
+            <if test="name != null and name != ''">
+                name like concat('%',#{ name },'%')
+            </if>
+            <if test="id != null and id != ''">
+                id like concat('%',#{id}, '%')
+            </if>
+        </where>
+        order by id asc
+    </select>
+    <select id="getById" resultType="com.example.springboot.entity.Vidio">
+        select *
+        from vidio
+        where id = #{id}
+    </select>
+    <select id="getByName" resultType="com.example.springboot.entity.Vidio">
+        select *
+        from vidio
+        where name = #{name}
+    </select>
+
 </mapper>
 

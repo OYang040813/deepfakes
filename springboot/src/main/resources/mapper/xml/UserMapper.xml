@@ -18,7 +18,8 @@
             age        = #{age},
             address    = #{address},
             cardnum    = #{cardnum},
-            updatetime = #{updatetime}
+            updatetime = #{updatetime},
+            isAuth = #{isAuth}
         where id = #{id}
     </update>
 

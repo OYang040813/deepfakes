@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author oy
  */
 @RestController
-@RequestMapping("/gen/image")
+@RequestMapping("/image")
 public class ImageController {
 
 }
