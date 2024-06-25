@@ -13,6 +13,7 @@ import com.example.springboot.request.BaseRequest;
 import com.example.springboot.request.LoginRequest;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,7 +49,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         Date date = new Date();
         user.setCardnum(DateUtil.format(date, "yyyyMMdd") + Math.abs(IdUtil.fastSimpleUUID().hashCode()));
         user.setUpdatetime(new Date());
-        //mt5+加盐并加密密码
+//        //mt5+加盐并加密密码
 //        user.setKeynum(secureKeynum(user.getKeynum()));
 
         User user1 = userMapper.getByName(user.getName());
@@ -78,7 +79,29 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Override
     public LoginDTO login(LoginRequest request) {
-        return null;
+//        //输入密码加盐加密后再进入数据库进行对比
+//        request.setKeynum(secureKeynum(request.getKeynum()));
+
+        User user = null;
+        try {
+            user = userMapper.getByName(request.getName());
+        }catch (Exception e){
+            log.error("根据用户名查询出错");
+            throw new ServiceException("用户名错误");
+        }
+
+        if (user == null){
+            throw new ServiceException("用户名或密码错误");
+        }
+
+        //判断密码是否合法
+        if (!request.getKeynum().equals(user.getKeynum())){
+            throw new ServiceException("用户名或密码错误");
+        }
+        LoginDTO loginDTO = new LoginDTO();
+        BeanUtils.copyProperties(user,loginDTO);
+
+        return loginDTO;
     }
 
     private String secureKeynum(String keynum) {
