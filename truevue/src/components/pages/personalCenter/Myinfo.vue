@@ -1,15 +1,179 @@
 <template>
-  <div>
-    <h1>个人信息</h1>
+  <div class="profile-container">
+    <div class="avatar-section">
+      <div class="avatar-wrapper">
+        <img src="@/assets/second.png" />
+      </div>
+      <button class="edit-avatar-btn">修改头像</button>
+    </div>
+    <div class="info-section">
+      <h2>个人信息</h2>
+      <div class="info-item">
+        <label>昵称：</label>
+        <input v-model="user.nickname" type="text">
+      </div>
+      <div class="info-item">
+        <label>性别：</label>
+        <select v-model="user.gender">
+          <option value="male">男</option>
+          <option value="female">女</option>
+          <option value="other">其他</option>
+        </select>
+      </div>
+      <div class="info-item">
+        <label>出生日期：</label>
+        <input v-model="user.birthdate" type="date">
+      </div>
+      <div class="info-item">
+        <label>电话：</label>
+        <input v-model="user.phone" type="tel">
+      </div>
+      <div class="info-item">
+        <label>邮箱：</label>
+        <input v-model="user.email" type="email">
+      </div>
+      <button class="save-btn">保存修改</button>
+    </div>
   </div>
 </template>
+
 <script>
 export default {
-  name: 'Myinfo',
-  data () {
+  data() {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      user: {
+        nickname: '用户昵称',
+        gender: 'male',
+        birthdate: '1990-01-01',
+        phone: '13800138000',
+        email: 'user@example.com'
+      }
     }
   }
 }
 </script>
+
+<style scoped>
+.profile-container {
+  display: flex;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.avatar-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-right: 20px;
+}
+
+.avatar-wrapper {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.edit-avatar-btn {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.edit-avatar-btn:hover {
+  background-color: #45a049;
+}
+
+.info-section {
+  flex: 2;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.info-item {
+  margin-bottom: 15px;
+}
+
+.info-item label {
+  display: inline-block;
+  width: 100px;
+  font-weight: bold;
+}
+
+.info-item input,
+.info-item select {
+  width: calc(100% - 110px);
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.info-item input:focus,
+.info-item select:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+.save-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 16px;
+}
+
+.save-btn:hover {
+  background-color: #1976D2;
+}
+
+h2 {
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+@media (max-width: 768px) {
+  .profile-container {
+    flex-direction: column;
+  }
+
+  .avatar-section {
+    margin-bottom: 20px;
+    padding-right: 0;
+  }
+
+  .info-item label {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  .info-item input,
+  .info-item select {
+    width: 100%;
+  }
+}
+</style>

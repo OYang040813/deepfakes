@@ -7,10 +7,14 @@ import router from './router'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import store from '@/store'
+import axios from 'axios'
 
 //配置
 Vue.use(ElementUI);
 Vue.config.productionTip = false
+
+// 配置axios
+Vue.prototype.$http = axios;
 
 /* eslint-disable no-new */
 new Vue({

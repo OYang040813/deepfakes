@@ -10,7 +10,7 @@
       text-color="#fff"
       active-text-color="#ffd04b">
       <h3>
-        {{isCollapse?'Deepfakes':'deepfake检测系统'}}
+        {{isCollapse?'':'deepfake检测系统'}}
       </h3>
       <!-- 单纯的一级菜单-->
       <el-menu-item v-for="item in noChildren"
