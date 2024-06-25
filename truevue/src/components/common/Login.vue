@@ -35,16 +35,23 @@ export default {
       form: {
         username: "",
         password: "",
-      },rules:{
-        username:[
-          { required: true, message: '请输入账号', trigger: 'blur' }
-        ],password:[
-          { required: true, message: '请输入密码', trigger: 'blur' }
+      }, rules: {
+        username: [
+          {required: true, message: '请输入账号', trigger: 'blur'}
+        ], password: [
+          {required: true, message: '请输入密码', trigger: 'blur'}
         ]
       }
-    };
+    }
   }
-};
+}
+
+  // },mounted() {
+  //   this.$http.get('http://localhost:9090/user/login',this.form).then((res)=>{
+  //     console.log(res)
+  //   })
+  // }
+
 </script>
 <style lang="less" scoped>
 
