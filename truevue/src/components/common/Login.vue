@@ -21,7 +21,7 @@
           ></el-input>
         </el-form-item>
         <el-form-item class="custom-button-position">
-          <el-button type="primary" size="medium">登录</el-button>
+          <el-button type="primary" size="medium" @click="login">登录</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -43,14 +43,16 @@ export default {
         ]
       }
     }
+  },methods: {
+    login(){
+      this.$http.post('http://localhost:9090/user/login',this.form).then((res)=>{
+        console.log(res)
+      })
+    },
   }
 }
 
-  // },mounted() {
-  //   this.$http.get('http://localhost:9090/user/login',this.form).then((res)=>{
-  //     console.log(res)
-  //   })
-  // }
+
 
 </script>
 <style lang="less" scoped>

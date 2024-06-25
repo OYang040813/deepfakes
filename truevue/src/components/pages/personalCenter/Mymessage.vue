@@ -1,282 +1,181 @@
 <template>
-  <div class="message-page">
-    <header class="header">
-      <h1>个人消息</h1>
-      <button @click="markAllAsRead" class="btn-mark-all">全部标为已读</button>
-    </header>
-
-<!--    <nav class="message-tabs">-->
-<!--      <button-->
-<!--        v-for="tab in tabs"-->
-<!--        :key="tab.id"-->
-<!--        :class="['tab-btn', { active: currentTab === tab.id }]"-->
-<!--        @click="currentTab = tab.id"-->
-<!--      >-->
-<!--        {{ tab.name }}-->
-<!--        <span v-if="tab.unread" class="unread-badge">{{ tab.unread }}</span>-->
-<!--      </button>-->
-<!--    </nav>-->
-
-<!--    <div class="message-list" v-if="filteredMessages.length">-->
-<!--      <div-->
-<!--        v-for="message in filteredMessages"-->
-<!--        :key="message.id"-->
-<!--        :class="['message-item', { unread: !message.read }]"-->
-<!--        @click="readMessage(message)"-->
-<!--      >-->
-<!--        <div class="message-icon" :class="message.type">-->
-<!--          <i :class="getIconClass(message.type)"></i>-->
-<!--        </div>-->
-<!--        <div class="message-content">-->
-<!--          <h3 class="message-title">{{ message.title }}</h3>-->
-<!--          <p class="message-preview">{{ message.content }}</p>-->
-<!--          <span class="message-time">{{ formatDate(message.time) }}</span>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--    <div v-else class="no-messages">-->
-<!--      当前没有消息-->
-<!--    </div>-->
-
-<!--    <div class="pagination" v-if="totalPages > 1">-->
-<!--      <button-->
-<!--        v-for="page in totalPages"-->
-<!--        :key="page"-->
-<!--        :class="['page-btn', { active: currentPage === page }]"-->
-<!--        @click="currentPage = page"-->
-<!--      >-->
-<!--        {{ page }}-->
-<!--      </button>-->
-<!--    </div>-->
+  <div class="message-management">
+    <h1>个人消息管理</h1>
+    <div class="message-list">
+      <div v-for="message in messages" :key="message.id" class="message-item">
+        <div class="message-header">
+          <span class="message-title">{{ message.title }}</span>
+          <span class="message-date">{{ message.date }}</span>
+        </div>
+        <p class="message-content">{{ message.content }}</p>
+        <div class="message-actions">
+          <button @click="markAsRead(message.id)">标记为已读</button>
+          <button @click="deleteMessage(message.id)">删除</button>
+        </div>
+      </div>
+    </div>
+    <div v-if="messages.length === 0" class="no-messages">
+      暂无消息
+    </div>
   </div>
 </template>
 
-<!--<script setup>-->
-<!--import { ref, computed } from 'vue';-->
-<!--import { formatDistanceToNow } from 'date-fns';-->
-<!--import { zhCN } from 'date-fns/locale';-->
+<script>
+export default {
+  data() {
+    return {
+      messages: [
+        { id: 1, title: "系统通知", content: "您的账户已成功激活。", date: "2023-05-10", read: false },
+        { id: 2, title: "新消息", content: "您有一条新的好友请求。", date: "2023-05-11", read: false },
+        { id: 3, title: "安全提醒", content: "请定期更改您的密码以确保账户安全。", date: "2023-05-12", read: false },
+      ]
+    };
+  },
+  methods: {
+    markAsRead(id) {
+      const message = this.messages.find(m => m.id === id);
+      if (message) {
+        message.read = true;
+      }
+    },
+    deleteMessage(id) {
+      this.messages = this.messages.filter(m => m.id !== id);
+    }
+  }
+}
+</script>
 
-<!--const tabs = [-->
-<!--  { id: 'all', name: '全部', unread: 5 },-->
-<!--  { id: 'system', name: '系统', unread: 2 },-->
-<!--  { id: 'notification', name: '通知', unread: 3 },-->
-<!--];-->
+<style scoped>
+.message-management {
+  font-family: Arial, sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f7f9fc;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
 
-<!--const messages = ref([-->
-<!--  { id: 1, type: 'system', title: '系统升级通知', content: '系统将于今晚23:00进行升级维护...', time: new Date('2023-05-20T10:00:00'), read: false },-->
-<!--  { id: 2, type: 'notification', title: '新评论提醒', content: '您的文章收到了新的评论...', time: new Date('2023-05-19T14:30:00'), read: true },-->
-<!--  // ... 更多消息-->
-<!--]);-->
+h1 {
+  color: #333;
+  text-align: center;
+  font-size: 28px; /* 调整字体大小 */
+  margin-bottom: 30px; /* 增加下方的间距 */
+}
 
-<!--const currentTab = ref('all');-->
-<!--const currentPage = ref(1);-->
-<!--const itemsPerPage = 10;-->
+.message-list {
+  margin-top: 20px;
+}
 
-<!--const filteredMessages = computed(() => {-->
-<!--  let filtered = messages.value;-->
-<!--  if (currentTab.value !== 'all') {-->
-<!--    filtered = filtered.filter(m => m.type === currentTab.value);-->
-<!--  }-->
-<!--  const start = (currentPage.value - 1) * itemsPerPage;-->
-<!--  return filtered.slice(start, start + itemsPerPage);-->
-<!--});-->
-<!--const totalPages = computed(() => Math.ceil(messages.value.length / itemsPerPage));-->
+.message-item {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 10px;
+  transition: transform 0.3s;
+}
 
-<!--const getIconClass = (type) => {-->
-<!--  switch (type) {-->
-<!--    case 'system': return 'fas fa-cog';-->
-<!--    case 'notification': return 'fas fa-bell';-->
-<!--    default: return 'fas fa-envelope';-->
-<!--  }-->
-<!--};-->
+.message-item:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
-<!--const formatDate = (date) => {-->
-<!--  return formatDistanceToNow(date, { addSuffix: true, locale: zhCN });-->
-<!--};-->
+.message-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
 
-<!--const readMessage = (message) => {-->
-<!--  message.read = true;-->
-<!--  // 这里可以添加向后端发送已读状态的逻辑-->
-<!--};-->
+.message-title {
+  font-weight: bold;
+  color: #444;
+}
 
-<!--const markAllAsRead = () => {-->
-<!--  messages.value.forEach(message => message.read = true);-->
-<!--  // 这里可以添加向后端发送全部已读的逻辑-->
-<!--};-->
-<!--</script>-->
+.message-date {
+  color: #888;
+  font-size: 0.9em;
+}
 
-<!--<style scoped>-->
-<!--.message-page {-->
-<!--  max-width: 800px;-->
-<!--  margin: 0 auto;-->
-<!--  padding: 20px;-->
-<!--  font-family: Arial, sans-serif;-->
-<!--}-->
+.message-content {
+  color: #555;
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
 
-<!--.header {-->
-<!--  display: flex;-->
-<!--  justify-content: space-between;-->
-<!--  align-items: center;-->
-<!--  margin-bottom: 20px;-->
-<!--}-->
+.message-actions {
+  display: flex;
+  justify-content: flex-end;
+}
 
-<!--h1 {-->
-<!--  font-size: 24px;-->
-<!--  color: #333;-->
-<!--}-->
+button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin-left: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
 
-<!--.btn-mark-all {-->
-<!--  background-color: #f0f0f0;-->
-<!--  border: none;-->
-<!--  padding: 8px 16px;-->
-<!--  border-radius: 4px;-->
-<!--  cursor: pointer;-->
-<!--  transition: background-color 0.3s;-->
-<!--}-->
+button:hover {
+  background-color: #45a049;
+}
 
-<!--.btn-mark-all:hover {-->
-<!--  background-color: #e0e0e0;-->
-<!--}-->
+.no-messages {
+  text-align: center;
+  color: #888;
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+}
 
-<!--.message-tabs {-->
-<!--  display: flex;-->
-<!--  margin-bottom: 20px;-->
-<!--  border-bottom: 1px solid #e0e0e0;-->
-<!--}-->
+.message-actions button:first-child {
+  background-color: #3498db;
+}
 
-<!--.tab-btn {-->
-<!--  padding: 10px 20px;-->
-<!--  background: none;-->
-<!--  border: none;-->
-<!--  cursor: pointer;-->
-<!--  font-size: 16px;-->
-<!--  color: #666;-->
-<!--  position: relative;-->
-<!--}-->
+.message-actions button:first-child:hover {
+  background-color: #2980b9;
+}
 
-<!--.tab-btn.active {-->
-<!--  color: #1a73e8;-->
-<!--  font-weight: bold;-->
-<!--}-->
+.message-actions button:last-child {
+  background-color: #e74c3c;
+}
 
-<!--.tab-btn.active::after {-->
-<!--  content: '';-->
-<!--  position: absolute;-->
-<!--  bottom: -1px;-->
-<!--  left: 0;-->
-<!--  right: 0;-->
-<!--  height: 3px;-->
-<!--  background-color: #1a73e8;-->
-<!--}-->
+.message-actions button:last-child:hover {
+  background-color: #c0392b;
+}
 
-<!--.unread-badge {-->
-<!--  background-color: #f44336;-->
-<!--  color: white;-->
-<!--  border-radius: 50%;-->
-<!--  padding: 2px 6px;-->
-<!--  font-size: 12px;-->
-<!--  margin-left: 5px;-->
-<!--}-->
+@media (max-width: 600px) {
+  .message-management {
+    padding: 10px;
+  }
 
-<!--.message-list {-->
-<!--  display: flex;-->
-<!--  flex-direction: column;-->
-<!--  gap: 10px;-->
-<!--}-->
+  .message-item {
+    padding: 10px;
+  }
 
-<!--.message-item {-->
-<!--  display: flex;-->
-<!--  align-items: flex-start;-->
-<!--  padding: 15px;-->
-<!--  background-color: #fff;-->
-<!--  border: 1px solid #e0e0e0;-->
-<!--  border-radius: 8px;-->
-<!--  cursor: pointer;-->
-<!--  transition: box-shadow 0.3s;-->
-<!--}-->
+  .message-header {
+    flex-direction: column;
+  }
 
-<!--.message-item:hover {-->
-<!--  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);-->
-<!--}-->
+  .message-date {
+    margin-top: 5px;
+  }
 
-<!--.message-item.unread {-->
-<!--  background-color: #f0f8ff;-->
-<!--}-->
+  .message-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
 
-<!--.message-icon {-->
-<!--  width: 40px;-->
-<!--  height: 40px;-->
-<!--  border-radius: 50%;-->
-<!--  display: flex;-->
-<!--  align-items: center;-->
-<!--  justify-content: center;-->
-<!--  margin-right: 15px;-->
-<!--  font-size: 20px;-->
-<!--}-->
-<!--.message-icon.system {-->
-<!--  background-color: #e1f5fe;-->
-<!--  color: #0288d1;-->
-<!--}-->
-
-<!--.message-icon.notification {-->
-<!--  background-color: #fff3e0;-->
-<!--  color: #ff9800;-->
-<!--}-->
-
-<!--.message-content {-->
-<!--  flex: 1;-->
-<!--}-->
-
-<!--.message-title {-->
-<!--  font-size: 16px;-->
-<!--  font-weight: bold;-->
-<!--  margin: 0 0 5px;-->
-<!--  color: #333;-->
-<!--}-->
-
-<!--.message-preview {-->
-<!--  font-size: 14px;-->
-<!--  color: #666;-->
-<!--  margin: 0 0 5px;-->
-<!--  white-space: nowrap;-->
-<!--  overflow: hidden;-->
-<!--  text-overflow: ellipsis;-->
-<!--}-->
-
-<!--.message-time {-->
-<!--  font-size: 12px;-->
-<!--  color: #999;-->
-<!--}-->
-
-<!--.no-messages {-->
-<!--  text-align: center;-->
-<!--  padding: 40px;-->
-<!--  color: #666;-->
-<!--  font-style: italic;-->
-<!--}-->
-
-<!--.pagination {-->
-<!--  display: flex;-->
-<!--  justify-content: center;-->
-<!--  margin-top: 20px;-->
-<!--}-->
-
-<!--.page-btn {-->
-<!--  padding: 5px 10px;-->
-<!--  margin: 0 5px;-->
-<!--  background-color: #f0f0f0;-->
-<!--  border: none;-->
-<!--  border-radius: 4px;-->
-<!--  cursor: pointer;-->
-<!--  transition: background-color 0.3s;-->
-<!--}-->
-
-<!--.page-btn:hover {-->
-<!--  background-color: #e0e0e0;-->
-<!--}-->
-
-<!--.page-btn.active {-->
-<!--  background-color: #1a73e8;-->
-<!--  color: white;-->
-<!--}-->
-<!--</style>-->
+  .message-actions button {
+    margin: 5px 0;
+  }
+}
+</style>
