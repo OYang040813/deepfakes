@@ -55,7 +55,9 @@ public class ImageController {
             image.setStatus("-1");
             imageService.save(image);
 
-            return Result.success(image);
+            Image image1 = imageService.getByPath(image.getPath());
+
+            return Result.success(image1);
         } catch (Exception e){
             log.error("文件上传失败",e);
         }
@@ -126,5 +128,26 @@ public class ImageController {
         return Result.success(imageService.page(imagePageRequest));
     }
 
+    @DeleteMapping("/deleteFile")
+    public Result deleteFileByName(@RequestParam String url, @RequestParam String name) {
+        try {
+            // 从 URL 中提取 flag 部分
+            String flag = url.substring(url.lastIndexOf("/") + 1, url.indexOf("?"));
+            List<String> filenames = FileUtil.listFileNames(BASE_FILE_PATH);
+            String targetFileName = filenames.stream()
+                    .filter(fileName -> fileName.contains(flag) && fileName.contains(name))
+                    .findAny()
+                    .orElse("");
+            if (StrUtil.isNotEmpty(targetFileName)) {
+                FileUtil.del(BASE_FILE_PATH + targetFileName);
+                return Result.success("文件删除成功");
+            } else {
+                return Result.error("文件不存在");
+            }
+        } catch (Exception e) {
+            log.error("删除文件失败", e);
+            return Result.error("文件删除失败");
+        }
+    }
 }
 

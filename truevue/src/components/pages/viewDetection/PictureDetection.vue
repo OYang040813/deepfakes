@@ -55,8 +55,22 @@ export default {
       console.log('移除文件', file, fileList);
       this.fileList = fileList.filter(item => item.uid !== file.uid);
 
+      // 删除本地图片
+      request.delete("/image/deleteFile", {
+        params: { url: file.url, name: file.name }  // 将'data'改为'params'以发送查询参数
+      }).then(res => {
+        if (res.code === '200') {
+          console.log("本地图片删除成功");
+        } else {
+          this.$notify.error(res.msg);
+        }
+      }).catch(err => {
+        console.error("删除本地图片出错", err);
+        this.$notify.error("删除本地图片出错");
+      });
+
       //同步删除数据库条目
-      request.delete("/image/delete/" + id).then(res =>{
+      request.delete("/image/delete/" + file.uid).then(res =>{
         if(res.code === '200'){
           this.$notify.success("删除成功")
           this.load()//调用刷新函数
@@ -75,6 +89,7 @@ export default {
     //上传成功
     handleSuccess(res) {
       if(res.code === "200") {
+        console.log(res.data)
         const newFile = {
           name: res.data.name,
           url: res.data.path,

@@ -49,6 +49,9 @@
     <select id="getByName" parameterType="String" resultType="com.example.springboot.entity.Image">
         select * from image where name = #{name}
     </select>
-    
+    <select id="getByPath" resultType="com.example.springboot.entity.Image">
+        select * from image where path = #{path}
+    </select>
+
 </mapper>
 

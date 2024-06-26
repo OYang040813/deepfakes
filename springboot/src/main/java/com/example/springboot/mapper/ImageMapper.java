@@ -5,6 +5,7 @@ import com.example.springboot.entity.Image;
 import com.example.springboot.entity.Image;
 import com.example.springboot.request.BaseRequest;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -26,5 +27,7 @@ public interface ImageMapper extends BaseMapper<Image> {
     void deleteById(Integer id);
 
     Image getByName(String name);
+
+    Image getByPath(String path);
 }
 

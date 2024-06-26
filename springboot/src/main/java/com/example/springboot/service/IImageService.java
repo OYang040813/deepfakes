@@ -1,10 +1,8 @@
 package com.example.springboot.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.example.springboot.dto.LoginDTO;
 import com.example.springboot.entity.Image;
 import com.example.springboot.request.BaseRequest;
-import com.example.springboot.request.LoginRequest;
 import com.github.pagehelper.PageInfo;
 
 import java.util.List;
@@ -26,6 +24,9 @@ public interface IImageService extends IService<Image> {
 
     void deleteById(Integer id);
 
+    Image getByName(String name);
+
+    Image getByPath(String path);
 }
 
 

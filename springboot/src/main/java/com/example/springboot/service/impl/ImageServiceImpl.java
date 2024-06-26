@@ -2,7 +2,6 @@ package com.example.springboot.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.springboot.entity.Image;
-import com.example.springboot.exception.ServiceException;
 import com.example.springboot.mapper.ImageMapper;
 import com.example.springboot.request.BaseRequest;
 import com.example.springboot.service.IImageService;
@@ -58,6 +57,16 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
     @Override
     public void deleteById(Integer id) {
         imageMapper.deleteById(id);
+    }
+
+    @Override
+    public Image getByName(String name) {
+        return imageMapper.getByName(name);
+    }
+
+    @Override
+    public Image getByPath(String path) {
+        return imageMapper.getByPath(path);
     }
 }
 
