@@ -2,5 +2,53 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.springboot.mapper.ImageMapper">
 
+    <insert id="save">
+        insert into image(name, pid, size, path, status, createtime, updatetime)
+        values (#{name}, #{pid}, #{size}, #{path}, #{status}, #{createtime}, #{updatetime})
+    </insert>
+
+    <update id="updateById">
+        update image
+        set name       = #{name},
+            pid      = #{pid},
+            size      = #{size},
+            path        = #{path},
+            status     = #{status},
+            createtime        = #{createtime},
+            updatetime    = #{updatetime}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        delete
+        from image
+        where id = #{id}
+    </delete>
+
+    <select id="list" resultType="com.example.springboot.entity.Image">
+        select *
+        from image
+    </select>
+
+    <select id="listByCondition" resultType="com.example.springboot.entity.Image">
+        select * from image
+        <where>
+            <if test="name != null and name != ''">
+                name like concat('%',#{ name },'%')
+            </if>
+        </where>
+        order by id desc
+    </select>
+
+    <select id="getById" resultType="com.example.springboot.entity.Image">
+        select *
+        from image
+        where id = #{id}
+    </select>
+
+    <select id="getByName" parameterType="String" resultType="com.example.springboot.entity.Image">
+        select * from image where name = #{name}
+    </select>
+    
 </mapper>
 
