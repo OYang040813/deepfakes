@@ -12,11 +12,12 @@ import Detectionhistory from "../components/pages/Detectionhistory.vue";
 import Myinfo from "@/components/pages/personalCenter/Myinfo.vue";
 import Mymessage from "@/components/pages/personalCenter/Mymessage.vue";
 import Helper from "../components/pages/Helper.vue";
+import process from "shelljs";
+import Cookies from "js-cookie";
 
 Vue.use(Router)
 
-export default new Router({
-  routes: [
+const routes = [
     {
       path: '/',
       name: 'Home',
@@ -69,10 +70,37 @@ export default new Router({
           component: Helper
         }
       ]
-    },{
+    },
+    {
       path: '/Login',
       name: 'Login',
       component: Login,
-    }
-    ]
+    },
+
+  // ==== 404界面 ===
+  { path:'*', name: '404', component: () => import('../404.vue')}
+]
+
+const router = new Router({
+  mode: 'history',
+  base: process.env.BASE_URL,
+  routes
 })
+
+router.beforeEach((to,from,next) =>{
+
+  if(to.path === "/Login"){
+    next()
+  }else{
+    let user = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : {}
+
+    if(user.isAuth === 1){
+      next()
+    }else{
+      next("/Login")
+    }
+  }
+
+})
+
+export default router

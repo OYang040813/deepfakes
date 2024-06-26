@@ -12,6 +12,7 @@
   "dependencies": {
     "echarts": "^5.1.2",
     "element-ui": "^2.15.14",
+    "js-cookie": "^3.0.5",
     "less": "^3.0.0",
     "less-loader": "^4.1.0",
     "vue": "^2.5.2",

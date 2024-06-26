@@ -19,8 +19,8 @@
     <img class = "user_img" src ="@/assets/wife.png"/>
   </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>个人信息</el-dropdown-item>
-          <el-dropdown-item>退出</el-dropdown-item>
+          <el-dropdown-item><div @click="message"><i class="el-icon-s-tools"></i>个人信息</div></el-dropdown-item>
+          <el-dropdown-item><div @click="out"><i class="el-icon-switch-button"></i>退出账号</div></el-dropdown-item>
 
         </el-dropdown-menu>
       </el-dropdown>
@@ -31,6 +31,7 @@
 <script>
 
 import { mapState } from 'vuex'
+import Cookies from "js-cookie";
 export default {
   name: 'Header',
   data () {
@@ -38,12 +39,23 @@ export default {
     }
   },
   methods:{
+    out(){
+      Cookies.remove('user')
+      this.$router.push('/Login')
+      this.$notify.success('当前账号已退出')
+    },
+
     handleMenu(){
       console.log()
       // 对菜单进行展开折叠
       this.$store.commit('collapseMenu')
+    },
 
-    }
+    message(){
+      this.$router.push('/Myinfo')
+      this.$notify.success('已跳转至个人中心')
+    },
+
   },computed:{
     ...mapState({
       tags: state => state.tab.tabsList

@@ -5,18 +5,19 @@
       <el-form
         :model="form"
         :rules="rules"
+        ref="loginForm"
         status-icon
         label-width="100px"
         class="demo-ruleForm"
       >
-        <el-form-item label="账号" prop="username">
-          <el-input v-model="form.username" placeholder="请输入账号"></el-input>
+        <el-form-item label="账号" prop="name">
+          <el-input v-model="form.name" placeholder="请输入账号"></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="password">
+        <el-form-item label="密码" prop="keynum">
           <el-input
             type="password"
             show-password
-            v-model="form.password"
+            v-model="form.keynum"
             placeholder="请输入密码"
           ></el-input>
         </el-form-item>
@@ -28,29 +29,52 @@
   </div>
 </template>
 <script>
+import request from "../../utils/request";
+import Cookies from "js-cookie";
+
 export default {
   name: "Login",
   data() {
     return {
       form: {
-        username: "",
-        password: "",
-      }, rules: {
-        username: [
+        name: "",
+        keynum: "",
+      },
+
+      rules: {
+        name: [
           {required: true, message: '请输入账号', trigger: 'blur'}
-        ], password: [
+        ], keynum: [
           {required: true, message: '请输入密码', trigger: 'blur'}
         ]
       }
     }
-  },methods: {
+  },
+
+  methods: {
     login(){
-      this.$http.post('http://localhost:9090/user/login',this.form).then((res)=>{
-        console.log(res)
-      })
+      this.$refs["loginForm"].validate((valid) => {
+        if (valid) {
+          request.post('/user/login', this.form).then(res => {
+            if (res.code === '200') {
+              Cookies.set('user', JSON.stringify(res.data))
+              this.$notify.success('登陆成功')
+              this.$router.push('/FirstPage')
+            } else {
+              this.$notify.error(res.msg)
+            }
+          })
+        } else {
+          this.$message.error('请正确填入用户名与密码！')
+        }
+      });
+
     },
   }
+
+
 }
+
 
 
 

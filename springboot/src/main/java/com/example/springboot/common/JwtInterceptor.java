@@ -35,25 +35,25 @@ public class JwtInterceptor implements HandlerInterceptor {
         if (StrUtil.isBlank(token)) {
             throw new ServiceException(ERROR_CODE_401, "无token，请重新登录");
         }
-        // 获取 token 中的adminId
-        String adminId;
-        User admin;
+        // 获取 token 中的userId
+        String userid;
+        User user;
         try {
-            adminId = JWT.decode(token).getAudience().get(0);
+            userid = JWT.decode(token).getAudience().get(0);
             // 根据token中的userid查询数据库
-            admin = userService.getById(Integer.parseInt(adminId));
+            user = userService.getById(Integer.parseInt(userid));
         } catch (Exception e) {
             String errMsg = "token验证失败，请重新登录";
             log.error(errMsg + ", token=" + token, e);
             throw new ServiceException(ERROR_CODE_401, errMsg);
         }
-        if (admin == null) {
+        if (user == null) {
             throw new ServiceException(ERROR_CODE_401, "用户不存在，请重新登录");
         }
 
         try {
             // 用户密码加签验证 token
-            JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(admin.getKeynum())).build();
+            JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(user.getKeynum())).build();
             jwtVerifier.verify(token); // 验证token
         } catch (JWTVerificationException e) {
             throw new ServiceException(ERROR_CODE_401, "token验证失败，请重新登录");

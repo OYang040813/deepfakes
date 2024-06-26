@@ -15,8 +15,13 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import com.example.springboot.Utils.TokenUtils;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -83,15 +88,30 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 //        request.setKeynum(secureKeynum(request.getKeynum()));
 
         User user = null;
-        try {
-            user = userMapper.getByName(request.getName());
-        }catch (Exception e){
-            log.error("根据用户名查询出错");
-            throw new ServiceException("用户名错误");
+
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/deepfake",
+                "root", "root root")) {
+            if (connection != null) {
+                System.out.println("数据库连接成功");
+            } else {
+                System.out.println("数据库连接失败");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
-        if (user == null){
-            throw new ServiceException("用户名或密码错误");
+
+        try {
+            user = userMapper.getByName(request.getName());
+            if (user == null) {
+                throw new ServiceException("用户名不存在: " + request.getName());
+            }
+        } catch (DataAccessException e) {
+            log.error("数据库访问异常，根据用户名查询出错");
+            throw new ServiceException("数据库访问错误，请稍后再试");
+        } catch (Exception e) {
+            log.error("未知错误，根据用户名查询出错");
+            throw new ServiceException("内部错误，请稍后再试");
         }
 
         //判断密码是否合法
@@ -100,6 +120,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         }
         LoginDTO loginDTO = new LoginDTO();
         BeanUtils.copyProperties(user,loginDTO);
+
+        //用用户ID与用户密码生成Token
+        String token = TokenUtils.genToken(String.valueOf(user.getId()), user.getKeynum());
+        loginDTO.setToken(token);
 
         return loginDTO;
     }
