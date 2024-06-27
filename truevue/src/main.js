@@ -22,5 +22,6 @@ new Vue({
   router, // 挂载路由
   store, // 挂载状态管理
   components: { App },
+  render: h => h(App),
   template: '<App/>'
-})
+}).$mount('#app');
