@@ -10,7 +10,9 @@
       :on-remove="handleRemove"
       :file-list="fileList"
       list-type="text"
-      accept="video/*">
+      accept="video/*"
+      :show-file-list="false"
+    >
       <el-button size="large" type="primary">
         <i class="fas fa-video"></i> 点击上传视频
       </el-button>
@@ -23,6 +25,7 @@
         <video :src="file.url" controls></video>
         <p>
           <i class="fas fa-file-video"></i> {{ file.name }}
+          <i class="fas fa-trash-alt" @click="removeFile(file)"></i>
         </p>
       </div>
     </div>
@@ -45,6 +48,9 @@ export default {
     },
     handlePreview(file) {
       console.log('预览视频', file);
+    },
+    removeFile(file) {
+      this.fileList = this.fileList.filter(f => f !== file);
     }
   }
 }
@@ -60,14 +66,29 @@ export default {
   border: 2px solid #ccc;
   border-radius: 12px;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
-  background-color: #d6e6ea;
+  background-color: rgba(0, 0, 0, 0.7);
+  background-image: url('https://img2.baidu.com/it/u=229796480,2119532825&fm=253&fmt=auto&app=138&f=JPEG?w=1480&h=800');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   text-align: center;
+  color: #836666;
+  animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .title {
   font-size: 35px;
   margin-bottom: 30px;
-  color: #333;
+  color: #110518;
 }
 
 .upload-demo {
@@ -76,7 +97,7 @@ export default {
 
 .el-upload__tip {
   font-size: 20px;
-  color: #666;
+  color: #fff;
   margin-top: 10px;
 }
 
@@ -99,7 +120,7 @@ export default {
 }
 
 .video-preview {
-  background: #fff;
+  background: rgba(255, 255, 255, 0.8);
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 10px;
@@ -107,6 +128,8 @@ export default {
   width: 300px;
   text-align: center;
   transition: transform 0.3s;
+  color: #333;
+  position: relative;
 }
 
 .video-preview:hover {
@@ -121,12 +144,21 @@ export default {
   transition: transform 0.3s;
 }
 
-.video-preview video:hover {
-  transform: scale(1.1);
-}
-
 .video-preview p {
   font-size: 14px;
   color: #333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.video-previews i.fas.fa-trash-alt {
+  cursor: pointer;
+  color: #ff4d4f;
+  transition: color 0.3s;
+}
+
+.video-previews i.fas.fa-trash-alt:hover {
+  color: #ff7875;
 }
 </style>
