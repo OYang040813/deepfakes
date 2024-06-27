@@ -19,6 +19,7 @@
         <i class="fas fa-info-circle"></i> 只能上传mp3文件，且不超过10MB
       </div>
     </el-upload>
+    <el-button size="large" type="primary" @click="startDetection">开始检测</el-button>
     <div class="audio-previews">
       <div v-for="file in fileList" :key="file.name" class="audio-preview">
         <audio :src="file.url" controls></audio>
@@ -51,6 +52,9 @@ export default {
     },
     removeFile(file) {
       this.fileList = this.fileList.filter(f => f !== file);
+    },
+    startDetection() {
+      this.$router.push('/ShowResult');
     }
   }
 }
