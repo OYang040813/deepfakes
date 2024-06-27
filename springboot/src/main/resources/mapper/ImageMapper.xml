@@ -26,7 +26,7 @@
 
     <select id="list" resultType="com.example.springboot.entity.Image">
         select *
-        from image
+        from image where pid = #{id}
     </select>
 
     <select id="listByCondition" resultType="com.example.springboot.entity.Image">
@@ -34,6 +34,9 @@
         <where>
             <if test="name != null and name != ''">
                 name like concat('%',#{ name },'%')
+            </if>
+            <if test="pid != null and pid != ''">
+                pid like concat('%',#{ pid },'%')
             </if>
         </where>
         order by id desc

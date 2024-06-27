@@ -12,6 +12,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class DectectionServiceImpl extends ServiceImpl<DectectionMapper, Dectection> implements IDectectionService {
 
+    @Override
+    public void startDetectionForImage(Integer fileId, Integer pid) {
+
+    }
+
+    @Override
+    public void startDetectionForVideo(Integer fileId, Integer pid) {
+
+    }
 }
 
 

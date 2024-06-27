@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Mapper
 public interface ImageMapper extends BaseMapper<Image> {
-    List<Image> list();
+    List<Image> list(Integer id);
 
     List<Image> listByCondition(BaseRequest baseRequest);
 

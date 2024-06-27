@@ -7,6 +7,7 @@
       :on-preview="handlePreview"
       :on-remove="handleRemove"
       :on-success="handleSuccess"
+      :data="{ userId: this.user.id }"
       :file-list="fileList"
       list-type="picture-card">
       <el-button size="large" type="primary">点击上传</el-button>
@@ -27,10 +28,14 @@ export default {
   data() {
     return {
       user: Cookies.get('user') ? JSON.parse(Cookies.get('user')) : {},
+
       fileList: [],
 
-      sampleFile1: { name: 'fish.jpeg', url: 'https://img2.baidu.com/it/u=2070724841,3828365377&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=375', uid: -1},
-      sampleFile2: { name: 'noodles.jpeg', url: 'https://img1.baidu.com/it/u=655258142,3279121237&fm=253&fmt=auto?w=746&h=532', uid: -2},
+      params:{
+        pageNum:1,
+        pageSize:7,
+        pid:'',
+      },
 
       dialogImageUrl: '',
       dialogVisible: false
@@ -44,43 +49,74 @@ export default {
   methods: {
 
     load(){
-      this.fileList= [];
-      const sampleFile1= { name: 'fish.jpeg', url: 'https://img2.baidu.com/it/u=2070724841,3828365377&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=375', uid: -1};
-      const sampleFile2= { name: 'noodles.jpeg', url: 'https://img1.baidu.com/it/u=655258142,3279121237&fm=253&fmt=auto?w=746&h=532', uid: -2};
 
-      this.fileList.push(sampleFile1);
-      this.fileList.push(sampleFile2);
-    },
+        this.fileList = [];
+        request.get('/image/list/' + this.user.id).then(res => {
+          if(res.code === '200'){
+            this.fileList = res.data.map(item => {
+              return {
+                id: item.id,
+                name: item.name,
+                url: item.path,
+                pid: item.pid,
+              };
+            });
 
-    // 移除图片
-    handleRemove(file, fileList) {
-      console.log('移除文件', file, fileList);
-      this.fileList = fileList.filter(item => item.uid !== file.uid);
+          if(this.fileList.length === 0){
+            // 添加示例文件
+            const sample1 = { id: -1, name: 'fish.jpeg', url: 'https://img2.baidu.com/it/u=2070724841,3828365377&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=375', pid: -1};
+            const sample2 = { id: -2, name: 'noodles.jpeg', url: 'https://img1.baidu.com/it/u=655258142,3279121237&fm=253&fmt=auto?w=746&h=532', pid: -2};
 
-      // 删除本地图片
-      request.delete("/image/deleteFile", {
-        params: { url: file.url, name: file.name }  // 将'data'改为'params'以发送查询参数
-      }).then(res => {
-        if (res.code === '200') {
-          console.log("本地图片删除成功");
+            this.fileList.push(sample1);
+            this.fileList.push(sample2);
+          }
+
         } else {
           this.$notify.error(res.msg);
         }
       }).catch(err => {
-        console.error("删除本地图片出错", err);
-        this.$notify.error("删除本地图片出错");
+        console.error("加载视频列表出错", err);
+        this.$notify.error("加载视频列表出错");
       });
 
-      //同步删除数据库条目
-      request.delete("/image/delete/" + file.uid).then(res =>{
-        if(res.code === '200'){
-          this.$notify.success("删除成功")
-          this.load()//调用刷新函数
-        }else{
-          this.$notify.error(res.msg)
-        }
-      })
+      console.log(this.fileList)
+    },
 
+    // 移除图片
+    handleRemove(file, fileList) {
+
+      if(file.id < 0){
+        this.$notify.error("无法移除示例图片");
+      }else{
+        console.log('移除文件', file, fileList);
+        this.fileList = fileList.filter(item => item.pid !== file.pid);
+
+        // 删除本地图片
+        request.delete("/image/deleteFile", {
+          params: { url: file.url, name: file.name }  // 将'data'改为'params'以发送查询参数
+        }).then(res => {
+          if (res.code === '200') {
+            console.log("本地图片删除成功");
+          } else {
+            this.$notify.error(res.msg);
+          }
+        }).catch(err => {
+          console.error("删除本地图片出错", err);
+          this.$notify.error("删除本地图片出错");
+        });
+
+        //同步删除数据库条目
+        request.delete("/image/delete/" + file.id).then(res =>{
+          if(res.code === '200'){
+            this.$notify.success("删除成功")
+            this.load()//调用刷新函数
+          }else{
+            this.$notify.error(res.msg)
+          }
+        })
+      }
+
+      this.load()
     },
     // 预览图片
     handlePreview(file) {
@@ -93,17 +129,28 @@ export default {
     handleSuccess(res) {
       if(res.code === "200") {
         console.log(res.data)
-        const newFile = {
-          name: res.data.name,
-          url: res.data.path,
-          uid: res.data.id,
-        };
-        this.fileList.push(newFile);
+        this.load();
+      }else{
+        this.$notify.error(res.msg)
       }
     },
     // 跳转到/ShowResult路由
     startDetection() {
-      this.$router.push('/ShowResult');
+      const fileIds = this.fileList.map(file => file.pid);
+      const payload = {
+        fileIds: fileIds,
+        pid: this.user.id
+      };
+      request.post('/dectection/createforimage/', payload).then(res => {
+        if (res.code === '200') {
+          this.$router.push('/ShowResult');
+        } else {
+          this.$notify.error(res.msg);
+        }
+      }).catch(err => {
+        console.error("检测请求出错", err);
+        this.$notify.error("检测请求出错");
+      });
     }
   }
 }

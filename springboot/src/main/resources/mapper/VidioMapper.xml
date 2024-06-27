@@ -3,7 +3,7 @@
 <mapper namespace="com.example.springboot.mapper.VideoMapper">
 
     <insert id="save">
-        insert into video(name, pid, size, path, status,createtime ,updatetime)
+        insert into video(name, pid, size, path, status, createtime, updatetime)
         values (#{name}, #{pid}, #{size}, #{path}, #{status}, #{createtime}, #{updatetime})
     </insert>
 
@@ -26,7 +26,7 @@
 
     <select id="list" resultType="com.example.springboot.entity.Video">
         select *
-        from video
+        from video where pid = #{id}
     </select>
 
     <select id="listByCondition" resultType="com.example.springboot.entity.Video">
@@ -34,6 +34,9 @@
         <where>
             <if test="name != null and name != ''">
                 name like concat('%',#{ name },'%')
+            </if>
+            <if test="pid != null and pid != ''">
+                pid like concat('%',#{ pid },'%')
             </if>
         </where>
         order by id desc
@@ -50,7 +53,7 @@
     </select>
 
     <select id="getByPath" resultType="com.example.springboot.entity.Video">
-        select * from image where path = #{path}
+        select * from video where path = #{path}
     </select>
 
 </mapper>

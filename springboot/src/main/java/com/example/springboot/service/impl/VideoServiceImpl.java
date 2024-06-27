@@ -2,7 +2,6 @@ package com.example.springboot.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.springboot.entity.Video;
-import com.example.springboot.exception.ServiceException;
 import com.example.springboot.mapper.VideoMapper;
 import com.example.springboot.request.BaseRequest;
 import com.example.springboot.service.IVideoService;
@@ -24,8 +23,8 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
     VideoMapper videoMapper;
 
     @Override
-    public List<Video> list() {
-        return videoMapper.list();
+    public List<Video> list(Integer id) {
+        return videoMapper.list(id);
     }
 
 
@@ -68,6 +67,13 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
     @Override
     public Video getByPath(String path) {
         return videoMapper.getByPath(path);
+    }
+
+    @Override
+    public void owner(Integer pid, Integer id) {
+        Video byId = videoMapper.getById(id);
+        byId.setPid(pid);
+        videoMapper.updateById(byId);
     }
 
 }

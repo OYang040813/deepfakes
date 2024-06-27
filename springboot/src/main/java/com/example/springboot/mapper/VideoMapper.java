@@ -12,8 +12,7 @@ import java.util.List;
  */
 @Mapper
 public interface VideoMapper extends BaseMapper<Video> {
-    
-    List<Video> list();
+    List<Video> list(Integer id);
 
     List<Video> listByCondition(BaseRequest baseRequest);
 

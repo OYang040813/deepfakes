@@ -9,10 +9,10 @@
       :on-preview="handlePreview"
       :on-remove="handleRemove"
       :on-success="handleSuccess"
+      :data="{ userId: this.user.id }"
       :file-list="fileList"
       list-type="text"
       accept="video/*"
-      :show-file-list="false"
     >
       <el-button size="large" type="primary">
         <i class="fas fa-video"></i> 点击上传视频
@@ -56,40 +56,69 @@ export default {
   methods: {
 
     load(){
-      const sampleFile1= { name: 'sample1.mp4', url: 'https://www.w3schools.com/html/mov_bbb.mp4', uid: -1};
-      const sampleFile2= { name: 'sample2.mp4', url: 'https://www.w3schools.com/html/movie.mp4', uid: -2};
+      request.get('/video/list/' + this.user.id).then(res => {
+        if(res.code === '200') {
+          this.fileList = res.data.map(item => {
+            return {
+              id: item.id,
+              name: item.name,
+              url: item.path,
+              pid: item.pid,
+            };
+          });
 
-      this.fileList.push(sampleFile1);
-      this.fileList.push(sampleFile2);
-    },
+          if (this.fileList.length === 0) {
+            const sampleFile1 = {name: 'sample1.mp4', url: 'https://www.w3schools.com/html/mov_bbb.mp4', uid: -1};
+            const sampleFile2 = {name: 'sample2.mp4', url: 'https://www.w3schools.com/html/movie.mp4', uid: -2};
 
-    handleRemove(file, fileList) {
-      console.log('移除文件', file, fileList);
-      this.fileList = fileList.filter(item => item.uid !== file.uid);
-
-      // 删除本地图片
-      request.delete("/video/deleteFile", {
-        params: { url: file.url, name: file.name }  // 将'data'改为'params'以发送查询参数
-      }).then(res => {
-        if (res.code === '200') {
-          console.log("本地图片删除成功");
+            this.fileList.push(sampleFile1);
+            this.fileList.push(sampleFile2);
+          }
         } else {
           this.$notify.error(res.msg);
         }
       }).catch(err => {
-        console.error("删除本地图片出错", err);
-        this.$notify.error("删除本地图片出错");
+        console.error("加载视频列表出错", err);
+        this.$notify.error("加载视频列表出错");
       });
 
-      //同步删除数据库条目
-      request.delete("/video/delete/" + file.uid).then(res =>{
-        if(res.code === '200'){
-          this.$notify.success("删除成功")
-          this.load()//调用刷新函数
-        }else{
-          this.$notify.error(res.msg)
-        }
-      })
+
+    },
+
+    handleRemove(file, fileList) {
+
+      if(file.id < 0) {
+        this.$notify.error("无法移除示例视频");
+      }else {
+        console.log('移除文件', file, fileList);
+        this.fileList = fileList.filter(item => item.uid !== file.uid);
+
+        // 删除本地视频
+        request.delete("/video/deleteFile", {
+          params: { url: file.url, name: file.name }  // 将'data'改为'params'以发送查询参数
+        }).then(res => {
+          if (res.code === '200') {
+            console.log("本地视频删除成功");
+          } else {
+            this.$notify.error(res.msg);
+          }
+        }).catch(err => {
+          console.error("删除本地视频出错", err);
+          this.$notify.error("删除本地视频出错");
+        });
+
+        //同步删除数据库条目
+        request.delete("/video/delete/" + file.id).then(res =>{
+          if(res.code === '200'){
+            this.$notify.success("删除成功")
+            this.load()//调用刷新函数
+          }else{
+            this.$notify.error(res.msg)
+          }
+        })
+      }
+
+      this.load()
     },
 
     //预览视频
@@ -101,12 +130,9 @@ export default {
     handleSuccess(res) {
       if(res.code === "200") {
         console.log(res.data)
-        const newFile = {
-          name: res.data.name,
-          url: res.data.path,
-          uid: res.data.id,
-        };
-        this.fileList.push(newFile);
+        this.load()
+      }else{
+        this.$notify.error(res.msg)
       }
     },
 
@@ -114,7 +140,21 @@ export default {
       this.handleRemove(file,this.fileList);
     },
     startDetection() {
-      this.$router.push('/ShowResult');
+      const fileIds = this.fileList.map(file => file.pid);
+      const payload = {
+        fileIds: fileIds,
+        pid: this.user.id
+      };
+      request.post('/dectection/createforvideo/', payload).then(res => {
+        if (res.code === '200') {
+          this.$router.push('/ShowResult');
+        } else {
+          this.$notify.error(res.msg);
+        }
+      }).catch(err => {
+        console.error("检测请求出错", err);
+        this.$notify.error("检测请求出错");
+      });
     }
   }
 }

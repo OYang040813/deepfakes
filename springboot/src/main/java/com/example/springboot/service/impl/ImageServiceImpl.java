@@ -23,8 +23,8 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
     ImageMapper imageMapper;
 
     @Override
-    public List<Image> list() {
-        return imageMapper.list();
+    public List<Image> list(Integer id) {
+        return imageMapper.list(id);
     }
     
     @Override
@@ -67,6 +67,13 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
     @Override
     public Image getByPath(String path) {
         return imageMapper.getByPath(path);
+    }
+
+    @Override
+    public void owner(Integer pid, Integer id) {
+        Image byId = imageMapper.getById(id);
+        byId.setPid(pid);
+        imageMapper.updateById(byId);
     }
 }
 

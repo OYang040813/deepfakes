@@ -37,7 +37,10 @@ public class ImageController {
     private static final String BASE_FILE_PATH = System.getProperty("user.dir") + "/DectetionFiles/image/";
 
     @PostMapping("/upload")
-    public Result upload(MultipartFile file){
+    public Result upload(@RequestParam("file") MultipartFile file, @RequestParam("userId") String userId){
+        if (userId == null) {
+            return Result.error("userId 参数不能为空");
+        }
         String originalFilename = file.getOriginalFilename();
         long flag = System.currentTimeMillis();//时间戳
         String filePath = BASE_FILE_PATH + flag + "_" + originalFilename;
@@ -53,6 +56,7 @@ public class ImageController {
 
             image.setPath("http://localhost:9090/api/image/download/" + flag + "?token=" + token);
             image.setStatus("-1");
+            image.setPid(Math.toIntExact(Long.parseLong(userId)));
             imageService.save(image);
 
             Image image1 = imageService.getByPath(image.getPath());
@@ -104,7 +108,6 @@ public class ImageController {
         return Result.success();
     }
 
-
     @PutMapping("/update")
     public Result update(@RequestBody Image image) {
         imageService.update(image);
@@ -117,10 +120,16 @@ public class ImageController {
         return Result.success(image);
     }
 
-    @GetMapping("/list")
-    public Result list() {
-        List<Image> users = imageService.list();
-        return Result.success(users);
+    @GetMapping("/list/{id}")
+    public Result list(@PathVariable String id) {
+        List<Image> images = imageService.list(Integer.valueOf(id));
+        return Result.success(images);
+    }
+
+    @PutMapping("/owner")
+    public Result owner(@RequestParam Integer pid, @RequestParam Integer id) {
+        imageService.owner(pid, id);
+        return Result.success();
     }
 
     @GetMapping("/page")

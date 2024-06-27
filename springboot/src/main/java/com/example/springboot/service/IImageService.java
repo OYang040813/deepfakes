@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface IImageService extends IService<Image> {
     
-    List<Image> list();
+    List<Image> list(Integer id);
 
     PageInfo<Image> page(BaseRequest baseRequest);
 
@@ -27,6 +27,8 @@ public interface IImageService extends IService<Image> {
     Image getByName(String name);
 
     Image getByPath(String path);
+
+    void owner(Integer pid, Integer id);
 }
 
 

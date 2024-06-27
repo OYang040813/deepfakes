@@ -34,7 +34,10 @@ public class VideoController {
     private static final String BASE_FILE_PATH = System.getProperty("user.dir") + "/DectetionFiles/video/";
 
     @PostMapping("/upload")
-    public Result upload(MultipartFile file){
+    public Result upload(@RequestParam("file") MultipartFile file, @RequestParam("userId") String userId){
+        if (userId == null) {
+            return Result.error("userId 参数不能为空");
+        }
         String originalFilename = file.getOriginalFilename();
         long flag = System.currentTimeMillis(); // 时间戳
         String filePath = BASE_FILE_PATH + flag + "_" + originalFilename;
@@ -50,6 +53,7 @@ public class VideoController {
 
             video.setPath("http://localhost:9090/api/video/download/" + flag + "?token=" + token);
             video.setStatus("-1");
+            video.setPid(Math.toIntExact(Long.parseLong(userId)));
             videoService.save(video);
 
             Video video1 = videoService.getByPath(video.getPath());
@@ -57,8 +61,8 @@ public class VideoController {
             return Result.success(video1);
         } catch (Exception e){
             log.error("文件上传失败", e);
-            return Result.error("文件上传失败");
         }
+        return Result.error("文件上传失败");
     }
 
     @GetMapping("/download/{flag}")
@@ -113,10 +117,16 @@ public class VideoController {
         return Result.success(video);
     }
 
-    @GetMapping("/list")
-    public Result list() {
-        List<Video> users = videoService.list();
-        return Result.success(users);
+    @GetMapping("/list/{id}")
+    public Result list(@PathVariable String id) {
+        List<Video> videos = videoService.list(Integer.valueOf(id));
+        return Result.success(videos);
+    }
+
+    @PutMapping("/owner")
+    public Result owner(@RequestParam Integer pid, @RequestParam Integer id) {
+        videoService.owner(pid, id);
+        return Result.success();
     }
 
     @GetMapping("/page")
