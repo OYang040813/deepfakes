@@ -3,33 +3,100 @@
     <h1 class="title">图片上传</h1>
     <el-upload
       class="upload-demo"
-      action="https://jsonplaceholder.typicode.com/posts/"
+      :action="'http://localhost:9090/api/image/upload?token=' + this.user.token"
       :on-preview="handlePreview"
       :on-remove="handleRemove"
+      :on-success="handleSuccess"
       :file-list="fileList"
       list-type="picture-card">
       <el-button size="large" type="primary">点击上传</el-button>
       <div slot="tip" class="el-upload__tip"><h1>只能上传jpg/png文件，且不超过500kb</h1></div>
     </el-upload>
+    <el-dialog :visible.sync="dialogVisible">
+      <img width="100%" :src="dialogImageUrl" alt="" />
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import Cookies from "js-cookie";
+import request from "../../../utils/request";
+
 export default {
   data() {
     return {
-      fileList: [
-        { name: 'fish.jpeg', url: 'https://img2.baidu.com/it/u=2070724841,3828365377&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=375' },
-        { name: 'noodles.jpeg', url: 'https://img1.baidu.com/it/u=655258142,3279121237&fm=253&fmt=auto?w=746&h=532' }
-      ]
+      user: Cookies.get('user') ? JSON.parse(Cookies.get('user')) : {},
+      fileList: [],
+
+      sampleFile1: { name: 'fish.jpeg', url: 'https://img2.baidu.com/it/u=2070724841,3828365377&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=375', uid: -1},
+      sampleFile2: { name: 'noodles.jpeg', url: 'https://img1.baidu.com/it/u=655258142,3279121237&fm=253&fmt=auto?w=746&h=532', uid: -2},
+
+      dialogImageUrl: '',
+      dialogVisible: false
     };
   },
+
+  created() {
+    const sampleFile1= { name: 'fish.jpeg', url: 'https://img2.baidu.com/it/u=2070724841,3828365377&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=375', uid: -1};
+    const sampleFile2= { name: 'noodles.jpeg', url: 'https://img1.baidu.com/it/u=655258142,3279121237&fm=253&fmt=auto?w=746&h=532', uid: -2};
+
+    this.fileList.push(sampleFile1);
+    this.fileList.push(sampleFile2);
+  },
+
   methods: {
+
+    load(){
+      fileList.pull
+    },
+
+    // 移除图片
     handleRemove(file, fileList) {
       console.log('移除文件', file, fileList);
+      this.fileList = fileList.filter(item => item.uid !== file.uid);
+
+      // 删除本地图片
+      request.delete("/image/deleteFile", {
+        params: { url: file.url, name: file.name }  // 将'data'改为'params'以发送查询参数
+      }).then(res => {
+        if (res.code === '200') {
+          console.log("本地图片删除成功");
+        } else {
+          this.$notify.error(res.msg);
+        }
+      }).catch(err => {
+        console.error("删除本地图片出错", err);
+        this.$notify.error("删除本地图片出错");
+      });
+
+      //同步删除数据库条目
+      request.delete("/image/delete/" + file.uid).then(res =>{
+        if(res.code === '200'){
+          this.$notify.success("删除成功")
+          this.load()//调用刷新函数
+        }else{
+          this.$notify.error(res.msg)
+        }
+      })
+
     },
+    // 预览图片
     handlePreview(file) {
-      console.log('预览文件', file);
+      console.log('预览文件',file.name,file.url);
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
+    //上传成功
+    handleSuccess(res) {
+      if(res.code === "200") {
+        console.log(res.data)
+        const newFile = {
+          name: res.data.name,
+          url: res.data.path,
+          uid: res.data.id,
+        };
+        this.fileList.push(newFile);
+      }
     }
   }
 }
