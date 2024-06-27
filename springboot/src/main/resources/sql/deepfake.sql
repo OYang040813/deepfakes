@@ -11,7 +11,7 @@
  Target Server Version : 50735
  File Encoding         : 65001
 
- Date: 26/06/2024 00:59:17
+ Date: 27/06/2024 23:22:51
 */
 
 SET NAMES utf8mb4;
@@ -63,7 +63,29 @@ CREATE TABLE `image`  (
   `path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '路径',
   `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '已检测？未检测？正在检测？',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 90 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for message
+-- ----------------------------
+DROP TABLE IF EXISTS `message`;
+CREATE TABLE `message`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '信息唯一id',
+  `style` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '系统？安全？检测？',
+  `mes` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '内容',
+  `createtime` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updatetime` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+  `isread` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '是否已读',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of message
+-- ----------------------------
+INSERT INTO `message` VALUES (1, '系统通知', '您的账户已成功激活', '2024-06-27 11:50:48', '2024-06-27 11:50:48', '0');
+INSERT INTO `message` VALUES (2, '安全提醒', '请定期更改您的密码以确保账户安全', '2024-06-27 11:51:46', '2024-06-27 13:02:26', '0');
+INSERT INTO `message` VALUES (3, '系统通知', '您的最新图像检测已完成', '2024-06-27 12:36:23', '2024-06-27 13:02:24', '1');
+INSERT INTO `message` VALUES (4, '系统通知', '您的最新视频检测已完成', '2024-06-27 13:03:04', '2024-06-27 21:29:36', '1');
 
 -- ----------------------------
 -- Table structure for user
@@ -84,7 +106,7 @@ CREATE TABLE `user`  (
   `IsAuth` int(11) UNSIGNED ZEROFILL NULL DEFAULT NULL COMMENT '权限表示字',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `name_key`(`name`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user
@@ -95,10 +117,10 @@ INSERT INTO `user` VALUES (3, '用户2', 'kexu@sb.com', 'ae54a5abf73761b9bd32060
 INSERT INTO `user` VALUES (4, '用户3', 'hongzihao@163.com', '123123', '13421334433', '男', 14, '华南理工大学', '2024-05-08 00:45:34', '2024-05-08 16:49:51', '20240508800959075', 00000000000);
 
 -- ----------------------------
--- Table structure for vidio
+-- Table structure for video
 -- ----------------------------
-DROP TABLE IF EXISTS `vidio`;
-CREATE TABLE `vidio`  (
+DROP TABLE IF EXISTS `video`;
+CREATE TABLE `video`  (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '视频id主键',
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '视频名',
   `pid` int(11) NULL DEFAULT NULL COMMENT '父id',
@@ -108,6 +130,6 @@ CREATE TABLE `vidio`  (
   `path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '路径',
   `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '已检测？未检测？正在检测？',
   PRIMARY KEY (`id`, `status`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;
