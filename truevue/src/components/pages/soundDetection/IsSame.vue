@@ -84,7 +84,8 @@ export default {
     },
     compareAudio() {
       console.log('比对音频', this.fileList1, this.fileList2);
-      // 在这里添加音频比对逻辑
+      // 跳转到/ShowResult路由
+      this.$router.push('/ShowResult');
     }
   }
 }
@@ -100,7 +101,7 @@ export default {
   border: 2px solid #ccc;
   border-radius: 12px;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
-  background-image: url('https://img1.baidu.com/it/u=1243550238,1440820964&fm=253&fmt=auto&app=120&f=JPEG?w=306&h=172');
+  background-image: url('https://img0.baidu.com/it/u=3043034702,4121447606&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=223');
   background-color: rgba(0, 0, 0, 0.3);
   background-size: cover;
   background-position: center;

@@ -12,6 +12,7 @@
       <el-button size="large" type="primary">点击上传</el-button>
       <div slot="tip" class="el-upload__tip"><h1>只能上传jpg/png文件，且不超过500kb</h1></div>
     </el-upload>
+    <el-button size="large" type="primary" @click="startDetection">开始检测</el-button>
     <el-dialog :visible.sync="dialogVisible">
       <img width="100%" :src="dialogImageUrl" alt="" />
     </el-dialog>
@@ -97,6 +98,10 @@ export default {
         };
         this.fileList.push(newFile);
       }
+    },
+    // 跳转到/ShowResult路由
+    startDetection() {
+      this.$router.push('/ShowResult');
     }
   }
 }
@@ -124,6 +129,7 @@ export default {
   100% {
     opacity: 1;
   }
+
 }
 
 .upload-container::before {
@@ -171,18 +177,15 @@ export default {
   position: relative;
 }
 
-.el-button
-{
+.el-button {
   background-color : #3e87a8;
   transition: transform 0.3s;
 }
 
-.el-button:hover
-{
+.el-button:hover {
   background-color : #097fa1;
   transform: scale(1.02);
 }
-
 
 h1 {
   color: #3e87a8;

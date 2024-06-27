@@ -20,6 +20,7 @@
         <i class="fas fa-info-circle"></i> 只能上传mp4文件，且不超过50MB
       </div>
     </el-upload>
+    <el-button size="large" type="primary" @click="startDetection">开始检测</el-button>
     <div class="video-previews">
       <div v-for="file in fileList" :key="file.name" class="video-preview">
         <video :src="file.url" controls></video>
@@ -51,6 +52,9 @@ export default {
     },
     removeFile(file) {
       this.fileList = this.fileList.filter(f => f !== file);
+    },
+    startDetection() {
+      this.$router.push('/ShowResult');
     }
   }
 }

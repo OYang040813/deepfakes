@@ -14,6 +14,7 @@ import Mymessage from "@/components/pages/personalCenter/Mymessage.vue";
 import Helper from "../components/pages/Helper.vue";
 import process from "shelljs";
 import Cookies from "js-cookie";
+import ShowResult from "../components/ShowResult.vue";
 
 Vue.use(Router)
 
@@ -68,6 +69,12 @@ const routes = [
           path: '/Helper',
           name: 'Helper',
           component: Helper
+        }
+        ,
+        {
+          path: '/ShowResult',
+          name: 'ShowResult',
+          component: ShowResult
         }
       ]
     },
