@@ -1,9 +1,12 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import tab from './tab'
-Vue.use(Vuex)
+// store/index.js
+import Vue from 'vue';
+import Vuex from 'vuex';
+import tab from './tab';
+
+Vue.use(Vuex);
+
 export default new Vuex.Store({
-  modules:{
+  modules: {
     tab
-  }
-})
+  },
+});

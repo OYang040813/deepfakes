@@ -148,6 +148,14 @@ export default {
           icon: 'help',
           url: 'Helper/Helper'
         }
+        ,
+        {
+          label: '管理员',
+          icon: 's-custom',
+          name: 'AdminPage',
+          path: '/AdminPage',
+          url: 'AdminPage/AdminPage'
+        }
       ]
     };
   },

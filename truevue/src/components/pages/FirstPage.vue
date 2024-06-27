@@ -19,7 +19,7 @@
         </el-card>
 
         <el-card style="margin-top: 20px">
-          <div ref="echarts1" style="height: 300px;"></div>
+          <div ref="echarts2" style="height: 300px;"></div>
         </el-card>
       </el-col>
 
@@ -31,6 +31,13 @@
           <div v-for="item in systemData" :key="item.id" class="system_context item">
             <div>{{ item.title }}</div>
             <div><i :class="`el-icon-${item.icon}`"> {{ item.date }}</i></div>
+          </div>
+        </el-card>
+
+        <el-card style="margin-top: 20px">
+          <div class="system-performance">
+            <h3>系统性能统计</h3>
+            <div ref="echarts1" style="height: 300px;"></div>
           </div>
         </el-card>
       </el-col>
@@ -49,44 +56,63 @@ export default {
           id: 1,
           date: "2024-6-23 12.00",
           title: "【维护通知】系统升级或维护时间",
-          icon: 'timer'
+          icon:'timer'
         },
         {
           id: 2,
           date: "2024-6-22 11.32",
           title: "【服务中断或故障】预计修复时间",
-          icon: 'timer'
+          icon:'timer'
         },
         {
           id: 3,
           date: "2024-6-21 10.00",
           title: "【内部分享】如何建立良好的客户关系",
-          icon: 'timer'
+          icon:'timer'
         },
         {
           id: 4,
           date: "2024-6-17 10.20",
           title: "【活动和促销】参与方式和时间",
-          icon: 'timer'
+          icon:'timer'
         },
         {
           id: 5,
           date: "2024-6-14 09:00",
           title: "【政策变更】用户协议或隐私政策的变更",
-          icon: 'timer'
+          icon:'timer'
         },
         {
           id: 6,
           date: "2024-6-12 13:00",
           title: "【重要通知】公司或平台的重要新闻",
-          icon: 'timer'
-        }
-      ]
+          icon:'timer'
+        }]
     };
   },
   mounted() {
     var myChart1 = echarts.init(this.$refs.echarts1);
     var option1 = {
+      title: {
+        text: 'System Performance Statistics'
+      },
+      tooltip: {},
+      xAxis: {
+        data: ['Week 1', 'Week 2', 'Week 3', 'Week 4']
+      },
+      yAxis: {},
+      series: [
+        {
+          name: 'Files Processed',
+          type: 'bar',
+          data: [150, 200, 180, 220]
+        }
+      ]
+    };
+    myChart1.setOption(option1);
+
+    var myChart2 = echarts.init(this.$refs.echarts2);
+    var option2 = {
       title: {
         text: 'Deepfake Detection Confidence'
       },
@@ -119,7 +145,7 @@ export default {
         }
       ]
     };
-    myChart1.setOption(option1);
+    myChart2.setOption(option2);
   }
 };
 </script>
@@ -179,6 +205,15 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+}
+
+.system-performance {
+  margin-top: 20px;
+
+  h3 {
+    margin-bottom: 10px;
+    color: #333;
   }
 }
 </style>
