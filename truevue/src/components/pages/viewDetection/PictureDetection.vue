@@ -38,17 +38,18 @@ export default {
   },
 
   created() {
-    const sampleFile1= { name: 'fish.jpeg', url: 'https://img2.baidu.com/it/u=2070724841,3828365377&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=375', uid: -1};
-    const sampleFile2= { name: 'noodles.jpeg', url: 'https://img1.baidu.com/it/u=655258142,3279121237&fm=253&fmt=auto?w=746&h=532', uid: -2};
-
-    this.fileList.push(sampleFile1);
-    this.fileList.push(sampleFile2);
+    this.load();
   },
 
   methods: {
 
     load(){
-      fileList.pull
+      this.fileList= [];
+      const sampleFile1= { name: 'fish.jpeg', url: 'https://img2.baidu.com/it/u=2070724841,3828365377&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=375', uid: -1};
+      const sampleFile2= { name: 'noodles.jpeg', url: 'https://img1.baidu.com/it/u=655258142,3279121237&fm=253&fmt=auto?w=746&h=532', uid: -2};
+
+      this.fileList.push(sampleFile1);
+      this.fileList.push(sampleFile2);
     },
 
     // 移除图片
@@ -87,6 +88,7 @@ export default {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     },
+
     //上传成功
     handleSuccess(res) {
       if(res.code === "200") {

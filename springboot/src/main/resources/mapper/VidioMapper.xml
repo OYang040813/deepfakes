@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.springboot.mapper.VidioMapper">
+<mapper namespace="com.example.springboot.mapper.VideoMapper">
 
     <insert id="save">
-        insert into vidio(name, pid, createtime, size, path, status, updatetime)
-        values (#{name}, #{pid}, #{createtime}, #{size}, #{path}, #{status}, #{updatetime})
+        insert into video(name, pid, size, path, status,createtime ,updatetime)
+        values (#{name}, #{pid}, #{size}, #{path}, #{status}, #{createtime}, #{updatetime})
     </insert>
 
     <update id="updateById">
-        update vidio
+        update video
         set name          = #{name},
             pid           = #{pid},
-            createtime    = #{createtime},
             size          = #{size},
             path          = #{path},
             status        = #{status},
@@ -21,36 +20,37 @@
 
     <delete id="deleteById">
         delete
-        from vidio
+        from video
         where id = #{id}
     </delete>
 
-    <select id="list" resultType="com.example.springboot.entity.Vidio">
+    <select id="list" resultType="com.example.springboot.entity.Video">
         select *
-        from vidio
+        from video
     </select>
 
-    <select id="listByCondition" resultType="com.example.springboot.entity.Vidio">
-        select * from vidio
+    <select id="listByCondition" resultType="com.example.springboot.entity.Video">
+        select * from video
         <where>
             <if test="name != null and name != ''">
                 name like concat('%',#{ name },'%')
             </if>
-            <if test="id != null and id != ''">
-                id like concat('%',#{id}, '%')
-            </if>
         </where>
-        order by id asc
+        order by id desc
     </select>
-    <select id="getById" resultType="com.example.springboot.entity.Vidio">
+    <select id="getById" resultType="com.example.springboot.entity.Video">
         select *
-        from vidio
+        from video
         where id = #{id}
     </select>
-    <select id="getByName" resultType="com.example.springboot.entity.Vidio">
+    <select id="getByName" resultType="com.example.springboot.entity.Video">
         select *
-        from vidio
+        from video
         where name = #{name}
+    </select>
+
+    <select id="getByPath" resultType="com.example.springboot.entity.Video">
+        select * from image where path = #{path}
     </select>
 
 </mapper>

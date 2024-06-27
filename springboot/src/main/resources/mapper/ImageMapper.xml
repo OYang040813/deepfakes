@@ -14,7 +14,6 @@
             size      = #{size},
             path        = #{path},
             status     = #{status},
-            createtime        = #{createtime},
             updatetime    = #{updatetime}
         where id = #{id}
     </update>

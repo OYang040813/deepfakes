@@ -66,7 +66,7 @@ public class ImageController {
 
     @GetMapping("/download/{flag}")
     public void download(@PathVariable String flag, @RequestParam(required = false) String play,
-                         HttpServletResponse response) throws UnsupportedEncodingException {
+                         HttpServletResponse response) {
         OutputStream os;
         List<String> filenames = FileUtil.listFileNames(BASE_FILE_PATH);
         String fileName = filenames.stream().filter(name -> name.contains(flag)).findAny().

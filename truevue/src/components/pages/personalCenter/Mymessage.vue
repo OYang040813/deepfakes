@@ -2,77 +2,101 @@
   <div class="message-management">
     <h1>个人消息管理</h1>
     <div class="message-list">
-      <div v-for="message in pagedMessages" :key="message.id" class="message-item">
+      <div v-for="message in pagedMessages" :key="message.id" :class="['message-item', { 'message-read': message.isread == 1 }]">
         <div class="message-header">
-          <span class="message-title">{{ message.title }}</span>
-          <span class="message-date">{{ message.date }}</span>
+          <span class="message-style">{{ message.style }}</span>
+          <span class="message-createtime">{{ message.createtime }}</span>
         </div>
-        <p class="message-content">{{ message.content }}</p>
+        <p class="message-mes">{{ message.mes }}</p>
         <div class="message-actions">
-          <button @click="markAsRead(message.id)">标记为已读</button>
+          <button v-if="message.isread == 0" @click="markAsRead(message.id)">标记为已读</button>
           <button @click="deleteMessage(message.id)">删除</button>
         </div>
       </div>
     </div>
-    <div v-if="messages.length === 0" class="no-messages">
+    <div v-if="messages.length == 0" class="no-messages">
       暂无消息
     </div>
     <el-pagination
-      v-if="messages.length > pageSize"
+      v-if="messages.length > params.pageSize"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
-      :current-page="currentPage"
-      :page-size="pageSize"
+      :current-page="params.currentPage"
+      :page-size="params.pageSize"
       layout="total, sizes, prev, pager, next, jumper"
-      :total="messages.length">
+      :total="total">
     </el-pagination>
   </div>
 </template>
 
 <script>
+import request from "../../../utils/request";
+
 export default {
   data() {
     return {
-      messages: [
-        { id: 1, title: "系统通知", content: "您的账户已成功激活。", date: "2023-05-10", read: false },
-        { id: 2, title: "新消息", content: "您有一条新的好友请求。", date: "2023-05-11", read: false },
-        { id: 3, title: "安全提醒", content: "请定期更改您的密码以确保账户安全。", date: "2023-05-12", read: false },
-        { id: 4, title: "系统通知", content: "您的账户已成功激活。", date: "2023-05-10", read: false },
-        { id: 5, title: "新消息", content: "您有一条新的好友请求。", date: "2023-05-11", read: false },
-        { id: 6, title: "安全提醒", content: "请定期更改您的密码以确保账户安全。", date: "2023-05-12", read: false },
-        { id: 7, title: "系统通知", content: "您的账户已成功激活。", date: "2023-05-10", read: false },
-        { id: 8, title: "新消息", content: "您有一条新的好友请求。", date: "2023-05-11", read: false },
-        { id: 9, title: "安全提醒", content: "请定期更改您的密码以确保账户安全。", date: "2023-05-12", read: false },
-        { id: 10, title: "系统通知", content: "您的账户已成功激活。", date: "2023-05-10", read: false },
-        { id: 11, title: "新消息", content: "您有一条新的好友请求。", date: "2023-05-11", read: false },
-        { id: 12, title: "安全提醒", content: "请定期更改您的密码以确保账户安全。", date: "2023-05-12", read: false },
-      ],
-      currentPage: 1,
-      pageSize: 5
+      messages: [],
+      params: {
+        currentPage: 1,
+        pageSize: 5,
+        style: '',
+        createtime: '',
+        isread: '',
+      },
+      total: 0,
     };
+  },
+  created() {
+    this.load();
   },
   computed: {
     pagedMessages() {
-      const start = (this.currentPage - 1) * this.pageSize;
-      const end = start + this.pageSize;
+      const start = (this.params.currentPage - 1) * this.params.pageSize;
+      const end = start + this.params.pageSize;
       return this.messages.slice(start, end);
     }
   },
   methods: {
+    load() {
+      request.get('/message/page', { params: this.params }).then(res => {
+        if (res.code === '200') {
+          this.messages = res.data.list;
+          this.total = res.data.total;
+        }
+      });
+    },
     markAsRead(id) {
       const message = this.messages.find(m => m.id === id);
       if (message) {
-        message.read = true;
+        message.isread = 1;
+        request.put("/message/mark/" + id).then(res => {
+          if (res.code === '200') {
+            this.$notify.success("标记成功");
+            this.load();
+          } else {
+            this.$notify.error(res.msg);
+          }
+        });
       }
     },
     deleteMessage(id) {
       this.messages = this.messages.filter(m => m.id !== id);
+      request.delete("/message/delete/" + id).then(res => {
+        if (res.code === '200') {
+          this.$notify.success("删除成功");
+          this.load(); // 调用刷新函数
+        } else {
+          this.$notify.error(res.msg);
+        }
+      });
     },
     handleSizeChange(size) {
-      this.pageSize = size;
+      this.params.pageSize = size;
+      this.load();
     },
     handleCurrentChange(page) {
-      this.currentPage = page;
+      this.params.currentPage = page;
+      this.load();
     }
   }
 }
@@ -122,23 +146,27 @@ h1 {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.message-item.message-read {
+  background-color: #e0ffe0;
+}
+
 .message-header {
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
 }
 
-.message-title {
+.message-style {
   font-weight: bold;
   color: #444;
 }
 
-.message-date {
+.message-createtime {
   color: #888;
   font-size: 0.9em;
 }
 
-.message-content {
+.message-mes {
   color: #555;
   margin-bottom: 10px;
   line-height: 1.6;
@@ -213,7 +241,7 @@ button:hover {
     flex-direction: column;
   }
 
-  .message-date {
+  .message-createtime {
     margin-top: 5px;
   }
 

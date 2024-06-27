@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.springboot.mapper.MessageMapper">
+
+    <insert id="save">
+        insert into message(style, mes, isread)
+        values (#{style}, #{mes}, #{isread})
+    </insert>
+
+    <update id="updateById">
+        update message
+        set style       = #{style},
+            mes      = #{mes},
+            isread      = #{isread},
+            updatetime = #{updatetime}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        delete
+        from message
+        where id = #{id}
+    </delete>
+
+    <select id="list" resultType="com.example.springboot.entity.Message">
+        select *
+        from message
+    </select>
+
+    <select id="listByCondition" resultType="com.example.springboot.entity.Message">
+        select * from message
+        <where>
+            <if test="style != null and style != ''">
+                style like concat('%',#{style},'%')
+            </if>
+            <if test="mes != null and mes != ''">
+                mes like concat('%',#{mes}, '%')
+            </if>
+            <if test="isread != null and isread != ''">
+                isread like concat('%',#{isread}, '%')
+            </if>
+        </where>
+        order by id desc
+    </select>
+
+    <select id="getById" resultType="com.example.springboot.entity.Message">
+        select *
+        from message
+        where id = #{id}
+    </select>
+
+</mapper>
+

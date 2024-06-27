@@ -5,9 +5,10 @@
     </h1>
     <el-upload
       class="upload-demo"
-      action="https://jsonplaceholder.typicode.com/posts/"
+      :action="'http://localhost:9090/api/video/upload?token=' + this.user.token"
       :on-preview="handlePreview"
       :on-remove="handleRemove"
+      :on-success="handleSuccess"
       :file-list="fileList"
       list-type="text"
       accept="video/*"
@@ -34,24 +35,83 @@
 </template>
 
 <script>
+import Cookies from "js-cookie";
+import request from "../../../utils/request";
+
 export default {
   data() {
     return {
-      fileList: [
-        { name: 'sample1.mp4', url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
-        { name: 'sample2.mp4', url: 'https://www.w3schools.com/html/movie.mp4' }
-      ]
+      user: Cookies.get('user') ? JSON.parse(Cookies.get('user')) : {},
+      fileList: [],
+
+      sampleFile1: { name: 'sample1.mp4', url: 'https://www.w3schools.com/html/mov_bbb.mp4', uid: -1},
+      sampleFile2: { name: 'sample2.mp4', url: 'https://www.w3schools.com/html/movie.mp4', uid: -2},
+
     };
   },
+  created() {
+    this.load()
+  },
+
   methods: {
-    handleRemove(file, fileList) {
-      console.log('移除视频', file, fileList);
+
+    load(){
+      const sampleFile1= { name: 'sample1.mp4', url: 'https://www.w3schools.com/html/mov_bbb.mp4', uid: -1};
+      const sampleFile2= { name: 'sample2.mp4', url: 'https://www.w3schools.com/html/movie.mp4', uid: -2};
+
+      this.fileList.push(sampleFile1);
+      this.fileList.push(sampleFile2);
     },
+
+    handleRemove(file, fileList) {
+      console.log('移除文件', file, fileList);
+      this.fileList = fileList.filter(item => item.uid !== file.uid);
+
+      // 删除本地图片
+      request.delete("/video/deleteFile", {
+        params: { url: file.url, name: file.name }  // 将'data'改为'params'以发送查询参数
+      }).then(res => {
+        if (res.code === '200') {
+          console.log("本地图片删除成功");
+        } else {
+          this.$notify.error(res.msg);
+        }
+      }).catch(err => {
+        console.error("删除本地图片出错", err);
+        this.$notify.error("删除本地图片出错");
+      });
+
+      //同步删除数据库条目
+      request.delete("/video/delete/" + file.uid).then(res =>{
+        if(res.code === '200'){
+          this.$notify.success("删除成功")
+          this.load()//调用刷新函数
+        }else{
+          this.$notify.error(res.msg)
+        }
+      })
+    },
+
+    //预览视频
     handlePreview(file) {
       console.log('预览视频', file);
     },
+
+    //上传成功
+    handleSuccess(res) {
+      if(res.code === "200") {
+        console.log(res.data)
+        const newFile = {
+          name: res.data.name,
+          url: res.data.path,
+          uid: res.data.id,
+        };
+        this.fileList.push(newFile);
+      }
+    },
+
     removeFile(file) {
-      this.fileList = this.fileList.filter(f => f !== file);
+      this.handleRemove(file,this.fileList);
     },
     startDetection() {
       this.$router.push('/ShowResult');
