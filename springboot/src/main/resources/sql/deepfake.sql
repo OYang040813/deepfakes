@@ -11,7 +11,7 @@
  Target Server Version : 50735
  File Encoding         : 65001
 
- Date: 27/06/2024 23:22:51
+ Date: 28/06/2024 16:45:07
 */
 
 SET NAMES utf8mb4;
@@ -31,7 +31,7 @@ CREATE TABLE `audio`  (
   `size` double(100, 0) UNSIGNED NULL DEFAULT NULL COMMENT '大小',
   `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '已检测？未检测？正在检测？',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for dectection
@@ -103,7 +103,8 @@ CREATE TABLE `user`  (
   `createtime` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP,
   `updatetime` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP,
   `cardnum` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '卡号',
-  `IsAuth` int(11) UNSIGNED ZEROFILL NULL DEFAULT NULL COMMENT '权限表示字',
+  `IsAuth` int(11) UNSIGNED ZEROFILL NULL DEFAULT 00000000000 COMMENT '权限表示字',
+  `cover` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '头像',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `name_key`(`name`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
@@ -111,10 +112,10 @@ CREATE TABLE `user`  (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (1, 'admin', '', '123456', '', '男', 66, '', '2024-04-20 11:17:40', '2024-04-20 11:17:40', '202404201670051966', 00000000001);
-INSERT INTO `user` VALUES (2, '用户1', 'zhang@163.com', '123456', '13421594386', '男', 22, '西安交通大学', '2024-04-20 11:37:07', '2024-04-20 11:37:07', '20240420443544878', 00000000000);
-INSERT INTO `user` VALUES (3, '用户2', 'kexu@sb.com', 'ae54a5abf73761b9bd320607721f3509', '13421212121', '男', 18, '', '2024-05-07 11:00:49', '2024-05-08 00:44:54', '202405072054057603', 00000000000);
-INSERT INTO `user` VALUES (4, '用户3', 'hongzihao@163.com', '123123', '13421334433', '男', 14, '华南理工大学', '2024-05-08 00:45:34', '2024-05-08 16:49:51', '20240508800959075', 00000000000);
+INSERT INTO `user` VALUES (1, 'admin', '', '123456', '', '男', 66, '', '2024-04-20 11:17:40', '2024-04-20 11:17:40', '202404201670051966', 00000000001, NULL);
+INSERT INTO `user` VALUES (2, '用户1', 'zhang@163.com', '123456', '13421594386', '男', 22, '西安交通大学', '2024-04-20 11:37:07', '2024-04-20 11:37:07', '20240420443544878', 00000000000, NULL);
+INSERT INTO `user` VALUES (3, '用户2', 'kexu@sb.com', 'ae54a5abf73761b9bd320607721f3509', '13421212121', '男', 18, '', '2024-05-07 11:00:49', '2024-05-08 00:44:54', '202405072054057603', 00000000000, NULL);
+INSERT INTO `user` VALUES (4, '用户3', 'hongzihao@163.com', '123123', '13421334433', '男', 14, '华南理工大学', '2024-05-08 00:45:34', '2024-05-08 16:49:51', '20240508800959075', 00000000000, NULL);
 
 -- ----------------------------
 -- Table structure for video
@@ -128,8 +129,8 @@ CREATE TABLE `video`  (
   `updatetime` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP,
   `size` double(100, 0) UNSIGNED NULL DEFAULT NULL COMMENT '大小',
   `path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '路径',
-  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '已检测？未检测？正在检测？',
-  PRIMARY KEY (`id`, `status`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '已检测？未检测？正在检测？',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;
