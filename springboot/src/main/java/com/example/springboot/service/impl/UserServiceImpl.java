@@ -54,6 +54,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         Date date = new Date();
         user.setCardnum(DateUtil.format(date, "yyyyMMdd") + Math.abs(IdUtil.fastSimpleUUID().hashCode()));
         user.setUpdatetime(new Date());
+        user.setCreatetime(new Date());
+        user.setIsAuth(0);
 //        //mt5+加盐并加密密码
 //        user.setKeynum(secureKeynum(user.getKeynum()));
 
@@ -63,7 +65,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         } else {
             throw new ServiceException("该用户名已被占用");
         }
-        return false;
+        return true;
     }
 
     @Override

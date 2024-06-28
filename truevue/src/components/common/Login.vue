@@ -1,7 +1,10 @@
 <template>
   <div class="login_container">
     <div class="login_form">
-      <p class="login_title">Deepfake检测系统</p>
+      <div class="header">
+        <p class="login_title">Deepfake检测系统</p>
+        <el-button type="primary" class="register-button" @click="navigateToRegister">注册</el-button>
+      </div>
       <el-form
         :model="form"
         :rules="rules"
@@ -28,6 +31,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import request from "../../utils/request";
 import Cookies from "js-cookie";
@@ -68,19 +72,15 @@ export default {
           this.$message.error('请正确填入用户名与密码！')
         }
       });
-
     },
+    navigateToRegister() {
+      this.$router.push('/Register');
+    }
   }
-
-
 }
-
-
-
-
 </script>
-<style lang="less" scoped>
 
+<style lang="less" scoped>
 .login_container {
   width: 100%;
   height: 100vh;
@@ -103,6 +103,11 @@ export default {
     border-radius: 5px;
     // 添加阴影效果
     box-shadow: 0 0 25px #cac6c6;
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
     .login_title{
       font-family: '微软雅黑 Bold', '微软雅黑';
       font-weight: 700;
@@ -112,7 +117,21 @@ export default {
       margin-top:50px;
       margin-bottom: 30px;
       text-align: center;
+      flex-grow: 1;
     }
+    .register-button {
+      margin-top: 20px;
+      margin-right: 20px;
+      color: #fff;
+      background-color: #409EFF;
+      border-color: #409EFF;
+      transition: transform 0.3s;
+    }
+
+    .register-button:hover {
+      transform: scale(1.1);
+    }
+
     .custom-button-position {
       /* 你可以通过调整这些值来设置按钮的位置 */
       margin-top: 20px;
@@ -121,13 +140,3 @@ export default {
   }
 }
 </style>
-
-
-
-
-
-
-
-
-
-
