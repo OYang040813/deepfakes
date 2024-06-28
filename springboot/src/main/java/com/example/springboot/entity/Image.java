@@ -20,7 +20,7 @@ public class Image implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String id;
+    private Integer id;
     /**
      * 图片名
      */

@@ -17,6 +17,7 @@ import Cookies from 'js-cookie';
 import ShowResult from '../components/ShowResult.vue';
 import AdminPage from '../components/AdminPage.vue';
 import store from '../store'; // 引入 Vuex store
+import Register from '../components/common/Register.vue'
 
 Vue.use(Router);
 
@@ -85,6 +86,11 @@ const routes = [
     component: Login
   },
   {
+    path: '/Register',
+    name: 'Register',
+    component: Register
+  },
+  {
     path: '/AdminPage',
     name: 'AdminPage',
     component: AdminPage
@@ -104,7 +110,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   let user = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : {};
-  if (to.path === '/Login')
+  if (to.path === '/Login' || to.path ==='/Register')
   {
       next();
   }
@@ -122,16 +128,6 @@ router.beforeEach((to, from, next) => {
         next();
       }
     }
-    // if (user.isAuth === 1) {
-    //   store.dispatch('setUser', user); // 将用户信息存储到 Vuex
-    //   if (to.path === '/AdminPage' && user.role !== 'admin') {
-    //     next({ path: '/' });
-    //   } else {
-    //     next();
-    //   }
-    // } else {
-    //   next();
-    // }
   }
 });
 
