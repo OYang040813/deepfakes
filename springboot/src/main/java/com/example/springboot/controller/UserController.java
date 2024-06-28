@@ -1,19 +1,29 @@
 package com.example.springboot.controller;
 
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.StrUtil;
+import com.example.springboot.Utils.TokenUtils;
 import com.example.springboot.common.Result;
 import com.example.springboot.dto.LoginDTO;
+import com.example.springboot.entity.User;
 import com.example.springboot.entity.User;
 import com.example.springboot.service.IUserService;
 import com.example.springboot.request.LoginRequest;
 import com.example.springboot.request.UserPageRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.util.List;
 
 /**
  * @author oy
  */
+@Slf4j
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -21,6 +31,64 @@ public class UserController {
     @Autowired
     IUserService userService;
 
+    private static final String BASE_FILE_PATH = System.getProperty("user.dir") + "/CoverFiles/";
+
+    @PostMapping("/upload")
+    public Result upload(@RequestParam("file") MultipartFile file, @RequestParam("userId") String userId){
+        if (userId == null) {
+            return Result.error("userId 参数不能为空");
+        }
+        String originalFilename = file.getOriginalFilename();
+        long flag = System.currentTimeMillis();//时间戳
+        String filePath = BASE_FILE_PATH + flag + "_" + originalFilename;
+        try {
+            FileUtil.mkParentDirs(filePath); // 创建父级目录
+            file.transferTo(FileUtil.file(filePath));
+
+            User user = userService.getById(userId);
+
+            //打包Token与文件路径一并传回前端
+            User currentUser = TokenUtils.getCurrentUser();
+            String token = TokenUtils.genToken(currentUser.getId().toString(), currentUser.getKeynum());
+
+            user.setCover("http://localhost:9090/api/user/download/" + flag + "?token=" + token);
+            userService.update(user);
+
+            return Result.success(user);
+        } catch (Exception e){
+            log.error("文件上传失败",e);
+        }
+        return Result.error("文件上传失败");
+    }
+
+    @GetMapping("/download/{flag}")
+    public void download(@PathVariable String flag, @RequestParam(required = false) String play,
+                         HttpServletResponse response) {
+        OutputStream os;
+        List<String> filenames = FileUtil.listFileNames(BASE_FILE_PATH);
+        String fileName = filenames.stream().filter(name -> name.contains(flag)).findAny().
+                orElse("");
+        try {
+            if (StrUtil.isNotEmpty(fileName)){
+                String realName = fileName.substring(fileName.indexOf("_") + 1);
+                if("1".equals(play)){
+                    response.addHeader("Content-Disposition","inline;filename=" +
+                            URLEncoder.encode(realName, "UTF-8"));
+                } else {
+                    response.addHeader("Content-Disposition","attachment;filename=" +
+                            URLEncoder.encode(realName, "UTF-8"));
+                }
+                byte[] bytes = FileUtil.readBytes(BASE_FILE_PATH + fileName);
+                os = response.getOutputStream();
+                os.write(bytes);
+                os.flush();
+                os.close();
+            }
+        } catch (Exception e) {
+            log.error("文件下载失败",e);
+        }
+    }
+    
     @PostMapping("/save")
     public Result save(@RequestBody User user) {
         userService.save(user);

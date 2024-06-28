@@ -6,9 +6,9 @@
 <mapper namespace="com.example.springboot.mapper.UserMapper">
 
     <insert id="save">
-        insert into user(name, phone, email, sex, keynum, age, address, cardnum, createtime, updatetime, isAuth)
+        insert into user(name, phone, email, sex, keynum, age, address, cardnum, createtime, updatetime, isAuth, cover)
         values (#{name}, #{phone}, #{email}, #{sex}, #{keynum}, #{age}, #{address}, #{cardnum},
-                #{createtime}, #{updatetime}, #{isAuth})
+                #{createtime}, #{updatetime}, #{isAuth}, #{cover})
     </insert>
 
     <update id="updateById">
@@ -21,7 +21,8 @@
             age        = #{age},
             address    = #{address},
             updatetime = #{updatetime},
-            isAuth = #{isAuth}
+            isAuth = #{isAuth},
+            cover = #{cover}
         where id = #{id}
     </update>
 

@@ -68,11 +68,9 @@ export default {
           });
 
           if (this.fileList.length === 0) {
-            const sampleFile1 = {name: 'sample1.mp4', url: 'https://www.w3schools.com/html/mov_bbb.mp4', uid: -1};
-            const sampleFile2 = {name: 'sample2.mp4', url: 'https://www.w3schools.com/html/movie.mp4', uid: -2};
 
-            this.fileList.push(sampleFile1);
-            this.fileList.push(sampleFile2);
+            this.fileList.push(this.sampleFile1);
+            this.fileList.push(this.sampleFile2);
           }
         } else {
           this.$notify.error(res.msg);

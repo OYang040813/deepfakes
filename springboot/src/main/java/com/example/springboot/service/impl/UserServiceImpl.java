@@ -55,6 +55,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         user.setCardnum(DateUtil.format(date, "yyyyMMdd") + Math.abs(IdUtil.fastSimpleUUID().hashCode()));
         user.setUpdatetime(new Date());
         user.setCreatetime(new Date());
+
+        String pathForCover = System.getProperty("user.dir") + "/truevue/src/assets/second.png";
+        user.setCover(pathForCover);
+
         user.setIsAuth(0);
 //        //mt5+加盐并加密密码
 //        user.setKeynum(secureKeynum(user.getKeynum()));

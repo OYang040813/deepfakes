@@ -61,7 +61,8 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
 
     @Override
     public void deleteByName(String name) {
-        videoMapper.deleteById(name);
+        //to do
+//        videoMapper.deleteById(name);
     }
 
     @Override

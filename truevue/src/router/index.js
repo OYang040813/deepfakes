@@ -126,6 +126,8 @@ router.beforeEach((to, from, next) => {
     else{
       if(user.isAuth === 1 || user.isAuth === 0){
         next();
+      }else{
+        next({path: '/Login'})
       }
       else{
         next({ path:'/Login' });

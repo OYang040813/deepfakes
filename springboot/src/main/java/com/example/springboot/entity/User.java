@@ -75,4 +75,6 @@ public class User implements Serializable {
 
     private Integer IsAuth;
 
+    private String cover;
+
 }

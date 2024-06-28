@@ -5,13 +5,15 @@
     </h1>
     <el-upload
       class="upload-demo"
-      action="https://jsonplaceholder.typicode.com/posts/"
+      :action="'http://localhost:9090/api/audio/upload?token=' + this.user.token"
       :on-preview="handlePreview"
       :on-remove="handleRemove"
+      :on-success="handleSuccess"
+      :data="{ userId: this.user.id }"
       :file-list="fileList"
       list-type="text"
       accept="audio/*"
-      :show-file-list="false">
+    >
       <el-button size="large" type="primary">
         <i class="fas fa-microphone"></i> 点击上传音频
       </el-button>
@@ -33,28 +35,120 @@
 </template>
 
 <script>
+import Cookies from "js-cookie";
+import request from "../../../utils/request";
+
 export default {
   data() {
     return {
-      fileList: [
-        { name: 'sample1.mp3', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' },
-        { name: 'sample2.mp3', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3' }
-      ]
+      user: Cookies.get('user') ? JSON.parse(Cookies.get('user')) : {},
+      fileList: [],
+
+      sample2: { name: 'sample2.mp3', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3', uid:-1},
+      sample1: { name: 'sample1.mp3', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', uid:-2},
     };
   },
+
+  created() {
+    this.load()
+  },
+
   methods: {
+
+    load(){
+      request.get('/audio/list/' + this.user.id).then(res => {
+        if(res.code === '200') {
+          this.fileList = res.data.map(item => {
+            return {
+              id: item.id,
+              name: item.name,
+              url: item.path,
+              pid: item.pid,
+            };
+          });
+
+          if (this.fileList.length === 0) {
+
+            this.fileList.push(this.sample1);
+            this.fileList.push(this.sample2);
+          }
+        } else {
+          this.$notify.error(res.msg);
+        }
+      }).catch(err => {
+        console.error("加载音频列表出错", err);
+        this.$notify.error("加载音频列表出错");
+      });
+
+    },
+
     handleRemove(file, fileList) {
-      console.log('移除音频', file, fileList);
-      this.fileList = fileList;
+      if(file.id < 0) {
+        this.$notify.error("无法移除示例音频");
+      }else {
+        console.log('移除文件', file, fileList);
+        this.fileList = fileList.filter(item => item.uid !== file.uid);
+
+        // 删除本地视频
+        request.delete("/audio/deleteFile", {
+          params: { url: file.url, name: file.name }  // 将'data'改为'params'以发送查询参数
+        }).then(res => {
+          if (res.code === '200') {
+            console.log("本地视频删除成功");
+          } else {
+            this.$notify.error(res.msg);
+          }
+        }).catch(err => {
+          console.error("删除本地视频出错", err);
+          this.$notify.error("删除本地视频出错");
+        });
+
+        //同步删除数据库条目
+        request.delete("/audio/delete/" + file.id).then(res =>{
+          if(res.code === '200'){
+            this.$notify.success("删除成功")
+            this.load()//调用刷新函数
+          }else{
+            this.$notify.error(res.msg)
+          }
+        })
+      }
+
+      this.load()
     },
     handlePreview(file) {
       console.log('预览音频', file);
     },
+
+    //上传成功
+    handleSuccess(res) {
+      if(res.code === "200") {
+        console.log(res.data)
+        this.load()
+      }else{
+        this.$notify.error(res.msg)
+      }
+    },
+
     removeFile(file) {
-      this.fileList = this.fileList.filter(f => f !== file);
+      this.handleRemove(file,this.fileList);
     },
     startDetection() {
-      this.$router.push('/ShowResult');
+      const fileIds = this.fileList.map(file => file.pid);
+      const payload = {
+        fileIds: fileIds,
+        pid: this.user.id
+      };
+      request.post('/dectection/createforaudioSingle/', payload).then(res => {
+        if (res.code === '200') {
+          this.$router.push('/ShowResult');
+        } else {
+          this.$notify.error(res.msg);
+        }
+      }).catch(err => {
+        console.error("检测请求出错", err);
+        this.$notify.error("检测请求出错");
+      });
     }
   }
 }
