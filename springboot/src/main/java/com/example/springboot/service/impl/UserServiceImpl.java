@@ -127,6 +127,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         LoginDTO loginDTO = new LoginDTO();
         BeanUtils.copyProperties(user,loginDTO);
 
+        user.setUpdatetime(new Date());
+        userMapper.updateById(user);
+
         //用用户ID与用户密码生成Token
         String token = TokenUtils.genToken(String.valueOf(user.getId()), user.getKeynum());
         loginDTO.setToken(token);

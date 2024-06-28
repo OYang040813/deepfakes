@@ -6,13 +6,13 @@
           <div class="user">
             <img src="@/assets/wife.png" />
             <div class="userinfo">
-              <p class="name">light</p>
-              <p class="access">普通用户</p>
+              <p class="name">{{ user.name }}</p>
+              <p class="access">id: {{ user.id }}</p>
             </div>
           </div>
           <div>
             <div class="login-info">
-              <p>上次登录的时间:<span>2024-6-23</span></p>
+              <p>上次登录的时间:<span>{{ user.updatetime }}</span></p>
               <p>上次登录的地点:<span>广州</span></p>
             </div>
           </div>
@@ -47,10 +47,13 @@
 
 <script>
 import * as echarts from 'echarts';
+import Cookies from "js-cookie";
 export default {
   name: 'FirstPage',
   data() {
     return {
+      user: Cookies.get('user') ? JSON.parse(Cookies.get('user')) : {},
+
       systemData: [
         {
           id: 1,
@@ -87,7 +90,8 @@ export default {
           date: "2024-6-12 13:00",
           title: "【重要通知】公司或平台的重要新闻",
           icon:'timer'
-        }]
+        }
+      ]
     };
   },
   mounted() {
