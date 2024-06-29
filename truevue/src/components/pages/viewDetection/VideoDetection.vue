@@ -143,7 +143,7 @@ export default {
         fileIds: fileIds,
         pid: this.user.id
       };
-      request.post('/dectection/createforvideo/', payload).then(res => {
+      request.post('/detection/createForVideo/', payload).then(res => {
         if (res.code === '200') {
           this.$router.push('/ShowResult');
         } else {

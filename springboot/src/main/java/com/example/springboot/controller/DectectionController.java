@@ -15,24 +15,32 @@ import java.util.List;
  * @author oy
  */
 @RestController
-@RequestMapping("/dectection")
+@RequestMapping("/detection")
 public class DectectionController {
 
     @Autowired
     IDectectionService dectectionService;
 
-    @PostMapping("/createforimage")
-    public Result createDetection(@RequestParam List<Integer> fileIds, @RequestParam Integer pid) {
+    @PostMapping("/createForImage")
+    public Result createForImage(@RequestParam List<Integer> fileIds, @RequestParam Integer pid) {
         for (Integer fileId : fileIds) {
             dectectionService.startDetectionForImage(fileId, pid);
         }
         return Result.success();
     }
 
-    @PostMapping("/createforvideo")
-    public Result createforvidio(@RequestParam List<Integer> fileIds, @RequestParam Integer pid) {
+    @PostMapping("/createForVideo")
+    public Result createForVideo(@RequestParam List<Integer> fileIds, @RequestParam Integer pid) {
         for (Integer fileId : fileIds) {
             dectectionService.startDetectionForVideo(fileId, pid);
+        }
+        return Result.success();
+    }
+
+    @PostMapping("/createForAudioSingle")
+    public Result createForAudioSingle(@RequestParam List<Integer> fileIds, @RequestParam Integer pid) {
+        for (Integer fileId : fileIds) {
+            dectectionService.startDetectionForAudioSingle(fileId, pid);
         }
         return Result.success();
     }

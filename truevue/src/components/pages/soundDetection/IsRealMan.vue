@@ -139,7 +139,7 @@ export default {
         fileIds: fileIds,
         pid: this.user.id
       };
-      request.post('/dectection/createforaudioSingle/', payload).then(res => {
+      request.post('/detection/createForAudioSingle/', payload).then(res => {
         if (res.code === '200') {
           this.$router.push('/ShowResult');
         } else {

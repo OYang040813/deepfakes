@@ -141,7 +141,7 @@ export default {
         fileIds: fileIds,
         pid: this.user.id
       };
-      request.post('/dectection/createforimage/', payload).then(res => {
+      request.post('/detection/createForImage/', payload).then(res => {
         if (res.code === '200') {
           this.$router.push('/ShowResult');
         } else {

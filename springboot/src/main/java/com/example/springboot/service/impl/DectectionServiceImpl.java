@@ -14,11 +14,16 @@ public class DectectionServiceImpl extends ServiceImpl<DectectionMapper, Dectect
 
     @Override
     public void startDetectionForImage(Integer fileId, Integer pid) {
-
+        log.error(".......");
     }
 
     @Override
     public void startDetectionForVideo(Integer fileId, Integer pid) {
+
+    }
+
+    @Override
+    public void startDetectionForAudioSingle(Integer fileId, Integer pid) {
 
     }
 }
