@@ -6,9 +6,10 @@
       </div>
       <el-upload
         class="avatar-uploader"
-        action="#"
+        :action="'http://localhost:9090/api/user/upload?token=' + this.user.token"
         :show-file-list="false"
-        :on-change="handleAvatarChange"
+        :on-success="handleSuccess"
+        :data="{ userId: this.user.id }"
       >
         <el-button size="small" type="primary">修改头像</el-button>
       </el-upload>
@@ -16,20 +17,20 @@
     <div class="info-section">
       <h2>个人信息</h2>
       <div class="info-item">
-        <label>昵称：</label>
-        <input v-model="user.nickname" type="text">
+        <label>账户昵称：</label>
+        <input v-model="user.name" type="text">
       </div>
       <div class="info-item">
         <label>性别：</label>
-        <select v-model="user.gender">
+        <select v-model="user.sex">
           <option value="male">男</option>
           <option value="female">女</option>
           <option value="other">其他</option>
         </select>
       </div>
       <div class="info-item">
-        <label>出生日期：</label>
-        <input v-model="user.birthdate" type="date">
+        <label>创建日期：</label>
+        <input v-model="user.createtime" type="date">
       </div>
       <div class="info-item">
         <label>电话：</label>
@@ -45,20 +46,44 @@
 </template>
 
 <script>
+import Cookies from "js-cookie";
+import request from "../../../utils/request";
+
 export default {
   data() {
     return {
-      user: {
-        nickname: '用户昵称',
-        gender: 'male',
-        birthdate: '1990-01-01',
-        phone: '13800138000',
-        email: 'user@example.com'
-      },
+
+      user: Cookies.get('user') ? JSON.parse(Cookies.get('user')) : {},
+      form: '',
       avatar: require('@/assets/second.png') // default avatar
     }
   },
+  created() {
+    this.load();
+  },
   methods: {
+
+    load(){
+      request.get("/user/" + this.user.id).then(res =>{
+        this.form = res.data;
+        console.log(this.form)
+      })
+      if(this.form.cover == null){
+        this.avatar = require('@/assets/second.png');
+      }
+      this.avatar = require("../../../../../CoverFiles/1719675808113_1.jpg");
+    },
+
+    handleSuccess(res) {
+      if(res.code === "200") {
+        console.log(res.data)
+        this.Path = res.data
+        this.load()
+      }else{
+        this.$notify.error(res.msg)
+      }
+    },
+
     handleAvatarChange(file) {
       const reader = new FileReader();
       reader.onload = (e) => {

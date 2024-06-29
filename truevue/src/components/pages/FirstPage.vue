@@ -7,7 +7,7 @@
             <img src="@/assets/wife.png" />
             <div class="userinfo">
               <p class="name">{{ user.name }}</p>
-              <p class="access">id: {{ user.id }}</p>
+              <p class="access">ID: {{ user.cardnum }}</p>
             </div>
           </div>
           <div>
@@ -163,21 +163,22 @@ export default {
   margin-bottom: 20px;
 
   img {
-    margin-left: 40px;
-    width: 150px;
+    margin-left: 5px;
+    width: 130px;
     height: 150px;
     border-radius: 50%;
   }
 
   .userinfo {
-    margin-left: 40px;
+    margin-left: 30px;
 
     .name {
-      font-size: 32px;
+      font-size: 35px;
       margin-bottom: 10px;
     }
 
     .access {
+      font-size: 10px;
       color: #999;
     }
   }

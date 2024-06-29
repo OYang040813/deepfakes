@@ -34,7 +34,7 @@ public class UserController {
     private static final String BASE_FILE_PATH = System.getProperty("user.dir") + "/CoverFiles/";
 
     @PostMapping("/upload")
-    public Result upload(@RequestParam("file") MultipartFile file, @RequestParam("userId") String userId){
+    public Result upload(@RequestParam("file") MultipartFile file, @RequestParam("userId") Integer userId){
         if (userId == null) {
             return Result.error("userId 参数不能为空");
         }
@@ -51,10 +51,12 @@ public class UserController {
             User currentUser = TokenUtils.getCurrentUser();
             String token = TokenUtils.genToken(currentUser.getId().toString(), currentUser.getKeynum());
 
-            user.setCover("http://localhost:9090/api/user/download/" + flag + "?token=" + token);
+//          user.setCover("http://localhost:9090/api/user/download/" + flag + "?token=" + token);
+            String pathToCover = "../../../../../CoverFiles/" + flag + "_" + originalFilename;
+            user.setCover(pathToCover);
             userService.update(user);
 
-            return Result.success(user);
+            return Result.success(filePath);
         } catch (Exception e){
             log.error("文件上传失败",e);
         }

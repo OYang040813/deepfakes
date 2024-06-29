@@ -49,7 +49,6 @@ export default {
   methods: {
 
     load(){
-
         this.fileList = [];
         request.get('/image/list/' + this.user.id).then(res => {
           if(res.code === '200'){
@@ -134,6 +133,7 @@ export default {
         this.$notify.error(res.msg)
       }
     },
+
     // 跳转到/ShowResult路由
     startDetection() {
       const fileIds = this.fileList.map(file => file.pid);

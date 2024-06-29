@@ -9,11 +9,19 @@ import java.util.Date;
 public class LoginDTO {
     private Integer id;
     private String name;
+    private String sex;
+    private String age;
+    private String address;
     private String keynum;
+    private String email;
+    private String cover;
+    private String phone;
     private String cardnum;
     private String token;
     private Integer isAuth;
 
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    private Date createtime;
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date updatetime;
 }
