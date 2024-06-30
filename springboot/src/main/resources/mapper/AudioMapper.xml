@@ -30,10 +30,10 @@
         select * from video
         <where>
             <if test="name != null and name != ''">
-                name like concat('%',#{ name },'%')
+                name like concat('%', #{ name }, '%')
             </if>
             <if test="pid != null and pid != ''">
-                pid like concat('%',#{ pid },'%')
+                pid like concat('%', #{ pid }, '%')
             </if>
         </where>
         order by id desc

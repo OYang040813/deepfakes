@@ -34,13 +34,13 @@
         select * from message
         <where>
             <if test="style != null and style != ''">
-                style like concat('%',#{style},'%')
+                style like concat('%', #{style}, '%')
             </if>
             <if test="mes != null and mes != ''">
-                mes like concat('%',#{mes}, '%')
+                mes like concat('%', #{mes}, '%')
             </if>
             <if test="isread != null and isread != ''">
-                isread like concat('%',#{isread}, '%')
+                isread like concat('%', #{isread}, '%')
             </if>
         </where>
         order by id desc

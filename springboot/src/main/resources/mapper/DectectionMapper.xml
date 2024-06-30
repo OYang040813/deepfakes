@@ -2,5 +2,58 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.springboot.mapper.DectectionMapper">
 
+    <insert id="save">
+        insert into dectection(name, result, style, time, pid, createtime, updatetime)
+        values (#{name}, #{result}, #{style}, #{time}, #{pid}, #{createtime}, #{updatetime})
+    </insert>
+
+    <update id="updateById">
+        update dectection
+        set name         = #{name},
+            result       = #{result},
+            style        = #{style},
+            time         = #{time},
+            pid          = #{pid},
+            updatetime   = #{updatetime}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        delete
+        from dectection
+        where id = #{id}
+    </delete>
+
+    <select id="list" resultType="com.example.springboot.entity.Dectection">
+        select *
+        from dectection
+    </select>
+
+    <select id="listByCondition" resultType="com.example.springboot.entity.Dectection">
+        select * from dectection
+        <where>
+            <if test="name != null and name != ''">
+                name like concat('%', #{name }, '%')
+            </if>
+            <if test="style != null and style != ''">
+                style like concat('%', #{style}, '%')
+            </if>
+            <if test="pid != null and pid != ''">
+                pid = #{pid}
+            </if>
+        </where>
+        order by id desc
+    </select>
+
+    <select id="getById" resultType="com.example.springboot.entity.Dectection">
+        select *
+        from dectection
+        where id = #{id}
+    </select>
+
+    <select id="getByName" parameterType="String" resultType="com.example.springboot.entity.Dectection">
+        select * from dectection where name = #{name}
+    </select>
+    
 </mapper>
 

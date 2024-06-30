@@ -45,7 +45,7 @@ public class Dectection implements Serializable {
     /**
      * 检测类型
      */
-    private Integer style;
+    private String style;
 
     /**
      * 检测所用时间
@@ -57,5 +57,6 @@ public class Dectection implements Serializable {
      */
     private Integer pid;
 
+    private String status;
 
 }

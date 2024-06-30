@@ -2,13 +2,14 @@ package com.example.springboot.controller;
 
 
 import com.example.springboot.common.Result;
+import com.example.springboot.entity.Dectection;
+import com.example.springboot.request.DectectionPageRequest;
 import com.example.springboot.service.IDectectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author oy
@@ -72,5 +73,43 @@ public class DectectionController {
         }
         return Result.success();
     }
+
+    //////////////////////////////////////////////////////////////////////////
+    @PostMapping("/save")
+    public Result save(@RequestBody Dectection dectection) {
+        dectectionService.save(dectection);
+        return Result.success();
+    }
+    
+    @DeleteMapping("/delete/{id}")
+    public Result delete(@PathVariable Integer id) {
+        dectectionService.deleteById(id);
+        return Result.success();
+    }
+
+    @PutMapping("/update")
+    public Result update(@RequestBody Dectection dectection) {
+        dectectionService.update(dectection);
+        return Result.success();
+    }
+
+    @GetMapping("/{id}")
+    public Result getById(@PathVariable Integer id) {
+        Dectection dectection = dectectionService.getById(id);
+        return Result.success(dectection);
+    }
+
+    @GetMapping("/list")
+    public Result list() {
+        List<Dectection> dectections = dectectionService.list();
+        return Result.success(dectections);
+    }
+
+    @GetMapping("/page")
+    public Result page(DectectionPageRequest dectectionPageRequest) {
+        return Result.success(dectectionService.page(dectectionPageRequest));
+    }
+    
+    
 }
 

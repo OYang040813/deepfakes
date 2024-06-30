@@ -2,9 +2,11 @@
   <div class="detection-page">
     <h1>统一检测界面</h1>
     <el-table :data="pagedDetectionData" style="width: 100%">
-      <el-table-column prop="fileName" label="文件名称" min-width="25%"></el-table-column>
-      <el-table-column prop="status" label="检测状态" min-width="20%"></el-table-column>
-      <el-table-column prop="startTime" label="检测时间" min-width="25%"></el-table-column>
+      <el-table-column prop="id" label="id" min-width="10%"></el-table-column>
+      <el-table-column prop="name" label="文件名称" min-width="15%"></el-table-column>
+      <el-table-column prop="style" label="检测类型" min-width="15%"></el-table-column>
+      <el-table-column prop="status" label="检测状态" min-width="10%"></el-table-column>
+      <el-table-column prop="createtime" label="检测时间" min-width="25%"></el-table-column>
       <el-table-column prop="result" label="检测结果" min-width="30%">
         <template slot-scope="scope">
           <div :class="{'result-high': scope.row.result > 50, 'result-low': scope.row.result <= 50}">
@@ -14,11 +16,11 @@
       </el-table-column>
     </el-table>
     <el-pagination
-      v-if="detectionData.length > pageSize"
+      v-if="detectionData.length > params.pageSize"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
-      :current-page="currentPage"
-      :page-size="pageSize"
+      :current-page="params.pageNum"
+      :page-size="params.pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="detectionData.length"
       class="pagination">
@@ -31,30 +33,33 @@ export default {
   data() {
     return {
       detectionData: [
-        { fileName: 'image1.jpg', status: '正在检测', startTime: '2023-06-01 10:00:00', result: 0 },
-        { fileName: 'video1.mp4', status: '已检测完毕', startTime: '2023-06-01 10:30:00', result: 80 },
-        { fileName: 'audio1.mp3', status: '已检测完毕', startTime: '2023-06-01 11:00:00', result: 30 },
-        { fileName: 'image2.jpg', status: '已检测完毕', startTime: '2023-06-01 12:00:00', result: 45 },
-        { fileName: 'video2.mp4', status: '正在检测', startTime: '2023-06-01 13:00:00', result: 0 },
-        { fileName: 'audio2.mp3', status: '已检测完毕', startTime: '2023-06-01 14:00:00', result: 60 }
+        {id:1, name: 'image1.jpg', style: '图像检测', status: '正在检测', createtime: '2023-06-01 10:00:00', result: 0 },
+        {id:2, name: 'video1.mp4', style: '视频检测', status: '已检测完毕', createtime: '2023-06-01 10:30:00', result: 80 },
+        {id:3, name: 'audio1.mp3', style: '音频检测', status: '已检测完毕', createtime: '2023-06-01 11:00:00', result: 30 },
+        {id:4, name: 'image2.jpg', style: '图像检测', status: '已检测完毕', createtime: '2023-06-01 12:00:00', result: 45 },
+        {id:5, name: 'video2.mp4', style: '视频检测', status: '正在检测', createtime: '2023-06-01 13:00:00', result: 0 },
+        {id:6, name: 'audio2.mp3', style: '音频检测', status: '已检测完毕', createtime: '2023-06-01 14:00:00', result: 60 }
       ],
-      currentPage: 1,
-      pageSize: 5
+      params:{
+        pageNum:1,
+        pageSize:5,
+      },
+
     };
   },
   computed: {
     pagedDetectionData() {
-      const start = (this.currentPage - 1) * this.pageSize;
-      const end = start + this.pageSize;
+      const start = (this.params.pageNum - 1) * this.params.pageSize;
+      const end = start + this.params.pageSize;
       return this.detectionData.slice(start, end);
     }
   },
   methods: {
     handleSizeChange(size) {
-      this.pageSize = size;
+      this.params.pageSize = size;
     },
     handleCurrentChange(page) {
-      this.currentPage = page;
+      this.params.pageNum = page;
     }
   }
 };

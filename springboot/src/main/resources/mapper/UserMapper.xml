@@ -42,10 +42,10 @@
         select * from user
         <where>
             <if test="name != null and name != ''">
-                name like concat('%',#{ name },'%')
+                name like concat('%', #{ name }, '%')
             </if>
             <if test="phone != null and phone != ''">
-                phone like concat('%',#{ phone }, '%')
+                phone like concat('%', #{ phone }, '%')
             </if>
         </where>
         order by id desc
