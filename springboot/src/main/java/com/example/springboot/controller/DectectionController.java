@@ -60,7 +60,7 @@ public class DectectionController {
         return Result.success();
     }
 
-    @PostMapping("/createForAudioSingle")
+    @PostMapping("/createForAudioDouble")
     public Result createForAudioDouble(@RequestBody Map<String, Object> payload) {
         List<Integer> fileIds = (List<Integer>) payload.get("fileIds");
         Integer pid = (Integer) payload.get("pid");
