@@ -38,9 +38,8 @@ public class UserController {
         if (userId == null) {
             return Result.error("userId 参数不能为空");
         }
-        String originalFilename = file.getOriginalFilename();
         long flag = System.currentTimeMillis();//时间戳
-        String filePath = BASE_FILE_PATH + flag + "_" + originalFilename;
+        String filePath = BASE_FILE_PATH + flag;
         try {
             FileUtil.mkParentDirs(filePath); // 创建父级目录
             file.transferTo(FileUtil.file(filePath));
@@ -51,12 +50,15 @@ public class UserController {
             User currentUser = TokenUtils.getCurrentUser();
             String token = TokenUtils.genToken(currentUser.getId().toString(), currentUser.getKeynum());
 
-//          user.setCover("http://localhost:9090/api/user/download/" + flag + "?token=" + token);
-            String pathToCover = "../../../../../CoverFiles/" + flag + "_" + originalFilename;
-            user.setCover(pathToCover);
+            //预先取出旧封面，以于后续删除
+            String oldCover = user.getCover();
+
+            user.setCover("http://localhost:9090/api/user/download/" + flag + "?token=" + token);
+//            String pathToCover = "../../../../../CoverFiles/" + flag + "_" + originalFilename;
+//            user.setCover(pathToCover);
             userService.update(user);
 
-            return Result.success(filePath);
+            return deleteFile(oldCover);
         } catch (Exception e){
             log.error("文件上传失败",e);
         }
@@ -130,6 +132,28 @@ public class UserController {
     @GetMapping("/page")
     public Result page(UserPageRequest userPageRequest) {
         return Result.success(userService.page(userPageRequest));
+    }
+
+    @DeleteMapping("/deleteFile/{url}")
+    public Result deleteFile(@PathVariable String url) {
+        try {
+            // 从 URL 中提取 flag 部分
+            String flag = url.substring(url.lastIndexOf("/") + 1, url.indexOf("?"));
+            List<String> filenames = FileUtil.listFileNames(BASE_FILE_PATH);
+            String targetFileName = filenames.stream()
+                    .filter(fileName -> fileName.contains(flag))
+                    .findAny()
+                    .orElse("");
+            if (StrUtil.isNotEmpty(targetFileName)) {
+                FileUtil.del(BASE_FILE_PATH + targetFileName);
+                return Result.success("文件删除成功");
+            } else {
+                return Result.error("文件不存在");
+            }
+        } catch (Exception e) {
+            log.error("删除文件失败", e);
+            return Result.error("文件删除失败");
+        }
     }
 }
 

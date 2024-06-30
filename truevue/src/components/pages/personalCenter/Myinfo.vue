@@ -6,10 +6,10 @@
       </div>
       <el-upload
         class="avatar-uploader"
-        :action="'http://localhost:9090/api/user/upload?token=' + this.user.token"
+        :action="'http://localhost:9090/api/user/upload?token=' + this.userByCookies.token"
         :show-file-list="false"
         :on-success="handleSuccess"
-        :data="{ userId: this.user.id }"
+        :data="{ userId: userByCookies.id }"
       >
         <el-button size="small" type="primary">修改头像</el-button>
       </el-upload>
@@ -22,15 +22,15 @@
       </div>
       <div class="info-item">
         <label>性别：</label>
-        <select v-model="user.sex">
-          <option value="male">男</option>
-          <option value="female">女</option>
-          <option value="other">其他</option>
+          <select v-model="user.sex">
+          <option value="男">男</option>
+          <option value="女">女</option>
+          <option value="未知">未知</option>
         </select>
       </div>
       <div class="info-item">
         <label>创建日期：</label>
-        <input v-model="user.createtime" type="date">
+        <input v-model="user.birthday" type="date">
       </div>
       <div class="info-item">
         <label>电话：</label>
@@ -40,7 +40,7 @@
         <label>邮箱：</label>
         <input v-model="user.email" type="email">
       </div>
-      <button class="save-btn">保存修改</button>
+      <button class="save-btn" @click="update">保存修改</button>
     </div>
   </div>
 </template>
@@ -53,9 +53,9 @@ export default {
   data() {
     return {
 
-      user: Cookies.get('user') ? JSON.parse(Cookies.get('user')) : {},
-      form: '',
-      avatar: require('@/assets/second.png') // default avatar
+      userByCookies: Cookies.get('user') ? JSON.parse(Cookies.get('user')) : {},
+      user: {},
+      avatar: '',
     }
   },
   created() {
@@ -64,33 +64,45 @@ export default {
   methods: {
 
     load(){
-      request.get("/user/" + this.user.id).then(res =>{
-        this.form = res.data;
-        console.log(this.form)
+      request.get("/user/" + this.userByCookies.id).then(res =>{
+        this.user = res.data;
+        // console.log(this.form)
+        if(this.user.cover == null){
+          this.avatar = require('@/assets/second.png'); // default avatar
+        }
+        this.avatar = this.user.cover;
       })
-      if(this.form.cover == null){
-        this.avatar = require('@/assets/second.png');
-      }
-      this.avatar = require("../../../../../CoverFiles/1719675808113_1.jpg");
     },
 
     handleSuccess(res) {
       if(res.code === "200") {
         console.log(res.data)
-        this.Path = res.data
+
         this.load()
       }else{
         this.$notify.error(res.msg)
       }
     },
 
-    handleAvatarChange(file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        this.avatar = e.target.result;
-      };
-      reader.readAsDataURL(file.raw);
-    }
+    update() {
+      console.log(this.user)
+      request.put('/user/update', this.user).then(res =>{
+        if (res.code === '200'){
+          this.$notify.success('个人信息更新成功')
+          this.load()
+        } else{
+          this.$notify.error(res.msg)
+        }
+      })
+    },
+
+    // handleAvatarChange(file) {
+    //   const reader = new FileReader();
+    //   reader.onload = (e) => {
+    //     this.avatar = e.target.result;
+    //   };
+    //   reader.readAsDataURL(file.raw);
+    // }
   }
 }
 </script>

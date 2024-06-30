@@ -104,13 +104,13 @@ export default {
               icon: 'setting',
               url: 'soundDetection/IsRealMan'
             },
-            {
-              path: '/IsSame',
-              name: 'IsSame',
-              label: '判断是否为同一人',
-              icon: 'setting',
-              url: 'soundDetection/IsSame'
-            }
+            // {
+            //   path: '/IsSame',
+            //   name: 'IsSame',
+            //   label: '判断是否为同一人',
+            //   icon: 'setting',
+            //   url: 'soundDetection/IsSame'
+            // }
           ]
         },
         {

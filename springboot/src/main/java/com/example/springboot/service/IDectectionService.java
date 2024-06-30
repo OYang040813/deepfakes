@@ -13,6 +13,8 @@ public interface IDectectionService extends IService<Dectection> {
     void startDetectionForVideo(Integer fileId, Integer pid);
 
     void startDetectionForAudioSingle(Integer fileId, Integer pid);
+
+    void startDetectionForAudioDouble(Integer fileId, Integer pid);
 }
 
 

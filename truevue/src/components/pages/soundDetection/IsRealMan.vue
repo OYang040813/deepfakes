@@ -134,12 +134,12 @@ export default {
       this.handleRemove(file,this.fileList);
     },
     startDetection() {
-      const fileIds = this.fileList.map(file => file.pid);
+      const fileIds = this.fileList.map(file => file.id);
       const payload = {
         fileIds: fileIds,
         pid: this.user.id
       };
-      request.post('/detection/createForAudioSingle/', payload).then(res => {
+      request.post('/detection/createForAudioSingle', payload).then(res => {
         if (res.code === '200') {
           this.$router.push('/ShowResult');
         } else {

@@ -77,4 +77,5 @@ public class User implements Serializable {
 
     private String cover;
 
+    private String birthday;
 }
