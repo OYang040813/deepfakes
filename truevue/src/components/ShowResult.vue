@@ -3,7 +3,7 @@
     <h1>统一检测界面</h1>
     <el-table :data="pagedDetectionData" style="width: 100%">
       <el-table-column prop="id" label="id" min-width="10%"></el-table-column>
-      <el-table-column prop="name" label="文件名称" min-width="15%"></el-table-column>
+      <el-table-column prop="name" label="文件名称" min-width="30%"></el-table-column>
       <el-table-column prop="style" label="检测类型" min-width="15%"></el-table-column>
       <el-table-column prop="status" label="检测状态" min-width="10%"></el-table-column>
       <el-table-column prop="createtime" label="检测时间" min-width="25%"></el-table-column>
@@ -29,9 +29,14 @@
 </template>
 
 <script>
+import Cookies from "js-cookie";
+import request from "../utils/request";
+
 export default {
   data() {
     return {
+      user: Cookies.get('user') ? JSON.parse(Cookies.get('user')) : {},
+
       detectionData: [
         {id:1, name: 'image1.jpg', style: '图像检测', status: '正在检测', createtime: '2023-06-01 10:00:00', result: 0 },
         {id:2, name: 'video1.mp4', style: '视频检测', status: '已检测完毕', createtime: '2023-06-01 10:30:00', result: 80 },
@@ -40,9 +45,13 @@ export default {
         {id:5, name: 'video2.mp4', style: '视频检测', status: '正在检测', createtime: '2023-06-01 13:00:00', result: 0 },
         {id:6, name: 'audio2.mp3', style: '音频检测', status: '已检测完毕', createtime: '2023-06-01 14:00:00', result: 60 }
       ],
+
       params:{
         pageNum:1,
         pageSize:5,
+        // style:'',
+        // status:'',
+        pid:'',
       },
 
     };
@@ -54,7 +63,21 @@ export default {
       return this.detectionData.slice(start, end);
     }
   },
+  created() {
+    this.load()
+  },
   methods: {
+
+    load(){
+      this.params.pid = this.user.id;
+      request.get('/detection/page',{params : this.params}).then(res => {
+        if(res.code === '200'){
+          this.detectionData = res.data.list
+          this.total = res.data.total
+        }
+      })
+    },
+
     handleSizeChange(size) {
       this.params.pageSize = size;
     },

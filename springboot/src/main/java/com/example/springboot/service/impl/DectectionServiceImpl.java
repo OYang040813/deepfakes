@@ -35,14 +35,10 @@ public class DectectionServiceImpl extends ServiceImpl<DectectionMapper, Dectect
 
     @Override
     public void startDetectionForImage(Integer fileId, Integer pid) {
-        //创建实例
+
         Image image = imageMapper.getById(fileId);
-        Dectection dectection = new Dectection();
-        dectection.setName(image.getName());
-        dectection.setStyle("图像检测");
-        dectection.setStatus("等待检测");
-        dectection.setPid(pid);
-        dectectionMapper.save(dectection);
+        //创建实例
+        Dectection dectection = create(pid, "图像检测", image.getName(), image.getPath());
 
         imageMapper.deleteById(fileId);
 
@@ -51,14 +47,10 @@ public class DectectionServiceImpl extends ServiceImpl<DectectionMapper, Dectect
 
     @Override
     public void startDetectionForVideo(Integer fileId, Integer pid) {
-        //创建实例
+
         Video video = videoMapper.getById(fileId);
-        Dectection dectection = new Dectection();
-        dectection.setName(video.getName());
-        dectection.setStyle("视频检测");
-        dectection.setStatus("等待检测");
-        dectection.setPid(pid);
-        dectectionMapper.save(dectection);
+        //创建实例
+        Dectection dectection = create(pid, "图像检测", video.getName(), video.getPath());
 
         videoMapper.deleteById(fileId);
 
@@ -67,14 +59,10 @@ public class DectectionServiceImpl extends ServiceImpl<DectectionMapper, Dectect
 
     @Override
     public void startDetectionForAudioSingle(Integer fileId, Integer pid) {
-        //创建实例
+
         Audio audio = audioMapper.getById(fileId);
-        Dectection dectection = new Dectection();
-        dectection.setName(audio.getName());
-        dectection.setStyle("音频检测");
-        dectection.setStatus("等待检测");
-        dectection.setPid(pid);
-        dectectionMapper.save(dectection);
+        //创建实例
+        Dectection dectection = create(pid, "图像检测", audio.getName(), audio.getPath());
 
         audioMapper.deleteById(fileId);
 
@@ -123,8 +111,23 @@ public class DectectionServiceImpl extends ServiceImpl<DectectionMapper, Dectect
     @Override
     public PageInfo<Dectection> page(BaseRequest baseRequest) {
         PageHelper.startPage(baseRequest.getPageNum(), baseRequest.getPageSize());
-        List<Dectection> users = dectectionMapper.listByCondition(baseRequest);
-        return new PageInfo<>(users);
+        List<Dectection> dectections = dectectionMapper.listByCondition(baseRequest);
+        return new PageInfo<>(dectections);
+    }
+
+    public Dectection create(Integer pid, String style, String name, String path){
+
+        Dectection dectection = new Dectection();
+        dectection.setName(name);
+        dectection.setPath(path);
+        dectection.setCreatetime(new Date());
+        dectection.setUpdatetime(new Date());
+        dectection.setStyle(style);
+        dectection.setStatus("等待检测");
+        dectection.setPid(pid);
+        dectectionMapper.save(dectection);
+
+        return dectection;
     }
 }
 

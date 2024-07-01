@@ -27,7 +27,7 @@
         from audio where pid = #{id}
     </select>
     <select id="listByCondition" resultType="com.example.springboot.entity.Audio">
-        select * from video
+        select * from audio
         <where>
             <if test="name != null and name != ''">
                 name like concat('%', #{ name }, '%')
@@ -40,16 +40,16 @@
     </select>
     <select id="getById" resultType="com.example.springboot.entity.Audio">
         select *
-        from video
+        from audio
         where id = #{id}
     </select>
     <select id="getByName" resultType="com.example.springboot.entity.Audio">
         select *
-        from video
+        from audio
         where name = #{name}
     </select>
     <select id="getByPath" resultType="com.example.springboot.entity.Audio">
-        select * from video where path = #{path}
+        select * from audio where path = #{path}
     </select>
 </mapper>
 

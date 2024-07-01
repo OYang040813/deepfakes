@@ -3,8 +3,8 @@
 <mapper namespace="com.example.springboot.mapper.DectectionMapper">
 
     <insert id="save">
-        insert into dectection(name, result, style, time, pid, createtime, updatetime)
-        values (#{name}, #{result}, #{style}, #{time}, #{pid}, #{createtime}, #{updatetime})
+        insert into dectection(name, result, style, time, pid, path, status, createtime, updatetime)
+        values (#{name}, #{result}, #{style}, #{time}, #{pid}, #{path}, #{status}, #{createtime}, #{updatetime})
     </insert>
 
     <update id="updateById">
@@ -14,7 +14,9 @@
             style        = #{style},
             time         = #{time},
             pid          = #{pid},
-            updatetime   = #{updatetime}
+            updatetime   = #{updatetime},
+            status       = #{status},
+            path         = #{path}
         where id = #{id}
     </update>
 
@@ -32,8 +34,8 @@
     <select id="listByCondition" resultType="com.example.springboot.entity.Dectection">
         select * from dectection
         <where>
-            <if test="name != null and name != ''">
-                name like concat('%', #{name }, '%')
+            <if test="status != null and status != ''">
+                status like concat('%', #{status}, '%')
             </if>
             <if test="style != null and style != ''">
                 style like concat('%', #{style}, '%')

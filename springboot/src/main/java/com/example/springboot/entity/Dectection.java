@@ -59,4 +59,8 @@ public class Dectection implements Serializable {
 
     private String status;
 
+    private String path;
+
+    private String cardnum;
+
 }

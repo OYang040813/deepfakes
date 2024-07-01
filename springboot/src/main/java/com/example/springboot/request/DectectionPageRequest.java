@@ -6,5 +6,5 @@ import lombok.Data;
 public class DectectionPageRequest extends BaseRequest {
     private String style;
     private String status;
-    private String pid;
+    private Integer pid;
 }
