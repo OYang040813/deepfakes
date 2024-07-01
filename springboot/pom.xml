@@ -110,7 +110,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.example.Application</mainClass> <!-- 设置主类 -->
+                    <mainClass>com.example.springboot.SpringbootApplication</mainClass> <!-- 设置主类 -->
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
