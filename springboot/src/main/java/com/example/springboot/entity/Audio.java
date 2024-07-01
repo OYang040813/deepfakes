@@ -59,4 +59,6 @@ public class Audio implements Serializable {
      */
     private String status;
 
+    private String localpath;
+
 }

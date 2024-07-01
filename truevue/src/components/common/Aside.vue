@@ -100,7 +100,7 @@ export default {
             {
               path: '/IsRealMan',
               name: 'IsRealMan',
-              label: '判断是否为真人',
+              label: '人声检测',
               icon: 'setting',
               url: 'soundDetection/IsRealMan'
             },

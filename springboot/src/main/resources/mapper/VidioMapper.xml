@@ -3,8 +3,8 @@
 <mapper namespace="com.example.springboot.mapper.VideoMapper">
 
     <insert id="save">
-        insert into video(name, pid, size, path, status, createtime, updatetime)
-        values (#{name}, #{pid}, #{size}, #{path}, #{status}, #{createtime}, #{updatetime})
+        insert into video(name, pid, size, path, status, localpath, createtime, updatetime)
+        values (#{name}, #{pid}, #{size}, #{path}, #{status}, #{localpath}, #{createtime}, #{updatetime})
     </insert>
 
     <update id="updateById">
@@ -14,6 +14,7 @@
             size          = #{size},
             path          = #{path},
             status        = #{status},
+            localpath     = #{localpath},
             updatetime    = #{updatetime}
         where id = #{id}
     </update>

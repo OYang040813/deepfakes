@@ -3,17 +3,18 @@
 <mapper namespace="com.example.springboot.mapper.ImageMapper">
 
     <insert id="save">
-        insert into image(name, pid, size, path, status, createtime, updatetime)
-        values (#{name}, #{pid}, #{size}, #{path}, #{status}, #{createtime}, #{updatetime})
+        insert into image(name, pid, size, path, status,localpath, createtime, updatetime)
+        values (#{name}, #{pid}, #{size}, #{path}, #{status}, #{localpath}, #{createtime}, #{updatetime})
     </insert>
 
     <update id="updateById">
         update image
-        set name       = #{name},
-            pid      = #{pid},
-            size      = #{size},
-            path        = #{path},
-            status     = #{status},
+        set name          = #{name},
+            pid           = #{pid},
+            size          = #{size},
+            path          = #{path},
+            status        = #{status},
+            localpath     = #{localpath},
             updatetime    = #{updatetime}
         where id = #{id}
     </update>

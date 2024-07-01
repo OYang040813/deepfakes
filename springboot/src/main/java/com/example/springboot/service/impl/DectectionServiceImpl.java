@@ -125,6 +125,7 @@ public class DectectionServiceImpl extends ServiceImpl<DectectionMapper, Dectect
         dectection.setStyle(style);
         dectection.setStatus("等待检测");
         dectection.setPid(pid);
+        dectection.setCardnum(DateUtil.format(new Date(),"yyyyMMdd") + Math.abs(IdUtil.fastSimpleUUID().hashCode()));
         dectectionMapper.save(dectection);
 
         return dectection;

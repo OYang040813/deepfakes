@@ -59,4 +59,5 @@ public class Image implements Serializable {
      */
     private String status;
 
+    private String localpath;
 }

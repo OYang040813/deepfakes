@@ -44,8 +44,8 @@ export default {
       user: Cookies.get('user') ? JSON.parse(Cookies.get('user')) : {},
       fileList: [],
 
-      sampleFile1: { name: 'sample1.mp4', url: 'https://www.w3schools.com/html/mov_bbb.mp4', uid: -1},
-      sampleFile2: { name: 'sample2.mp4', url: 'https://www.w3schools.com/html/movie.mp4', uid: -2},
+      sampleFile1: {id:-1, name: 'sample1.mp4', url: 'https://www.w3schools.com/html/mov_bbb.mp4', uid: -1},
+      sampleFile2: {id:-2, name: 'sample2.mp4', url: 'https://www.w3schools.com/html/movie.mp4', uid: -2},
 
     };
   },
@@ -139,11 +139,16 @@ export default {
     },
 
     startDetection() {
-      const fileIds = this.fileList.map(file => file.id);
+      // 获取fileList中的文件ID并过滤掉示例文件的ID
+      const fileIds = this.fileList.map(file => file.id).filter(id => id !== -1 && id !== -2);
       const payload = {
         fileIds: fileIds,
         pid: this.user.id
       };
+      if(fileIds.length === 0){
+        this.$notify.warning("请勿对示例文件执行检测");
+        return
+      }
       request.post('/detection/createForVideo',payload).then(res => {
         if (res.code === '200') {
           this.$router.push('/ShowResult');

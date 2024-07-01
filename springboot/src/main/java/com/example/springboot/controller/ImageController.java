@@ -6,12 +6,9 @@ import cn.hutool.core.util.StrUtil;
 import com.example.springboot.Utils.TokenUtils;
 import com.example.springboot.common.Result;
 import com.example.springboot.entity.Image;
-import com.example.springboot.entity.Image;
 import com.example.springboot.entity.User;
 import com.example.springboot.request.ImagePageRequest;
-import com.example.springboot.request.UserPageRequest;
 import com.example.springboot.service.IImageService;
-import com.example.springboot.service.IUserService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
 
@@ -57,6 +53,7 @@ public class ImageController {
             image.setPath("http://localhost:9090/api/image/download/" + flag + "?token=" + token);
             image.setStatus("-1");
             image.setPid(Math.toIntExact(Long.parseLong(userId)));
+            image.setLocalpath(filePath);
             imageService.save(image);
 
             Image image1 = imageService.getByPath(image.getPath());

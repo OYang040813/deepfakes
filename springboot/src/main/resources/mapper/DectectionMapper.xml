@@ -3,8 +3,8 @@
 <mapper namespace="com.example.springboot.mapper.DectectionMapper">
 
     <insert id="save">
-        insert into dectection(name, result, style, time, pid, path, status, createtime, updatetime)
-        values (#{name}, #{result}, #{style}, #{time}, #{pid}, #{path}, #{status}, #{createtime}, #{updatetime})
+        insert into dectection(name, result, style, time, pid, path, status, cardnum, createtime, updatetime)
+        values (#{name}, #{result}, #{style}, #{time}, #{pid}, #{path}, #{status}, #{cardnum}, #{createtime}, #{updatetime})
     </insert>
 
     <update id="updateById">
@@ -16,6 +16,7 @@
             pid          = #{pid},
             updatetime   = #{updatetime},
             status       = #{status},
+            cardnum      = #{cardnum},
             path         = #{path}
         where id = #{id}
     </update>

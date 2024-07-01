@@ -4,7 +4,7 @@
       <el-col :span="8">
         <el-card class="box-card">
           <div class="user">
-            <img src="@/assets/wife.png" />
+            <img :src= 'avatar' />
             <div class="userinfo">
               <p class="name">{{ user.name }}</p>
               <p class="access">ID: {{ user.cardnum }}</p>
@@ -48,10 +48,13 @@
 <script>
 import * as echarts from 'echarts';
 import Cookies from "js-cookie";
+import request from "../../utils/request";
 export default {
   name: 'FirstPage',
   data() {
     return {
+
+      avatar: '@/assets/wife.png',
       user: Cookies.get('user') ? JSON.parse(Cookies.get('user')) : {},
 
       systemData: [
@@ -93,6 +96,22 @@ export default {
         }
       ]
     };
+  },
+  created() {
+    this.load();
+  },
+  methods: {
+    load(){
+      request.get("/user/" + this.user.id).then(res =>{
+        this.user = res.data;
+        // console.log(this.form)
+        if(this.user.cover == null){
+          this.avatar = require('@/assets/second.png'); // default avatar
+        }
+        this.avatar = this.user.cover;
+      })
+    },
+
   },
   mounted() {
     var myChart1 = echarts.init(this.$refs.echarts1);
@@ -163,9 +182,9 @@ export default {
   margin-bottom: 20px;
 
   img {
-    margin-left: 5px;
-    width: 130px;
-    height: 150px;
+    margin-left: 3px;
+    width: 140px;
+    height: 140px;
     border-radius: 50%;
   }
 

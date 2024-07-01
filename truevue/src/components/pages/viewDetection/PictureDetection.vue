@@ -113,8 +113,8 @@ export default {
             this.$notify.error(res.msg)
           }
         })
-      }
 
+      }
       this.load()
     },
     // 预览图片
@@ -136,11 +136,18 @@ export default {
 
     // 跳转到/ShowResult路由
     startDetection() {
-      const fileIds = this.fileList.map(file => file.id);
+
+      // 获取fileList中的文件ID并过滤掉示例文件的ID
+      const fileIds = this.fileList.map(file => file.id).filter(id => id !== -1 && id !== -2);
       const payload = {
         fileIds: fileIds,
         pid: this.user.id
       };
+      if(fileIds.length === 0){
+        this.$notify.warning("请勿对示例文件执行检测");
+        return
+      }
+
       request.post('/detection/createForImage',payload).then(res => {
         if (res.code === '200') {
           this.$router.push('/ShowResult');
@@ -151,7 +158,8 @@ export default {
         console.error("检测请求出错", err);
         this.$notify.error("检测请求出错");
       });
-    }
+    },
+
   }
 }
 </script>

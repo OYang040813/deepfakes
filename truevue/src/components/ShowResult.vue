@@ -2,10 +2,10 @@
   <div class="detection-page">
     <h1>统一检测界面</h1>
     <el-table :data="pagedDetectionData" style="width: 100%">
-      <el-table-column prop="id" label="id" min-width="10%"></el-table-column>
+      <el-table-column prop="cardnum" label="检测号" min-width="30%"></el-table-column>
       <el-table-column prop="name" label="文件名称" min-width="30%"></el-table-column>
       <el-table-column prop="style" label="检测类型" min-width="15%"></el-table-column>
-      <el-table-column prop="status" label="检测状态" min-width="10%"></el-table-column>
+      <el-table-column prop="status" label="检测状态" min-width="15%"></el-table-column>
       <el-table-column prop="createtime" label="检测时间" min-width="25%"></el-table-column>
       <el-table-column prop="result" label="检测结果" min-width="30%">
         <template slot-scope="scope">

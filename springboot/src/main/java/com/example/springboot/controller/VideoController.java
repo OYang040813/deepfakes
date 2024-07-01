@@ -11,12 +11,13 @@ import com.example.springboot.request.VideoPageRequest;
 import com.example.springboot.service.IVideoService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.connector.ClientAbortException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
 
@@ -54,6 +55,7 @@ public class VideoController {
             video.setPath("http://localhost:9090/api/video/download/" + flag + "?token=" + token);
             video.setStatus("-1");
             video.setPid(Math.toIntExact(Long.parseLong(userId)));
+            video.setLocalpath(filePath);
             videoService.save(video);
 
             Video video1 = videoService.getByPath(video.getPath());
@@ -88,10 +90,14 @@ public class VideoController {
                 os.flush();
                 os.close();
             }
-        } catch (Exception e) {
-            log.error("文件下载失败",e);
+        } catch (ClientAbortException e) {
+            log.warn("客户端中止了连接: {}", e.getMessage());
+        } catch (IOException e) {
+            log.error("文件下载失败", e);
         }
     }
+
+
 
     @PostMapping("/save")
     public Result save(@RequestBody Video video) {

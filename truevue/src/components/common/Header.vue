@@ -16,7 +16,7 @@
     <div class="r-context">
       <el-dropdown>
   <span class="el-dropdown-link">
-    <img class = "user_img" src ="@/assets/wife.png"/>
+    <img class = "user_img" :src ='avatar'/>
   </span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item><div @click="message"><i class="el-icon-s-tools"></i>个人信息</div></el-dropdown-item>
@@ -32,13 +32,32 @@
 
 import { mapState } from 'vuex'
 import Cookies from "js-cookie";
+import request from "../../utils/request";
 export default {
   name: 'Header',
   data () {
     return {
+
+      avatar: '@/assets/wife.png',
+      user: Cookies.get('user') ? JSON.parse(Cookies.get('user')) : {},
+
     }
   },
+  created() {
+    this.load();
+  },
   methods:{
+    load(){
+      request.get("/user/" + this.user.id).then(res =>{
+        this.user = res.data;
+        // console.log(this.form)
+        if(this.user.cover == null){
+          this.avatar = require('@/assets/second.png'); // default avatar
+        }
+        this.avatar = this.user.cover;
+      })
+    },
+
     out(){
       Cookies.remove('user')
       this.$router.push('/Login')
@@ -54,6 +73,7 @@ export default {
     message(){
       this.$router.push('/Myinfo')
       this.$notify.success('已跳转至个人中心')
+      this.load()
     },
 
   },computed:{

@@ -52,6 +52,7 @@ public class AudioController {
             audio.setPath("http://localhost:9090/api/audio/download/" + flag + "?token=" + token);
             audio.setStatus("-1");
             audio.setPid(Integer.valueOf(userId));
+            audio.setLocalpath(filePath);
             audioService.save(audio);
 
             Audio audio1 = audioService.getByPath(audio.getPath());

@@ -44,8 +44,8 @@ export default {
       user: Cookies.get('user') ? JSON.parse(Cookies.get('user')) : {},
       fileList: [],
 
-      sample2: { name: 'sample2.mp3', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3', uid:-1},
-      sample1: { name: 'sample1.mp3', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', uid:-2},
+      sample2: {id: -1, name: 'sample2.mp3', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3', uid:-1},
+      sample1: {id: -1, name: 'sample1.mp3', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', uid:-2},
     };
   },
 
@@ -134,11 +134,17 @@ export default {
       this.handleRemove(file,this.fileList);
     },
     startDetection() {
-      const fileIds = this.fileList.map(file => file.id);
+      // 获取fileList中的文件ID并过滤掉示例文件的ID
+      const fileIds = this.fileList.map(file => file.id).filter(id => id !== -1 && id !== -2);
       const payload = {
         fileIds: fileIds,
         pid: this.user.id
       };
+      if(fileIds.length === 0){
+        this.$notify.warning("请勿对示例文件执行检测");
+        return
+      }
+
       request.post('/detection/createForAudioSingle', payload).then(res => {
         if (res.code === '200') {
           this.$router.push('/ShowResult');
