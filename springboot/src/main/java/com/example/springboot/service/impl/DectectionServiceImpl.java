@@ -50,7 +50,7 @@ public class DectectionServiceImpl extends ServiceImpl<DectectionMapper, Dectect
 
         Video video = videoMapper.getById(fileId);
         //创建实例
-        Dectection dectection = create(pid, "图像检测", video.getName(), video.getPath());
+        Dectection dectection = create(pid, "视频检测", video.getName(), video.getPath());
 
         videoMapper.deleteById(fileId);
 
@@ -62,7 +62,7 @@ public class DectectionServiceImpl extends ServiceImpl<DectectionMapper, Dectect
 
         Audio audio = audioMapper.getById(fileId);
         //创建实例
-        Dectection dectection = create(pid, "图像检测", audio.getName(), audio.getPath());
+        Dectection dectection = create(pid, "音频检测", audio.getName(), audio.getPath());
 
         audioMapper.deleteById(fileId);
 

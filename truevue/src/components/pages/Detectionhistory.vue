@@ -6,15 +6,17 @@
     <el-table :data="paginatedData" style="width: 100%">
       <el-table-column prop="name" label="文件名称" width="150"></el-table-column>
       <el-table-column prop="style" label="文件类型" width="100"></el-table-column>
-      <el-table-column prop="path" label="路径" width="250"></el-table-column>
-      <el-table-column prop="createtime" label="检测时间" width="180"></el-table-column>
+      <el-table-column prop="path" label="下载地址"></el-table-column>
+      <el-table-column prop="createtime" label="检测时间" width="100"></el-table-column>
       <el-table-column prop="result" label="检测结果" width="100"></el-table-column>
     </el-table>
     <el-pagination
-      background
-      layout="prev, pager, next"
+      v-if="tableData.length > params.pageSize"
+      layout="total, sizes, prev, pager, next, jumper"
       :total="tableData.length"
-      :page-size="pageSize"
+      :current-page="params.pageNum"
+      :page-size="params.pageSize"
+      @size-change="handleSizeChange"
       @current-change="handlePageChange"
       class="pagination"
     />
@@ -22,9 +24,14 @@
 </template>
 
 <script>
+import Cookies from "js-cookie";
+import request from "../../utils/request";
+
 export default {
   data() {
     return {
+      user: Cookies.get('user') ? JSON.parse(Cookies.get('user')) : {},
+
       tableData: [
         { name: 'file1.mp4', style: '视频', path: '/videos/file1.mp4', createtime: '2023-06-01 10:00:00', result: 85 },
         { name: 'file2.jpg', style: '图片', path: '/images/file2.jpg', createtime: '2023-06-02 11:30:00', result: 70 },
@@ -32,20 +39,43 @@ export default {
         { name: 'file4.mp4', style: '视频', path: '/videos/file4.mp4', createtime: '2023-06-04 15:45:00', result: 60 },
         // Add more data as needed
       ],
-      currentPage: 1,
-      pageSize: 4 // Customize this to set items per page
+
+      params:{
+        pageNum:1,
+        pageSize:5,
+        // style:'',
+        // status:'',
+        pid:'',
+      },
     };
+  },
+  created() {
+    this.load()
   },
   computed: {
     paginatedData() {
-      const start = (this.currentPage - 1) * this.pageSize;
-      const end = start + this.pageSize;
+      const start = (this.params.pageNum - 1) * this.params.pageSize;
+      const end = start + this.params.pageSize;
       return this.tableData.slice(start, end);
     }
   },
   methods: {
+
+    load(){
+      this.params.pid = this.user.id;
+      request.get('/detection/page',{params : this.params}).then(res => {
+        if(res.code === '200'){
+          this.tableData = res.data.list
+          this.total = res.data.total
+        }
+      })
+    },
+
+    handleSizeChange(size) {
+      this.params.pageSize = size;
+    },
     handlePageChange(page) {
-      this.currentPage = page;
+      this.params.pageNum = page;
     }
   }
 };

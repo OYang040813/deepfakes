@@ -18,8 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.io.IOException;
 
 /**
  * @author oy
@@ -152,6 +154,42 @@ public class DectectionController {
         } catch (Exception e) {
             e.printStackTrace();
             return "Error: " + e.getMessage();
+        }
+    }
+
+    private static final String SCRIPTS_FOLDER = "path/to/your/classification";
+
+    @GetMapping("/runDetection")
+    public String runDetection(
+            @RequestParam String inputVideo,
+            @RequestParam String modelPath,
+            @RequestParam String outputFolder) {
+
+        File scriptFile = new File(SCRIPTS_FOLDER, "detect_from_video.py");
+
+        if (!scriptFile.exists()) {
+            return "Python script not found.";
+        }
+
+        try {
+            List<String> command = new ArrayList<>();
+            command.add("python");
+            command.add(scriptFile.getAbsolutePath());
+            command.add("-i");
+            command.add(inputVideo);
+            command.add("-m");
+            command.add(modelPath);
+            command.add("-o");
+            command.add(outputFolder);
+
+            ProcessBuilder pb = new ProcessBuilder(command);
+            pb.directory(new File(SCRIPTS_FOLDER)); // 设置工作目录
+            Process process = pb.start();
+            int exitCode = process.waitFor();
+
+            return "Script executed with exit code " + exitCode;
+        } catch (IOException | InterruptedException e) {
+            return "Failed to execute script: " + e.getMessage();
         }
     }
 }
