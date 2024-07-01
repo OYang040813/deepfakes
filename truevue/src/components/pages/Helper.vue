@@ -11,30 +11,22 @@
       <section v-if="currentPage === 2">
         <h2>功能介绍</h2>
         <ul>
-          <li>功能1：描述功能1的用途和使用方法。</li>
-          <li>功能2：描述功能2的用途和使用方法。</li>
-          <li>功能3：描述功能3的用途和使用方法。</li>
+          <li>上传照片：上传可疑的图片，系统将返回臆造的概率。</li>
+          <li>上传视频：上传可疑的视频，系统将截取其中的关键帧，圈出关键的头像。</li>
+          <li>上传音频：上传一段音频，系统将判断是否为真人发出的声音。</li>
         </ul>
       </section>
       <section v-if="currentPage === 3">
         <h2>常见问题</h2>
         <ul>
           <li>
-            <strong>问题1：</strong>如何解决问题1？
-            <p>解答：步骤1，步骤2，步骤3。</p>
+            <strong>问题1：</strong>内容违规(视频，图片不过审核)
+            <p>视频和图片上传之后系统会有短时间的审核机制，请耐心等待。如果发现有违规的内容出现，系统便会提示内容违规并返回该文件。</p>
           </li>
           <li>
-            <strong>问题2：</strong>如何解决问题2？
-            <p>解答：步骤1，步骤2，步骤3。</p>
+            <strong>问题2：</strong>文件上传失败
+            <p>系统对于图片、视频及音频的上传有对应的格式要求，请仔细检查您需上传的文件，如不符合要求可能上传失败</p>
           </li>
-        </ul>
-      </section>
-      <section v-if="currentPage === 4">
-        <h2>联系方式</h2>
-        <p>如果您有任何疑问，请通过以下方式联系我们：</p>
-        <ul>
-          <li>电话：</li>
-          <li>邮箱：</li>
         </ul>
       </section>
     </main>
@@ -57,7 +49,7 @@ export default {
   data() {
     return {
       currentPage: 1,
-      totalPages: 4 // Total number of sections
+      totalPages: 3 // Total number of sections
     };
   },
   methods: {
