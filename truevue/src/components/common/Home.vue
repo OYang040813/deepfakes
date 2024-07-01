@@ -5,18 +5,16 @@
         <Aside></Aside>
       </el-aside>
       <el-container>
-      <el-header>
-        <Header></Header>
-      </el-header>
+        <el-header>
+          <Header></Header>
+        </el-header>
         <common-tab></common-tab>
         <el-main>
           <!--路由的出口-->
-          <router-view>
-          </router-view>
+          <router-view></router-view>
         </el-main>
       </el-container>
     </el-container>
-
   </div>
 </template>
 
@@ -39,13 +37,15 @@ export default {
 }
 </script>
 
-
 <style>
+.Home {
+  background-image: url('https://img2.baidu.com/it/u=643742406,3544352807&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=281');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
 
-
-.el-header{
+.el-header {
   padding: 0 0;
 }
 </style>
-
-
