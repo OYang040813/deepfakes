@@ -63,8 +63,12 @@ mvn install
 mvn spring-boot:run
 
 # 初始化数据库
-# 在MySQL中创建一个数据库deepfake，并执行数据库初始化脚本
-# deepfake.sql
+在MySQL中创建一个数据库deepfake，并执行数据库初始化脚本
+deepfake.sql
+
+# 使用根账号登陆系统
+账号：admin
+密码：123456
 ```
 
 ## 使用
