@@ -6,5 +6,6 @@ import lombok.Data;
 public class MessagePageRequest extends BaseRequest {
     private String mes;
     private String style;
+    private Integer pid;
     private String isread;
 }

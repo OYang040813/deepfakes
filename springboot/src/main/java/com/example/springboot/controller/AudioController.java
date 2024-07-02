@@ -29,7 +29,7 @@ public class AudioController {
     @Autowired
     IAudioService audioService;
 
-    private static final String BASE_FILE_PATH = System.getProperty("user.dir") + "/DectetionFiles/audio/";
+    private static final String BASE_FILE_PATH = System.getProperty("user.dir") + "/DetectionFiles/audio/";
 
     @PostMapping("/upload")
     public Result upload(@RequestParam("file") MultipartFile file, @RequestParam("userId") String userId){

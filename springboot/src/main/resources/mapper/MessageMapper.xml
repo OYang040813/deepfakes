@@ -42,6 +42,9 @@
             <if test="isread != null and isread != ''">
                 isread like concat('%', #{isread}, '%')
             </if>
+            <if test="pid != null and pid != ''">
+                pid like concat('%', #{pid}, '%')
+            </if>
         </where>
         order by id desc
     </select>

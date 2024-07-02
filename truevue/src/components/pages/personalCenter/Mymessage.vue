@@ -31,10 +31,14 @@
 
 <script>
 import request from "../../../utils/request";
+import Cookies from "js-cookie";
 
 export default {
   data() {
     return {
+
+      user: Cookies.get('user') ? JSON.parse(Cookies.get('user')) : {},
+
       messages: [],
       params: {
         currentPage: 1,
@@ -42,6 +46,7 @@ export default {
         style: '',
         createtime: '',
         isread: '',
+        pid:'',
       },
       total: 0,
     };
@@ -58,6 +63,7 @@ export default {
   },
   methods: {
     load() {
+      this.params.pid = this.user.id;
       request.get('/message/page', { params: this.params }).then(res => {
         if (res.code === '200') {
           this.messages = res.data.list;

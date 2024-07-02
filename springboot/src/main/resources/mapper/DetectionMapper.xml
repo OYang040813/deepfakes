@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.springboot.mapper.DetectionMapper">
+
+    <insert id="save">
+        insert into detection(name, result, style, time, pid, path, status, donepath, cardnum, createtime, updatetime)
+        values (#{name}, #{result}, #{style}, #{time}, #{pid}, #{path}, #{status}, #{donepath}, #{cardnum}, #{createtime}, #{updatetime})
+    </insert>
+
+    <update id="updateById">
+        update detection
+        set name         = #{name},
+            result       = #{result},
+            style        = #{style},
+            time         = #{time},
+            pid          = #{pid},
+            updatetime   = #{updatetime},
+            status       = #{status},
+            cardnum      = #{cardnum},
+            path         = #{path},
+            donepath     = #{donepath}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        delete
+        from detection
+        where id = #{id}
+    </delete>
+
+    <select id="list" resultType="com.example.springboot.entity.Detection">
+        select *
+        from detection
+    </select>
+
+    <select id="listByCondition" resultType="com.example.springboot.entity.Detection">
+        select * from detection
+        <where>
+            <if test="status != null and status != ''">
+                status like concat('%', #{status}, '%')
+            </if>
+            <if test="style != null and style != ''">
+                style like concat('%', #{style}, '%')
+            </if>
+            <if test="pid != null and pid != ''">
+                pid = #{pid}
+            </if>
+        </where>
+        order by id desc
+    </select>
+
+    <select id="getById" resultType="com.example.springboot.entity.Detection">
+        select *
+        from detection
+        where id = #{id}
+    </select>
+
+    <select id="getByName" parameterType="String" resultType="com.example.springboot.entity.Detection">
+        select * from detection where name = #{name}
+    </select>
+    
+</mapper>
+

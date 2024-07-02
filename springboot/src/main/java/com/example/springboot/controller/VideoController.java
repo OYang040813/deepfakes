@@ -32,7 +32,7 @@ public class VideoController {
     @Autowired
     IVideoService videoService;
 
-    private static final String BASE_FILE_PATH = System.getProperty("user.dir") + "/DectetionFiles/video/";
+    private static final String BASE_FILE_PATH = System.getProperty("user.dir") + "/DetectionFiles/video/";
 
     @PostMapping("/upload")
     public Result upload(@RequestParam("file") MultipartFile file, @RequestParam("userId") String userId){

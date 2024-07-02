@@ -57,15 +57,15 @@ public class User implements Serializable {
     private String address;
 
     /**
-     * 创建时间
+     * Creation time
      */
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd-HH:mm:ss", timezone = "GMT+8")
     private Date createtime;
 
     /**
-     * 更新时间
+     * Update time
      */
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd-HH:mm:ss", timezone = "GMT+8")
     private Date updatetime;
 
     /**

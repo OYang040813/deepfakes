@@ -4,7 +4,7 @@
       <i class="fas fa-table"></i> 检测页面
     </h1>
     <el-table :data="paginatedData" style="width: 100%">
-      <el-table-column prop="name" label="文件名称" width="150"></el-table-column>
+      <el-table-column prop="name" label="文件名称" width="100"></el-table-column>
       <el-table-column prop="style" label="文件类型" width="100"></el-table-column>
       <el-table-column prop="path" label="下载地址"></el-table-column>
       <el-table-column prop="createtime" label="检测时间" width="100"></el-table-column>

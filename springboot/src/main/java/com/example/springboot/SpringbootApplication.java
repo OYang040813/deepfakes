@@ -16,6 +16,6 @@ public class SpringbootApplication {
     // 健康检查接口
     @GetMapping
     public String health(){
-        return "seccess";
+        return "success";
     }
 }
