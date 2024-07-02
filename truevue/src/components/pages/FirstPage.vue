@@ -30,7 +30,7 @@
           </div>
           <div v-for="item in systemData" :key="item.id" class="system_context item">
             <div>{{ item.title }}</div>
-            <div><i :class="`el-icon-${item.icon}`"> {{ item.date }}</i></div>
+            <div><i :class="`el-icon-timer`"> {{ item.updatetime }}</i></div>
           </div>
         </el-card>
 
@@ -57,44 +57,8 @@ export default {
       avatar: '@/assets/wife.png',
       user: Cookies.get('user') ? JSON.parse(Cookies.get('user')) : {},
 
-      systemData: [
-        {
-          id: 1,
-          date: "2024-6-23 12.00",
-          title: "【维护通知】系统升级或维护时间",
-          icon:'timer'
-        },
-        {
-          id: 2,
-          date: "2024-6-22 11.32",
-          title: "【服务中断或故障】预计修复时间",
-          icon:'timer'
-        },
-        {
-          id: 3,
-          date: "2024-6-21 10.00",
-          title: "【内部分享】如何建立良好的客户关系",
-          icon:'timer'
-        },
-        {
-          id: 4,
-          date: "2024-6-17 10.20",
-          title: "【活动和促销】参与方式和时间",
-          icon:'timer'
-        },
-        {
-          id: 5,
-          date: "2024-6-14 09:00",
-          title: "【政策变更】用户协议或隐私政策的变更",
-          icon:'timer'
-        },
-        {
-          id: 6,
-          date: "2024-6-12 13:00",
-          title: "【重要通知】公司或平台的重要新闻",
-          icon:'timer'
-        }
-      ]
+      systemData: []
+
     };
   },
   created() {
@@ -102,6 +66,9 @@ export default {
   },
   methods: {
     load(){
+      request.get("/announcement/list").then(res =>{
+        this.systemData = res.data;
+      })
       request.get("/user/" + this.user.id).then(res =>{
         this.user = res.data;
         // console.log(this.form)

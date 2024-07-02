@@ -7,7 +7,7 @@
 
     <insert id="save">
         insert into announcement(title, mes, style, createtime, updatetime)
-        values (#{style}, #{mes}, #{style}, #{createtime}, #{updatetime})
+        values (#{title}, #{mes}, #{style}, #{createtime}, #{updatetime})
     </insert>
 
     <update id="updateById">
@@ -27,7 +27,7 @@
 
     <select id="list" resultType="com.example.springboot.entity.Announcement">
         select *
-        from announcement
+        from announcement order by id desc
     </select>
 
     <select id="listByCondition" resultType="com.example.springboot.entity.Announcement">

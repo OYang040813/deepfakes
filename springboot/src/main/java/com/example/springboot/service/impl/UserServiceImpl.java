@@ -59,7 +59,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         String pathForCover = System.getProperty("user.dir") + "/truevue/src/assets/second.png";
         user.setCover(pathForCover);
 
-        user.setIsAuth(0);
+        if(user.getIsAuth() == null) {
+            user.setIsAuth(0);
+        }
+
 //        //mt5+加盐并加密密码
 //        user.setKeynum(secureKeynum(user.getKeynum()));
 

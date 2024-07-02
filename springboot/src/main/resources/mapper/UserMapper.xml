@@ -35,7 +35,7 @@
 
     <select id="list" resultType="com.example.springboot.entity.User">
         select *
-        from user
+        from user order by id desc
     </select>
 
     <select id="listByCondition" resultType="com.example.springboot.entity.User">
