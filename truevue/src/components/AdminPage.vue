@@ -25,10 +25,10 @@
 
             <el-tab-pane label="用户管理">
               <div class="tab-content manage-users">
-                <el-button type="primary" @click="handleAddUser">添加用户</el-button>
+                <el-button type="primary" @click="showAddUserDialog">添加用户</el-button>
                 <el-table :data="users" style="width: 100%">
                   <el-table-column prop="name" label="用户名" width="150"></el-table-column>
-                  <el-table-column prop="role" label="角色" width="100"></el-table-column>
+                  <el-table-column prop="IsAuth" label="角色" width="100"></el-table-column>
                   <el-table-column prop="email" label="邮箱" width="200"></el-table-column>
                   <el-table-column label="操作" width="180">
                     <template slot-scope="scope">
@@ -79,10 +79,37 @@
         </el-card>
       </el-col>
     </el-row>
+
+    <!-- 添加用户弹出框 -->
+    <el-dialog title="添加用户" :visible.sync="addUserDialogVisible">
+      <el-form ref="addUserForm" :model="addUserForm" label-width="120px">
+        <el-form-item label="用户名">
+          <el-input v-model="addUserForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="角色">
+          <el-select v-model="addUserForm.IsAuth" placeholder="请选择角色">
+            <el-option label="Admin" value="1"></el-option>
+            <el-option label="User" value="0"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="邮箱">
+          <el-input v-model="addUserForm.email"></el-input>
+        </el-form-item>
+        <el-form-item label="密码">
+          <el-input type="password" v-model="addUserForm.keynum"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="handleAddUserConfirm">确认</el-button>
+          <el-button @click="addUserDialogVisible = false">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import request from "../utils/request";
+
 export default {
   data() {
     return {
@@ -91,8 +118,7 @@ export default {
         content: ''
       },
       users: [
-        { name: 'user1', role: 'admin', email: 'user1@example.com' },
-        { name: 'user2', role: 'user', email: 'user2@example.com' }
+
       ],
       logs: [
         { timestamp: '2024-06-24 10:00:00', level: 'info', message: '系统启动' },
@@ -105,17 +131,40 @@ export default {
       detectionRecords: [
         { filename: 'file1.mp4', detectionTime: '2024-06-24 10:00:00', result: '通过' },
         { filename: 'file2.jpg', detectionTime: '2024-06-24 09:45:00', result: '未通过' }
-      ]
+      ],
+      addUserDialogVisible: false,
+      addUserForm: {
+        name: '',
+        IsAuth: '',
+        email: '',
+        keynum: ''
+      }
     };
   },
+   created() {
+    this.load();
+  },
   methods: {
+    load(){
+      request.get("/user/list").then(res =>{
+        this.users = res.data;
+        // console.log(this.form)
+
+      })
+    },
     handlePostMessage() {
       // 发布系统消息的逻辑
       console.log('发布系统消息:', this.form);
     },
-    handleAddUser() {
+    showAddUserDialog() {
+      this.addUserDialogVisible = true;
+    },
+    handleAddUserConfirm() {
       // 添加用户的逻辑
-      console.log('添加用户');
+      console.log('添加用户:', this.addUserForm);
+      this.add();
+      this.users.push({...this.addUserForm});
+      this.addUserDialogVisible = false;
     },
     handleEditUser(user) {
       // 编辑用户的逻辑
@@ -124,10 +173,20 @@ export default {
     handleDeleteUser(user) {
       // 删除用户的逻辑
       console.log('删除用户:', user);
+      this.users = this.users.filter(u => u.email !== user.email);
     },
     handleSaveSettings() {
       // 保存系统设置的逻辑
       console.log('保存系统设置:', this.settingsForm);
+    },
+    add() {
+          request.post('/user/save', this.addUserForm).then(res => {
+            if (res.code === '200') {
+              this.$notify.success('添加成功');
+            } else {
+              this.$notify.error(res.msg);
+            }
+          });
     }
   }
 };
