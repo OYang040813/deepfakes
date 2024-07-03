@@ -6,8 +6,8 @@
 <mapper namespace="com.example.springboot.mapper.MessageMapper">
 
     <insert id="save">
-        insert into message(style, mes, isread)
-        values (#{style}, #{mes}, #{isread})
+        insert into message(style, mes, isread, pid)
+        values (#{style}, #{mes}, #{isread}, #{pid})
     </insert>
 
     <update id="updateById">
@@ -15,6 +15,7 @@
         set style       = #{style},
             mes      = #{mes},
             isread      = #{isread},
+            pid         =#{pid},
             updatetime = #{updatetime}
         where id = #{id}
     </update>

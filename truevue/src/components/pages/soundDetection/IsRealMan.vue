@@ -5,7 +5,7 @@
     </h1>
     <el-upload
       class="upload-demo"
-      :action="'http://localhost:9090/api/audio/upload?token=' + this.user.token"
+      :action="'http://10.195.154.158:9090/api/audio/upload?token=' + this.user.token"
       :on-preview="handlePreview"
       :on-remove="handleRemove"
       :on-success="handleSuccess"

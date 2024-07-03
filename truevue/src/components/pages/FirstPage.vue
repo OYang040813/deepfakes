@@ -74,8 +74,10 @@ export default {
         // console.log(this.form)
         if(this.user.cover == null){
           this.avatar = require('@/assets/second.png'); // default avatar
+        }else{
+          this.avatar = this.user.cover;
         }
-        this.avatar = this.user.cover;
+
       })
     },
 

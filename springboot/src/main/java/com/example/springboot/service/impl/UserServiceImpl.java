@@ -4,6 +4,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.springboot.Utils.MessageFactory;
 import com.example.springboot.dto.LoginDTO;
 import com.example.springboot.exception.ServiceException;
 import com.example.springboot.entity.User;
@@ -34,6 +35,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     private static final String PASS_SALT = "ouyang";
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    MessageFactory messageFactory;
 
     @Override
     public List<User> list() {
@@ -56,8 +59,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         user.setUpdatetime(new Date());
         user.setCreatetime(new Date());
 
-        String pathForCover = System.getProperty("user.dir") + "/truevue/src/assets/second.png";
-        user.setCover(pathForCover);
 
         if(user.getIsAuth() == null) {
             user.setIsAuth(0);
@@ -69,6 +70,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         User user1 = userMapper.getByName(user.getName());
         if (user1 == null) {
             userMapper.save(user);
+            messageFactory.initForUser(userMapper.getByName(user.getName()).getId());
         } else {
             throw new ServiceException("该用户名已被占用");
         }
@@ -98,7 +100,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
         User user = null;
 
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/deepfake",
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://10.195.154.158:3306/deepfake",
                 "root", "root root")) {
             if (connection != null) {
                 System.out.println("数据库连接成功");

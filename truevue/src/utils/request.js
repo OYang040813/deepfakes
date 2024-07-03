@@ -3,7 +3,7 @@ import router from "../router";
 import Cookies from "js-cookie";
 
 const request = axios.create({
-  baseURL:'http://localhost:9090/api',  //全局统一加上后台基本前缀，所有接口前面都会有后台的基本地址
+  baseURL:'http://10.195.154.158:9090/api',  //全局统一加上后台基本前缀，所有接口前面都会有后台的基本地址
   timeout : 5000
 })
 

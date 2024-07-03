@@ -6,7 +6,7 @@
       </div>
       <el-upload
         class="avatar-uploader"
-        :action="'http://localhost:9090/api/user/upload?token=' + this.userByCookies.token"
+        :action="'http://10.195.154.158:9090/api/user/upload?token=' + this.userByCookies.token"
         :show-file-list="false"
         :on-success="handleSuccess"
         :data="{ userId: userByCookies.id }"
@@ -29,7 +29,7 @@
         </select>
       </div>
       <div class="info-item">
-        <label>创建日期：</label>
+        <label>生日：</label>
         <input v-model="user.birthday" type="date">
       </div>
       <div class="info-item">
@@ -69,8 +69,9 @@ export default {
         // console.log(this.form)
         if(this.user.cover == null){
           this.avatar = require('@/assets/second.png'); // default avatar
+        }else{
+          this.avatar = this.user.cover;
         }
-        this.avatar = this.user.cover;
       })
     },
 
