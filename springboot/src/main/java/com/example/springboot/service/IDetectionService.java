@@ -18,7 +18,7 @@ public interface IDetectionService extends IService<Detection> {
 
     void download(String flag, String play, HttpServletResponse response);
 
-    void startDetectionForVideo(Integer fileId, Integer pid);
+    Result startDetectionForVideo(Integer fileId, Integer pid);
 
     void startDetectionForAudioSingle(Integer fileId, Integer pid);
 

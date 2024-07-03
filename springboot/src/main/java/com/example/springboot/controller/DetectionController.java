@@ -5,12 +5,14 @@ import com.example.springboot.common.Result;
 import com.example.springboot.entity.Detection;
 import com.example.springboot.request.DectectionPageRequest;
 import com.example.springboot.service.IDetectionService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 /**
  * @author oy
  */
@@ -39,7 +41,7 @@ public class DetectionController {
         Integer pid = (Integer) payload.get("pid");
 
         for (Integer fileId : fileIds) {
-            dectectionService.startDetectionForVideo(fileId, pid);
+            Result result = dectectionService.startDetectionForVideo(fileId, pid);
         }
         return Result.success();
     }

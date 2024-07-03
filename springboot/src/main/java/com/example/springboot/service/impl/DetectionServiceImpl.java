@@ -50,7 +50,7 @@ public class DetectionServiceImpl extends ServiceImpl<DetectionMapper, Detection
     @Autowired
     AudioMapper audioMapper;
 
-    private static final String SCRIPTS_FOLDER = "path/to/your/classification";
+    private static final String SCRIPTS_FOLDER = "C:\\Users\\86138\\Desktop\\笔记集\\项目\\breakice\\Model\\FaceForensics\\classification";
     private static final String DOWNLOAD_PATH = System.getProperty("user.dir") + "/OutputFiles/";
 
     @Override
@@ -92,14 +92,16 @@ public class DetectionServiceImpl extends ServiceImpl<DetectionMapper, Detection
     }
 
     @Override
-    public void startDetectionForVideo(Integer fileId, Integer pid) {
+    public Result startDetectionForVideo(Integer fileId, Integer pid) {
 
         Video video = videoMapper.getById(fileId);
         //创建实例
         Detection detection = detectionFactory.create(pid, "视频检测", video.getName(), video.getPath());
+        Result result = runDetectionLocal("", "", "");
 
         videoMapper.deleteById(fileId);
 
+        return result;
     }
 
     @Override
@@ -195,6 +197,10 @@ public class DetectionServiceImpl extends ServiceImpl<DetectionMapper, Detection
 
     @Override
     public Result runDetectionLocal(String inputVideo, String modelPath, String outputFolder) {
+
+        inputVideo = "C:\\Users\\86138\\Desktop\\笔记集\\项目\\breakice\\Model\\FaceForensics\\classification\\videos\\003_000.mp4";
+        modelPath = "C:\\Users\\86138\\Desktop\\笔记集\\项目\\breakice\\Model\\FaceForensics\\classification\\detect_from_video.py";
+        outputFolder = "C:\\Users\\86138\\Desktop\\笔记集\\项目\\breakice\\Model\\FaceForensics\\classification\\output\\";
 
         File scriptFile = new File(SCRIPTS_FOLDER, "detect_from_video.py");
 

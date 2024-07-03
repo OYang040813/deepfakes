@@ -33,10 +33,10 @@ export default {
       user: Cookies.get('user') ? JSON.parse(Cookies.get('user')) : {},
 
       tableData: [
-        { name: 'file1.mp4', style: '视频', path: '/videos/file1.mp4', createtime: '2023-06-01 10:00:00', result: 85 },
-        { name: 'file2.jpg', style: '图片', path: '/images/file2.jpg', createtime: '2023-06-02 11:30:00', result: 70 },
-        { name: 'file3.mp3', style: '音频', path: '/audio/file3.mp3', createtime: '2023-06-03 14:20:00', result: 90 },
-        { name: 'file4.mp4', style: '视频', path: '/videos/file4.mp4', createtime: '2023-06-04 15:45:00', result: 60 },
+        { name: 'file1.mp4', style: '视频', path: '/videos/file1.mp4', createtime: '2024-06-24 10:00:00', result: 85 },
+        { name: 'file2.jpg', style: '图片', path: '/images/file2.jpg', createtime: '2024-06-24 11:30:00', result: 70 },
+        { name: 'file3.mp3', style: '音频', path: '/audio/file3.mp3', createtime: '2024-06-25 14:20:00', result: 90 },
+        { name: 'file4.mp4', style: '视频', path: '/videos/file4.mp4', createtime: '2024-06-27 15:45:00', result: 60 },
         // Add more data as needed
       ],
 
