@@ -67,7 +67,7 @@ export default {
       request.get("/user/" + this.userByCookies.id).then(res =>{
         this.user = res.data;
         // console.log(this.form)
-        if(this.user.cover == null){
+        if(this.user.cover == ""){
           this.avatar = require('@/assets/second.png'); // default avatar
         }else{
           this.avatar = this.user.cover;

@@ -4,7 +4,7 @@
       <el-col :span="8">
         <el-card class="box-card">
           <div class="user">
-            <img :src= 'avatar' />
+            <img :src="avatar" />
             <div class="userinfo">
               <p class="name">{{ user.name }}</p>
               <p class="access">ID: {{ user.cardnum }}</p>
@@ -28,8 +28,13 @@
           <div slot="header" class="system_title">
             <span>系统公告</span>
           </div>
-          <div v-for="item in systemData" :key="item.id" class="system_context item">
-            <div>{{ item.title }}</div>
+          <div
+            v-for="item in systemData"
+            :key="item.id"
+            class="system_context item"
+            @click="showDialog(item)"
+          >
+            <div class="clickable">{{ item.title }}</div>
             <div><i :class="`el-icon-timer`"> {{ item.updatetime }}</i></div>
           </div>
         </el-card>
@@ -42,81 +47,99 @@
         </el-card>
       </el-col>
     </el-row>
+
+    <!-- Dialog for displaying the details -->
+    <el-dialog
+      :visible.sync="dialogVisible"
+      :title= header
+      width="50%"
+      font-size = 25px
+      :modal-append-to-body="true"
+      custom-class="announcement-dialog"
+    >
+      <div class="dialog-content">{{ dialogContent }}</div>
+      <span slot="footer" class="dialog-footer">
+        <el-button class="close-button" @click="dialogVisible = false">关闭</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import * as echarts from 'echarts';
-import Cookies from "js-cookie";
-import request from "../../utils/request";
+import Cookies from 'js-cookie';
+import request from '../../utils/request';
 export default {
   name: 'FirstPage',
   data() {
     return {
-
       avatar: '@/assets/wife.png',
       user: Cookies.get('user') ? JSON.parse(Cookies.get('user')) : {},
-
-      systemData: []
-
+      systemData: [],
+      dialogVisible: false,
+      dialogContent: '',
+      header: ''
     };
   },
   created() {
     this.load();
   },
   methods: {
-    load(){
-      request.get("/announcement/list").then(res =>{
+    load() {
+      request.get('/announcement/list').then((res) => {
         this.systemData = res.data;
-      })
-      request.get("/user/" + this.user.id).then(res =>{
+      });
+
+      request.get('/user/' + this.user.id).then((res) => {
         this.user = res.data;
-        // console.log(this.form)
-        if(this.user.cover == null){
+        if (this.user.cover == '') {
           this.avatar = require('@/assets/second.png'); // default avatar
-        }else{
+        } else {
           this.avatar = this.user.cover;
         }
-
-      })
+      });
     },
-
+    showDialog(item) {
+      this.dialogContent = item.mes; // Assuming item has a mes property for the content
+      this.header = item.title;
+      this.dialogVisible = true;
+    },
   },
   mounted() {
     var myChart1 = echarts.init(this.$refs.echarts1);
     var option1 = {
       title: {
-        text: 'System Performance Statistics'
+        text: 'System Performance Statistics',
       },
       tooltip: {},
       xAxis: {
-        data: ['Week 1', 'Week 2', 'Week 3', 'Week 4']
+        data: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
       },
       yAxis: {},
       series: [
         {
           name: 'Files Processed',
           type: 'bar',
-          data: [150, 200, 180, 220]
-        }
-      ]
+          data: [150, 200, 180, 220],
+        },
+      ],
     };
     myChart1.setOption(option1);
 
     var myChart2 = echarts.init(this.$refs.echarts2);
     var option2 = {
       title: {
-        text: 'Deepfake Detection Confidence'
+        text: 'Deepfake Detection Confidence',
       },
       tooltip: {
-        trigger: 'axis'
+        trigger: 'axis',
       },
       xAxis: {
         type: 'category',
-        data: ['Video 1', 'Video 2', 'Video 3', 'Video 4', 'Video 5']
+        data: ['Video 1', 'Video 2', 'Video 3', 'Video 4', 'Video 5'],
       },
       yAxis: {
-        type: 'value'
+        type: 'value',
       },
       series: [
         {
@@ -126,19 +149,17 @@ export default {
           markPoint: {
             data: [
               { type: 'max', name: 'Max' },
-              { type: 'min', name: 'Min' }
-            ]
+              { type: 'min', name: 'Min' },
+            ],
           },
           markLine: {
-            data: [
-              { type: 'average', name: 'Average' }
-            ]
-          }
-        }
-      ]
+            data: [{ type: 'average', name: 'Average' }],
+          },
+        },
+      ],
     };
     myChart2.setOption(option2);
-  }
+  },
 };
 </script>
 
@@ -199,6 +220,15 @@ export default {
     justify-content: space-between;
     align-items: center;
   }
+
+  .clickable {
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+
+  .clickable:hover {
+    color: gold;
+  }
 }
 
 .system-performance {
@@ -207,6 +237,44 @@ export default {
   h3 {
     margin-bottom: 10px;
     color: #333;
+  }
+}
+
+.announcement-dialog {
+  .el-dialog__header {
+    background-color: #f2f2f2;
+    border-bottom: 1px solid #ddd;
+    padding: 20px;
+    font-size: 18px;
+    text-align: center;
+    font-weight: bold;
+  }
+
+  .el-dialog__body {
+    padding: 20px;
+    font-size: 18px;
+    line-height: 1.5;
+    color: #333;
+    font-weight: bold;
+  }
+
+  .dialog-footer {
+    padding: 10px 20px;
+    text-align: right;
+    border-top: 1px solid #ddd;
+    background-color: #f2f2f2;
+  }
+
+  .close-button {
+    transition: all 0.3s ease;
+    background-color: #409eff;
+    color: white;
+    font-weight: bold;
+  }
+
+  .close-button:hover {
+    background-color: #66b1ff;
+    transform: scale(1.1);
   }
 }
 </style>
