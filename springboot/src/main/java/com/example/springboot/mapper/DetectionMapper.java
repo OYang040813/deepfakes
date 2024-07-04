@@ -26,5 +26,9 @@ public interface DetectionMapper extends BaseMapper<Detection> {
     void deleteById(Integer id);
 
     Detection getByName(String name);
+
+    Detection getByFileid(Integer fileid);
+
+    Detection getByPath(String path);
 }
 

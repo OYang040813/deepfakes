@@ -38,8 +38,9 @@ public class UserController {
         if (userId == null) {
             return Result.error("userId 参数不能为空");
         }
+        String originalFilename = file.getOriginalFilename();
         long flag = System.currentTimeMillis();//时间戳
-        String filePath = BASE_FILE_PATH + flag;
+        String filePath = BASE_FILE_PATH + flag + "_" + originalFilename;
         try {
             FileUtil.mkParentDirs(filePath); // 创建父级目录
             file.transferTo(FileUtil.file(filePath));

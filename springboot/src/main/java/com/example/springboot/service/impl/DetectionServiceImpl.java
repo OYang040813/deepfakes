@@ -5,9 +5,14 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.springboot.Utils.DetectionFactory;
 import com.example.springboot.common.Result;
-import com.example.springboot.entity.*;
+import com.example.springboot.entity.Audio;
 import com.example.springboot.entity.Detection;
-import com.example.springboot.mapper.*;
+import com.example.springboot.entity.Image;
+import com.example.springboot.entity.Video;
+import com.example.springboot.mapper.AudioMapper;
+import com.example.springboot.mapper.DetectionMapper;
+import com.example.springboot.mapper.ImageMapper;
+import com.example.springboot.mapper.VideoMapper;
 import com.example.springboot.request.BaseRequest;
 import com.example.springboot.service.IDetectionService;
 import com.github.pagehelper.PageHelper;
@@ -52,16 +57,18 @@ public class DetectionServiceImpl extends ServiceImpl<DetectionMapper, Detection
 
     private static final String SCRIPTS_FOLDER = "C:\\Users\\86138\\Desktop\\笔记集\\项目\\breakice\\Model\\FaceForensics\\classification";
     private static final String DOWNLOAD_PATH = System.getProperty("user.dir") + "/OutputFiles/";
+    private static final String MODEL_PATH = "C:\\Users\\86138\\Desktop\\笔记集\\项目\\breakice\\Model\\FaceForensics\\classification\\detect_from_video.py";
+    private static final String OUTPUT_FOLDER = "C:\\Users\\86138\\Desktop\\笔记集\\项目\\breakice\\Model\\FaceForensics\\classification\\output\\";
 
     @Override
-    public void startDetectionForImage(Integer fileId, Integer pid) {
+    public Result startDetectionForImage(Integer fileId, Integer pid) {
 
         Image image = imageMapper.getById(fileId);
         //创建实例
-        Detection detection = detectionFactory.create(pid, "图像检测", image.getName(), image.getPath());
+        Detection detection = detectionFactory.create(pid, "图像检测", image.getName(), image.getPath(), image.getLocalpath(), image.getId());
+        Result result = runDetectionLocal(detection.getLocalpath(), MODEL_PATH, OUTPUT_FOLDER);
 
-        imageMapper.deleteById(fileId);
-
+        return result;
     }
 
     @Override
@@ -96,23 +103,21 @@ public class DetectionServiceImpl extends ServiceImpl<DetectionMapper, Detection
 
         Video video = videoMapper.getById(fileId);
         //创建实例
-        Detection detection = detectionFactory.create(pid, "视频检测", video.getName(), video.getPath());
-        Result result = runDetectionLocal("", "", "");
-
-        videoMapper.deleteById(fileId);
+        Detection detection = detectionFactory.create(pid, "视频检测", video.getName(), video.getPath(), video.getLocalpath(), video.getId());
+        Result result = runDetectionLocal(detection.getLocalpath(), MODEL_PATH, OUTPUT_FOLDER);
 
         return result;
     }
 
     @Override
-    public void startDetectionForAudioSingle(Integer fileId, Integer pid) {
+    public Result startDetectionForAudioSingle(Integer fileId, Integer pid) {
 
         Audio audio = audioMapper.getById(fileId);
         //创建实例
-        Detection detection = detectionFactory.create(pid, "音频检测", audio.getName(), audio.getPath());
+        Detection detection = detectionFactory.create(pid, "音频检测", audio.getName(), audio.getPath(), audio.getLocalpath(), audio.getId());
+        Result result = runDetectionLocal(detection.getLocalpath(), MODEL_PATH, OUTPUT_FOLDER);
 
-        audioMapper.deleteById(fileId);
-
+        return result;
     }
 
     @Override
@@ -198,10 +203,6 @@ public class DetectionServiceImpl extends ServiceImpl<DetectionMapper, Detection
     @Override
     public Result runDetectionLocal(String inputVideo, String modelPath, String outputFolder) {
 
-        inputVideo = "C:\\Users\\86138\\Desktop\\笔记集\\项目\\breakice\\Model\\FaceForensics\\classification\\videos\\003_000.mp4";
-        modelPath = "C:\\Users\\86138\\Desktop\\笔记集\\项目\\breakice\\Model\\FaceForensics\\classification\\detect_from_video.py";
-        outputFolder = "C:\\Users\\86138\\Desktop\\笔记集\\项目\\breakice\\Model\\FaceForensics\\classification\\output\\";
-
         File scriptFile = new File(SCRIPTS_FOLDER, "detect_from_video.py");
 
         if (!scriptFile.exists()) {
@@ -228,6 +229,21 @@ public class DetectionServiceImpl extends ServiceImpl<DetectionMapper, Detection
         } catch (IOException | InterruptedException e) {
             return Result.error("Failed to execute script: " + e.getMessage());
         }
+    }
+
+    @Override
+    public Detection getByFileId(Integer fileId) {
+        return detectionMapper.getByFileid(fileId);
+    }
+
+    @Override
+    public Detection getByName(String name) {
+        return detectionMapper.getByName(name);
+    }
+
+    @Override
+    public Detection getByPath(String path) {
+        return detectionMapper.getByPath(path);
     }
 
 }

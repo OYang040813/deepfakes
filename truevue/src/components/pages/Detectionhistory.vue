@@ -3,20 +3,24 @@
     <h1 class="title">
       <i class="fas fa-table"></i> 检测页面
     </h1>
-    <el-table :data="paginatedData" style="width: 100%">
+    <el-table :data="tableData" style="width: 100%">
       <el-table-column prop="name" label="文件名称" width="100"></el-table-column>
       <el-table-column prop="style" label="文件类型" width="100"></el-table-column>
       <el-table-column prop="path" label="下载地址"></el-table-column>
-      <el-table-column prop="createtime" label="检测时间" width="100"></el-table-column>
-      <el-table-column prop="result" label="检测结果" width="100"></el-table-column>
-    </el-table>
+      <el-table-column prop="createtime" label="检测时间" width="180"></el-table-column>
+      <el-table-column prop="result" label="检测结果(真人概率)" min-width="16%">
+        <template slot-scope="scope">
+          <div :class="{'result-high': scope.row.result > 50, 'result-low': scope.row.result <= 50}">
+            {{ scope.row.result }}%
+          </div>
+        </template>
+      </el-table-column>    </el-table>
     <el-pagination
-      v-if="tableData.length > params.pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="tableData.length"
+      v-if="total > params.pageSize"
+      layout="total, prev, pager, next, jumper"
+      :total="total"
       :current-page="params.pageNum"
       :page-size="params.pageSize"
-      @size-change="handleSizeChange"
       @current-change="handlePageChange"
       class="pagination"
     />
@@ -32,19 +36,15 @@ export default {
     return {
       user: Cookies.get('user') ? JSON.parse(Cookies.get('user')) : {},
 
-      tableData: [
-        { name: 'file1.mp4', style: '视频', path: '/videos/file1.mp4', createtime: '2024-06-24 10:00:00', result: 85 },
-        { name: 'file2.jpg', style: '图片', path: '/images/file2.jpg', createtime: '2024-06-24 11:30:00', result: 70 },
-        { name: 'file3.mp3', style: '音频', path: '/audio/file3.mp3', createtime: '2024-06-25 14:20:00', result: 90 },
-        { name: 'file4.mp4', style: '视频', path: '/videos/file4.mp4', createtime: '2024-06-27 15:45:00', result: 60 },
-        // Add more data as needed
-      ],
+      tableData: [],
+
+      total:0,
 
       params:{
         pageNum:1,
-        pageSize:5,
-        // style:'',
-        // status:'',
+        pageSize:4,
+        style:'',
+        status:'',
         pid:'',
       },
     };
@@ -52,13 +52,8 @@ export default {
   created() {
     this.load()
   },
-  computed: {
-    paginatedData() {
-      const start = (this.params.pageNum - 1) * this.params.pageSize;
-      const end = start + this.params.pageSize;
-      return this.tableData.slice(start, end);
-    }
-  },
+
+  computed: {},
   methods: {
 
     load(){
@@ -70,12 +65,9 @@ export default {
         }
       })
     },
-
-    handleSizeChange(size) {
-      this.params.pageSize = size;
-    },
     handlePageChange(page) {
       this.params.pageNum = page;
+      this.load();
     }
   }
 };
@@ -115,6 +107,16 @@ export default {
   margin-top: 20px;
   display: flex;
   justify-content: center;
+}
+
+.result-high {
+  color: #3498db;
+  font-weight: bold;
+}
+
+.result-low {
+  color: #e74c3c;
+  font-weight: bold;
 }
 
 .el-table th,

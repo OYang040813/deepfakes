@@ -16,24 +16,26 @@ public class DetectionFactory {
     @Autowired
     DetectionMapper detectionMapper;
 
-    public Detection create(Integer pid, String style, String name, String path){
+    public Detection create(Integer pid, String style, String name, String path, String localpath, Integer id){
 
-        return getDectection(pid, style, name, path, detectionMapper);
+        return getDectection(pid, style, name, path, localpath, detectionMapper, id);
     }
 
-    public static Detection getDectection(Integer pid, String style, String name, String path, DetectionMapper detectionMapper) {
+    public static Detection getDectection(Integer pid, String style, String name, String path, String localpath, DetectionMapper detectionMapper, Integer id) {
         Detection detection = new Detection();
         detection.setName(name);
         detection.setPath(path);
+        detection.setLocalpath(localpath);
         detection.setCreatetime(new Date());
         detection.setUpdatetime(new Date());
         detection.setStyle(style);
         detection.setStatus("等待检测");
         detection.setPid(pid);
         detection.setCardnum(generateCardNum());
+        detection.setFileid(id);
         detectionMapper.save(detection);
 
-        return detection;
+        return detectionMapper.getByFileid(id);
     }
 
     private static String generateCardNum() {

@@ -136,7 +136,6 @@ export default {
 
     // 跳转到/ShowResult路由
     startDetection() {
-
       // 获取fileList中的文件ID并过滤掉示例文件的ID
       const fileIds = this.fileList.map(file => file.id).filter(id => id !== -1 && id !== -2);
       const payload = {
@@ -151,6 +150,7 @@ export default {
       request.post('/detection/createForImage',payload).then(res => {
         if (res.code === '200') {
           this.$router.push('/ShowResult');
+          request.post('/detection/makeForImage',payload);
         } else {
           this.$notify.error(res.msg);
         }

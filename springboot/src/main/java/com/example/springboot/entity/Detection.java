@@ -40,7 +40,7 @@ public class Detection implements Serializable {
     /**
      * 检测结果
      */
-    private Double result;
+    private Integer result;
 
     /**
      * 检测类型
@@ -61,8 +61,12 @@ public class Detection implements Serializable {
 
     private String path;
 
+    private String localpath;
+
     private String cardnum;
 
     private String donepath;
+
+    private Integer fileid;
 
 }

@@ -44,7 +44,7 @@
                 isread like concat('%', #{isread}, '%')
             </if>
             <if test="pid != null and pid != ''">
-                pid like concat('%', #{pid}, '%')
+                pid = #{pid}
             </if>
         </where>
         order by id desc

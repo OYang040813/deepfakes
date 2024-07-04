@@ -14,13 +14,13 @@ import java.util.List;
  */
 public interface IDetectionService extends IService<Detection> {
 
-    void startDetectionForImage(Integer fileId, Integer pid);
+    Result startDetectionForImage(Integer fileId, Integer pid);
 
     void download(String flag, String play, HttpServletResponse response);
 
     Result startDetectionForVideo(Integer fileId, Integer pid);
 
-    void startDetectionForAudioSingle(Integer fileId, Integer pid);
+    Result startDetectionForAudioSingle(Integer fileId, Integer pid);
 
     void startDetectionForAudioDouble(Integer fileId, Integer pid);
 
@@ -39,6 +39,12 @@ public interface IDetectionService extends IService<Detection> {
     Result runDetectionCloud(String filePath);
 
     Result runDetectionLocal(String inputVideo, String modelPath, String outputFolder);
+
+    Detection getByFileId(Integer fileId);
+
+    Detection getByName(String name);
+
+    Detection getByPath(String path);
 }
 
 

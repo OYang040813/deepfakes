@@ -152,6 +152,7 @@ export default {
       request.post('/detection/createForVideo',payload).then(res => {
         if (res.code === '200') {
           this.$router.push('/ShowResult');
+          request.post('/detection/makeForVideo',payload);
         } else {
           this.$notify.error(res.msg);
         }

@@ -1,13 +1,13 @@
 <template>
   <div class="detection-page">
     <h1>统一检测界面</h1>
-    <el-table :data="pagedDetectionData" style="width: 100%">
+    <el-table :data="detectionData" style="width: 100%">
       <el-table-column prop="cardnum" label="检测号" min-width="30%"></el-table-column>
       <el-table-column prop="name" label="文件名称" min-width="30%"></el-table-column>
       <el-table-column prop="style" label="检测类型" min-width="15%"></el-table-column>
       <el-table-column prop="status" label="检测状态" min-width="15%"></el-table-column>
       <el-table-column prop="createtime" label="检测时间" min-width="25%"></el-table-column>
-      <el-table-column prop="result" label="检测结果" min-width="30%">
+      <el-table-column prop="result" label="检测结果(真人概率)" min-width="30%">
         <template slot-scope="scope">
           <div :class="{'result-high': scope.row.result > 50, 'result-low': scope.row.result <= 50}">
             {{ scope.row.result }}%
@@ -16,13 +16,13 @@
       </el-table-column>
     </el-table>
     <el-pagination
-      v-if="detectionData.length > params.pageSize"
-      @size-change="handleSizeChange"
+      background
+      v-if="total > params.pageSize"
       @current-change="handleCurrentChange"
       :current-page="params.pageNum"
       :page-size="params.pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="detectionData.length"
+      layout="total, prev, pager, next, jumper"
+      :total= "total"
       class="pagination">
     </el-pagination>
   </div>
@@ -37,35 +37,41 @@ export default {
     return {
       user: Cookies.get('user') ? JSON.parse(Cookies.get('user')) : {},
 
-      detectionData: [
-        {id:1, name: 'image1.jpg', style: '图像检测', status: '正在检测', createtime: '2023-06-01 10:00:00', result: 0 },
-        {id:2, name: 'video1.mp4', style: '视频检测', status: '已检测完毕', createtime: '2023-06-01 10:30:00', result: 80 },
-        {id:3, name: 'audio1.mp3', style: '音频检测', status: '已检测完毕', createtime: '2023-06-01 11:00:00', result: 30 },
-        {id:4, name: 'image2.jpg', style: '图像检测', status: '已检测完毕', createtime: '2023-06-01 12:00:00', result: 45 },
-        {id:5, name: 'video2.mp4', style: '视频检测', status: '正在检测', createtime: '2023-06-01 13:00:00', result: 0 },
-        {id:6, name: 'audio2.mp3', style: '音频检测', status: '已检测完毕', createtime: '2023-06-01 14:00:00', result: 60 }
-      ],
+      total: 0,
+
+      detectionData: [],
 
       params:{
         pageNum:1,
-        pageSize:5,
-        // style:'',
-        // status:'',
+        pageSize:8,
+        style:'',
+        status:'',
         pid:'',
       },
 
     };
   },
   computed: {
-    pagedDetectionData() {
-      const start = (this.params.pageNum - 1) * this.params.pageSize;
-      const end = start + this.params.pageSize;
-      return this.detectionData.slice(start, end);
-    }
+    // pagedDetectionData() {
+    //   const start = (this.params.pageNum - 1) * this.params.pageSize;
+    //   const end = start + this.params.pageSize;
+    //   return this.detectionData.slice(start, end);
+    // }
   },
   created() {
     this.load()
   },
+
+  mounted() {
+    // 设置自动刷新间隔时间（以毫秒为单位）
+    const refreshInterval = 15000; // 15000毫秒 = 15秒
+
+    // 自动刷新页面函数
+    setTimeout(() => {
+      this.$router.go(0); // 使用Vue Router刷新页面
+    }, refreshInterval);
+  },
+
   methods: {
 
     load(){
@@ -83,6 +89,7 @@ export default {
     },
     handleCurrentChange(page) {
       this.params.pageNum = page;
+      this.load()
     }
   }
 };
@@ -130,12 +137,12 @@ h1 {
 }
 
 .result-high {
-  color: #e74c3c;
+  color: #3498db;
   font-weight: bold;
 }
 
 .result-low {
-  color: #3498db;
+  color: #e74c3c;
   font-weight: bold;
 }
 

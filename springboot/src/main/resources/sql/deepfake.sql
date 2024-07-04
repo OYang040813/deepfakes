@@ -11,7 +11,7 @@
  Target Server Version : 50735
  File Encoding         : 65001
 
- Date: 03/07/2024 14:51:00
+ Date: 04/07/2024 00:24:03
 */
 
 SET NAMES utf8mb4;
@@ -66,7 +66,7 @@ CREATE TABLE `detection`  (
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `createtime` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP,
   `updatetime` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP,
-  `result` double(255, 0) NULL DEFAULT NULL COMMENT '检测结果',
+  `result` int(255) NULL DEFAULT NULL COMMENT '检测结果',
   `style` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '检测类型',
   `time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '检测所用时间',
   `pid` int(11) NULL DEFAULT NULL COMMENT '父id',
@@ -74,18 +74,14 @@ CREATE TABLE `detection`  (
   `path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '路径',
   `cardnum` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '卡号',
   `donepath` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '结果路径',
+  `localpath` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '本地路径，用于提供检测路径',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 29 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 30 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of detection
 -- ----------------------------
-INSERT INTO `detection` VALUES (23, '1.jpg', '2024-07-02 18:17:39', '2024-07-02 18:17:39', NULL, '图像检测', NULL, 1, '等待检测', 'http://localhost:9090/api/image/download/1719915457325?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxIiwiZXhwIjoxNzIwMjc1NDU3fQ.I0ddu7NNDzzzMEJG7B55-u6F6nuTHjJWQ2_N8-fIdP0', '20240702641437312', NULL);
-INSERT INTO `detection` VALUES (24, '2.jpg', '2024-07-02 18:17:46', '2024-07-02 18:17:46', NULL, '图像检测', NULL, 1, '等待检测', 'http://localhost:9090/api/image/download/1719915464384?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxIiwiZXhwIjoxNzIwMjc1NDY0fQ.Y5Q8K-PG7sc_kG8DC9Flo2PVIjJvW2iVQKdTBx8uKuk', '202407021920225944', NULL);
-INSERT INTO `detection` VALUES (25, 'Screenshot 2024-06-11 225339.png', '2024-07-03 11:51:25', '2024-07-03 11:51:25', NULL, '图像检测', NULL, 10, '等待检测', 'http://10.195.154.158:9090/api/image/download/1719978683888?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxMCIsImV4cCI6MTcyMDMzODY4M30.LiwLMZ_4kcyQ98DADFNkU2aKscconon6Ooy2W-cwX4I', '20240703113390501', NULL);
-INSERT INTO `detection` VALUES (26, 'DFGSAEWGTRAEWGRAZESWGEG.mp4', '2024-07-03 11:54:31', '2024-07-03 11:54:31', NULL, '视频检测', NULL, 10, '等待检测', 'http://10.195.154.158:9090/api/video/download/1719978828820?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxMCIsImV4cCI6MTcyMDMzODgyOH0.qSMseQkBBr3aYXmk6-LU0RdRjrDQ8Iaaf2VmHzNZ6GY', '202407031260711834', NULL);
-INSERT INTO `detection` VALUES (27, 'DFGSAEWGTRAEWGRAZESWGEG.mp4', '2024-07-03 11:55:38', '2024-07-03 11:55:38', NULL, '视频检测', NULL, 10, '等待检测', 'http://10.195.154.158:9090/api/video/download/1719978933929?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxMCIsImV4cCI6MTcyMDMzODkzM30.GSXxgkDlEkgl_5nJqpGCrY2GQa6vYzhcB3nWq9G1ok8', '202407031973614623', NULL);
-INSERT INTO `detection` VALUES (28, 'DFGSAEWGTRAEWGRAZESWGEG.mp4', '2024-07-03 11:55:53', '2024-07-03 11:55:53', NULL, '视频检测', NULL, 10, '等待检测', 'http://10.195.154.158:9090/api/video/download/1719978949300?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxMCIsImV4cCI6MTcyMDMzODk0OX0.StmwAWa7gpCgWYG2c0UZXxuPJXvrVsVLxKXk2vhIsX0', '20240703622885111', NULL);
+INSERT INTO `detection` VALUES (29, '1.jpg', '2024-07-03 23:50:53', '2024-07-03 23:50:53', NULL, '图像检测', NULL, 1, '等待检测', 'http://10.195.154.158:9090/api/image/download/1720021850713?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxIiwiZXhwIjoxNzIwNzQxODUwfQ.hxxnjHp6xjpDY_3ZpnOzNIorN1cNS5zp6CYqNGiAXcY', '202407031530483156', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for image
@@ -102,7 +98,7 @@ CREATE TABLE `image`  (
   `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '已检测？未检测？正在检测？',
   `localpath` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '本地路径',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 119 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 120 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for message
@@ -126,10 +122,6 @@ INSERT INTO `message` VALUES (1, '系统通知', '您的账户已成功激活', 
 INSERT INTO `message` VALUES (2, '安全提醒', '请定期更改您的密码以确保账户安全', '2024-06-27 11:51:46', '2024-06-29 23:59:01', '1', 1);
 INSERT INTO `message` VALUES (3, '系统通知', '您的最新图像检测已完成', '2024-06-27 12:36:23', '2024-06-27 13:02:24', '1', 1);
 INSERT INTO `message` VALUES (4, '系统通知', '您的最新视频检测已完成', '2024-06-27 13:03:04', '2024-06-27 21:29:36', '1', 2);
-INSERT INTO `message` VALUES (7, '系统通知', '您的账户已成功激活,可以开始属于你的检测之旅了', '2024-07-03 12:30:48', '2024-07-03 12:30:48', '0', 14);
-INSERT INTO `message` VALUES (8, '安全提醒', '请定期更改您的密码以确保账户安全', '2024-07-03 12:30:48', '2024-07-03 12:30:48', '0', 14);
-INSERT INTO `message` VALUES (9, '系统通知', '您的账户已成功激活,可以开始属于你的检测之旅了', '2024-07-03 12:35:28', '2024-07-03 12:35:28', '0', 15);
-INSERT INTO `message` VALUES (10, '安全提醒', '请定期更改您的密码以确保账户安全', '2024-07-03 12:35:28', '2024-07-03 12:35:28', '0', 15);
 
 -- ----------------------------
 -- Table structure for user
@@ -157,11 +149,9 @@ CREATE TABLE `user`  (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (1, 'admin', '123456789@163.com', '123456', '13421594388', '男', 66, '', '2024-04-20 11:17:40', '2024-07-03 12:54:40', '202404201670051966', 00000000001, 'http://10.195.154.158:9090/api/user/download/1719979147392?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxIiwiZXhwIjoxNzIwMzM5MTQ3fQ.ReRxNxoI5umFQGuSR2xqLlJJc4oKxCwBu8DNwBzXlPM', '2004-10-01');
+INSERT INTO `user` VALUES (1, 'admin', '123456789@163.com', '123456', '13421594388', '男', 66, '', '2024-04-20 11:17:40', '2024-07-03 23:00:58', '202404201670051966', 00000000001, '', '2004-10-01');
 INSERT INTO `user` VALUES (2, '用户1', 'zhang@163.com', '123456', '13421594386', '男', 22, '西安交通大学', '2024-04-20 11:37:07', '2024-07-03 12:09:50', '20240420443544878', 00000000000, '', NULL);
 INSERT INTO `user` VALUES (3, '用户2', 'kexu@sb.com', '123456', '13421212121', '男', 18, '', '2024-05-07 11:00:49', '2024-07-03 12:10:21', '202405072054057603', 00000000000, '', NULL);
-INSERT INTO `user` VALUES (14, '123123', NULL, '123456', '13421594386', NULL, NULL, NULL, '2024-07-03 12:30:49', '2024-07-03 12:34:57', '202407031385167625', 00000000000, '', NULL);
-INSERT INTO `user` VALUES (15, '111111', NULL, '111111', '13421594386', NULL, NULL, NULL, '2024-07-03 12:35:29', '2024-07-03 12:35:32', '202407031767067209', 00000000000, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for video

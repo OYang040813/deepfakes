@@ -45,7 +45,7 @@ export default {
       fileList: [],
 
       sample2: {id: -1, name: 'sample2.mp3', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3', uid:-1},
-      sample1: {id: -1, name: 'sample1.mp3', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', uid:-2},
+      sample1: {id: -2, name: 'sample1.mp3', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', uid:-2},
     };
   },
 
@@ -148,6 +148,7 @@ export default {
       request.post('/detection/createForAudioSingle', payload).then(res => {
         if (res.code === '200') {
           this.$router.push('/ShowResult');
+          request.post('/detection/makeForAudio',payload);
         } else {
           this.$notify.error(res.msg);
         }

@@ -53,11 +53,10 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
             String token = TokenUtils.genToken(currentUser.getId().toString(), currentUser.getKeynum());
 
             image.setPath("http://10.195.154.158:9090/api/image/download/" + flag + "?token=" + token);
+            image.setLocalpath(filePath);
             image.setStatus("-1");
             image.setPid(Math.toIntExact(Long.parseLong(userId)));
-            image.setLocalpath(filePath);
-            save(image);
-
+            imageMapper.save(image);
             Image image1 = getByPath(image.getPath());
 
             return Result.success(image1);

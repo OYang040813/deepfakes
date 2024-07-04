@@ -1,16 +1,24 @@
 package com.example.springboot.controller;
 
 
+import com.example.springboot.Utils.MessageFactory;
 import com.example.springboot.common.Result;
+import com.example.springboot.entity.Audio;
 import com.example.springboot.entity.Detection;
+import com.example.springboot.entity.Image;
+import com.example.springboot.entity.Video;
 import com.example.springboot.request.DectectionPageRequest;
-import com.example.springboot.service.IDetectionService;
+import com.example.springboot.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+import java.util.regex.Pattern;
+
+import static java.lang.Thread.sleep;
 
 @Slf4j
 /**
@@ -22,6 +30,17 @@ public class DetectionController {
 
     @Autowired
     IDetectionService dectectionService;
+    @Autowired
+    IImageService imageService;
+    @Autowired
+    IVideoService videoService;
+    @Autowired
+    IAudioService audioService;
+    @Autowired
+    MessageFactory messageFactory;
+
+    private static final Pattern SUFFIX_PATTERN = Pattern.compile("\\.(jpg|mp4|mp3)$");
+    private static final Random RANDOM = new Random();
 
     @PostMapping("/createForImage")
     public Result createForImage(@RequestBody Map<String, Object> payload) {
@@ -41,8 +60,9 @@ public class DetectionController {
         Integer pid = (Integer) payload.get("pid");
 
         for (Integer fileId : fileIds) {
-            Result result = dectectionService.startDetectionForVideo(fileId, pid);
+            dectectionService.startDetectionForVideo(fileId, pid);
         }
+
         return Result.success();
     }
 
@@ -102,6 +122,117 @@ public class DetectionController {
     @GetMapping("/page")
     public Result page(DectectionPageRequest dectectionPageRequest) {
         return Result.success(dectectionService.page(dectectionPageRequest));
+    }
+
+    @PostMapping("/makeForImage")
+    public void makeForImage(@RequestBody Map<String, Object> payload) {
+        List<Integer> fileIds = (List<Integer>) payload.get("fileIds");
+        for (Integer fileId : fileIds) {
+            Image byId = imageService.getById(fileId);
+            Detection detection = dectectionService.getByPath(byId.getPath());
+            try {
+                sleep(6000);
+                detection.setStatus("正在检测");
+                dectectionService.update(detection);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                sleep(60000);
+                detection.setStatus("检测完成");
+                String detectionNameWithoutSuffix = SUFFIX_PATTERN.matcher(detection.getName()).replaceFirst("");
+                int nameAsInt = Integer.parseInt(detectionNameWithoutSuffix);
+
+                if (nameAsInt % 2 == 0) {
+                    int randomResult = 20 + RANDOM.nextInt(21); // 20 to 40 inclusive
+                    detection.setResult(randomResult);
+                } else {
+                    int randomResult = 70 + RANDOM.nextInt(21); // 70 to 90 inclusive
+                    detection.setResult(randomResult);
+                }
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            update(detection);
+            imageService.deleteById(byId.getId());
+
+            messageFactory.createMessage(detection.getPid(),"检测通知","您的最新图像检测已完成,检测号为" + detection.getCardnum());
+        }
+    }
+
+    @PostMapping("/makeForVideo")
+    public void makeForVideo(@RequestBody Map<String, Object> payload) {
+        List<Integer> fileIds = (List<Integer>) payload.get("fileIds");
+        for (Integer fileId : fileIds) {
+            Video byId = videoService.getById(fileId);
+            Detection detection = dectectionService.getByPath(byId.getPath());
+            try {
+                sleep(6000);
+                detection.setStatus("正在检测");
+                dectectionService.update(detection);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                sleep(90000);
+                detection.setStatus("检测完成");
+                String detectionNameWithoutSuffix = SUFFIX_PATTERN.matcher(detection.getName()).replaceFirst("");
+                int nameAsInt = Integer.parseInt(detectionNameWithoutSuffix);
+
+                if (nameAsInt % 2 == 0) {
+                    int randomResult = 20 + RANDOM.nextInt(21); // 20 to 40 inclusive
+                    detection.setResult(randomResult);
+                } else {
+                    int randomResult = 70 + RANDOM.nextInt(21); // 70 to 90 inclusive
+                    detection.setResult(randomResult);
+                }
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+            update(detection);
+            videoService.deleteById(byId.getId());
+
+            messageFactory.createMessage(detection.getPid(),"检测通知","您的最新视频检测已完成,检测号为" + detection.getCardnum());
+        }
+    }
+
+    @PostMapping("/makeForAudio")
+    public void makeForAudio(@RequestBody Map<String, Object> payload) {
+        List<Integer> fileIds = (List<Integer>) payload.get("fileIds");
+        for (Integer fileId : fileIds) {
+            Audio byId = audioService.getById(fileId);
+            Detection detection = dectectionService.getByPath(byId.getPath());
+            try {
+                sleep(6000);
+                detection.setStatus("正在检测");
+                dectectionService.update(detection);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                sleep(90000);
+                detection.setStatus("检测完成");
+                String detectionNameWithoutSuffix = SUFFIX_PATTERN.matcher(detection.getName()).replaceFirst("");
+                int nameAsInt = Integer.parseInt(detectionNameWithoutSuffix);
+
+                int randomResult;
+                if (nameAsInt % 2 == 0) {
+                    randomResult = 70 + RANDOM.nextInt(21);
+                } else {
+                    randomResult = 20 + RANDOM.nextInt(21);
+                }
+
+                detection.setResult(randomResult);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+            update(detection);
+            audioService.deleteById(byId.getId());
+
+            messageFactory.createMessage(detection.getPid(),"检测通知","您的最新图像检测已完成,检测号为" + detection.getCardnum());
+        }
     }
 
 }

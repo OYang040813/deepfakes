@@ -53,12 +53,11 @@
       :visible.sync="dialogVisible"
       :title= header
       width="50%"
-      font-size = 25px
       :modal-append-to-body="true"
       custom-class="announcement-dialog"
     >
       <div class="dialog-content">{{ dialogContent }}</div>
-      <span slot="footer" class="dialog-footer">
+      <span slot="footer">
         <el-button class="close-button" @click="dialogVisible = false">关闭</el-button>
       </span>
     </el-dialog>
@@ -275,6 +274,14 @@ export default {
   .close-button:hover {
     background-color: #66b1ff;
     transform: scale(1.1);
+  }
+
+  .dialog-content {
+    font-size: 18px; /* 根据需要调整大小 */
+  }
+
+  .close-button {
+    font-size: 13px; /* 根据需要调整大小 */
   }
 }
 </style>
