@@ -2,17 +2,16 @@ package com.example.springboot.controller;
 
 
 import com.example.springboot.Utils.MessageFactory;
+import com.example.springboot.Utils.TokenUtils;
 import com.example.springboot.common.Result;
-import com.example.springboot.entity.Audio;
-import com.example.springboot.entity.Detection;
-import com.example.springboot.entity.Image;
-import com.example.springboot.entity.Video;
+import com.example.springboot.entity.*;
 import com.example.springboot.request.DectectionPageRequest;
 import com.example.springboot.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -39,7 +38,9 @@ public class DetectionController {
     @Autowired
     MessageFactory messageFactory;
 
-    private static final Pattern SUFFIX_PATTERN = Pattern.compile("\\.(jpg|mp4|mp3)$");
+    private static final Pattern SUFFIX_PATTERN = Pattern.compile("\\.(jpg|mp4|mp3|png)$");
+    private static final String MODEL_PATH = "C:\\Users\\86138\\Desktop\\笔记集\\项目\\breakice\\Model\\FaceForensics\\classification\\detect_from_video.py";
+    private static final String OUTPUT_FOLDER = "C:\\Users\\86138\\Desktop\\笔记集\\项目\\breakice\\Model\\FaceForensics\\classification\\output\\";
     private static final Random RANDOM = new Random();
 
     @PostMapping("/createForImage")
@@ -130,30 +131,13 @@ public class DetectionController {
         for (Integer fileId : fileIds) {
             Image byId = imageService.getById(fileId);
             Detection detection = dectectionService.getByPath(byId.getPath());
-            try {
-                sleep(6000);
-                detection.setStatus("正在检测");
-                dectectionService.update(detection);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            try {
-                sleep(60000);
-                detection.setStatus("检测完成");
-                String detectionNameWithoutSuffix = SUFFIX_PATTERN.matcher(detection.getName()).replaceFirst("");
-                int nameAsInt = Integer.parseInt(detectionNameWithoutSuffix);
 
-                if (nameAsInt % 2 == 0) {
-                    int randomResult = 20 + RANDOM.nextInt(21); // 20 to 40 inclusive
-                    detection.setResult(randomResult);
-                } else {
-                    int randomResult = 70 + RANDOM.nextInt(21); // 70 to 90 inclusive
-                    detection.setResult(randomResult);
-                }
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            update(detection);
+            dectectionService.runDetectionLocal(detection.getLocalpath(), MODEL_PATH, OUTPUT_FOLDER);
+            Detection detection1 = dectectionService.readTxtFile(OUTPUT_FOLDER + "Result", detection);
+//            User currentUser = TokenUtils.getCurrentUser();
+//            String token = TokenUtils.genToken(currentUser.getId().toString(), currentUser.getKeynum());
+//            detection1.setPath("http://10.195.154.158:9090/api/image/download/" + flag + "?token=" + token);
+            update(detection1);
             imageService.deleteById(byId.getId());
 
             messageFactory.createMessage(detection.getPid(),"检测通知","您的最新图像检测已完成,检测号为" + detection.getCardnum());
@@ -166,31 +150,10 @@ public class DetectionController {
         for (Integer fileId : fileIds) {
             Video byId = videoService.getById(fileId);
             Detection detection = dectectionService.getByPath(byId.getPath());
-            try {
-                sleep(6000);
-                detection.setStatus("正在检测");
-                dectectionService.update(detection);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            try {
-                sleep(90000);
-                detection.setStatus("检测完成");
-                String detectionNameWithoutSuffix = SUFFIX_PATTERN.matcher(detection.getName()).replaceFirst("");
-                int nameAsInt = Integer.parseInt(detectionNameWithoutSuffix);
+            dectectionService.runDetectionLocal(detection.getLocalpath(), MODEL_PATH, OUTPUT_FOLDER);
+            Detection detection1 = dectectionService.readTxtFile(OUTPUT_FOLDER + "Result", detection);
 
-                if (nameAsInt % 2 == 0) {
-                    int randomResult = 20 + RANDOM.nextInt(21); // 20 to 40 inclusive
-                    detection.setResult(randomResult);
-                } else {
-                    int randomResult = 70 + RANDOM.nextInt(21); // 70 to 90 inclusive
-                    detection.setResult(randomResult);
-                }
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-
-            update(detection);
+            update(detection1);
             videoService.deleteById(byId.getId());
 
             messageFactory.createMessage(detection.getPid(),"检测通知","您的最新视频检测已完成,检测号为" + detection.getCardnum());
@@ -203,32 +166,10 @@ public class DetectionController {
         for (Integer fileId : fileIds) {
             Audio byId = audioService.getById(fileId);
             Detection detection = dectectionService.getByPath(byId.getPath());
-            try {
-                sleep(6000);
-                detection.setStatus("正在检测");
-                dectectionService.update(detection);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            try {
-                sleep(90000);
-                detection.setStatus("检测完成");
-                String detectionNameWithoutSuffix = SUFFIX_PATTERN.matcher(detection.getName()).replaceFirst("");
-                int nameAsInt = Integer.parseInt(detectionNameWithoutSuffix);
+            dectectionService.runDetectionLocal(detection.getLocalpath(), MODEL_PATH, OUTPUT_FOLDER);
+            Detection detection1 = dectectionService.readTxtFile(OUTPUT_FOLDER + "Result", detection);
 
-                int randomResult;
-                if (nameAsInt % 2 == 0) {
-                    randomResult = 70 + RANDOM.nextInt(21);
-                } else {
-                    randomResult = 20 + RANDOM.nextInt(21);
-                }
-
-                detection.setResult(randomResult);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-
-            update(detection);
+            update(detection1);
             audioService.deleteById(byId.getId());
 
             messageFactory.createMessage(detection.getPid(),"检测通知","您的最新图像检测已完成,检测号为" + detection.getCardnum());

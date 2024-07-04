@@ -18,7 +18,7 @@
       <h2>个人信息</h2>
       <div class="info-item">
         <label>账户昵称：</label>
-        <input v-model="user.name" type="text">
+        <input v-model="user.name" type="text"></input>
       </div>
       <div class="info-item">
         <label>性别：</label>
@@ -30,15 +30,19 @@
       </div>
       <div class="info-item">
         <label>生日：</label>
-        <input v-model="user.birthday" type="date">
+        <input v-model="user.birthday" type="date"></input>
       </div>
       <div class="info-item">
         <label>电话：</label>
-        <input v-model="user.phone" type="tel">
+        <input v-model="user.phone" type="tel"></input>
       </div>
       <div class="info-item">
         <label>邮箱：</label>
-        <input v-model="user.email" type="email">
+        <input v-model="user.email" type="email"></input>
+      </div>
+      <div class="info-item">
+        <label>密码：</label>
+        <el-input type="password" v-model="user.keynum" show-password></el-input>
       </div>
       <button class="save-btn" @click="update">保存修改</button>
     </div>
@@ -67,7 +71,7 @@ export default {
       request.get("/user/" + this.userByCookies.id).then(res =>{
         this.user = res.data;
         // console.log(this.form)
-        if(this.user.cover == ""){
+        if(this.user.cover === ''||this.user.cover === null){
           this.avatar = require('@/assets/second.png'); // default avatar
         }else{
           this.avatar = this.user.cover;

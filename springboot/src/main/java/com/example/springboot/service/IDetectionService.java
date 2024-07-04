@@ -40,6 +40,8 @@ public interface IDetectionService extends IService<Detection> {
 
     Result runDetectionLocal(String inputVideo, String modelPath, String outputFolder);
 
+    Detection readTxtFile(String filePath, Detection detection);
+
     Detection getByFileId(Integer fileId);
 
     Detection getByName(String name);

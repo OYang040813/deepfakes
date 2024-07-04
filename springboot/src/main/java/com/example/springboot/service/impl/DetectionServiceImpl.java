@@ -30,9 +30,7 @@ import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
@@ -66,9 +64,9 @@ public class DetectionServiceImpl extends ServiceImpl<DetectionMapper, Detection
         Image image = imageMapper.getById(fileId);
         //创建实例
         Detection detection = detectionFactory.create(pid, "图像检测", image.getName(), image.getPath(), image.getLocalpath(), image.getId());
-        Result result = runDetectionLocal(detection.getLocalpath(), MODEL_PATH, OUTPUT_FOLDER);
+//        Result result = runDetectionLocal(detection.getLocalpath(), MODEL_PATH, OUTPUT_FOLDER);
 
-        return result;
+        return Result.success();
     }
 
     @Override
@@ -104,9 +102,9 @@ public class DetectionServiceImpl extends ServiceImpl<DetectionMapper, Detection
         Video video = videoMapper.getById(fileId);
         //创建实例
         Detection detection = detectionFactory.create(pid, "视频检测", video.getName(), video.getPath(), video.getLocalpath(), video.getId());
-        Result result = runDetectionLocal(detection.getLocalpath(), MODEL_PATH, OUTPUT_FOLDER);
+//        Result result = runDetectionLocal(detection.getLocalpath(), MODEL_PATH, OUTPUT_FOLDER);
 
-        return result;
+        return Result.success();
     }
 
     @Override
@@ -115,9 +113,9 @@ public class DetectionServiceImpl extends ServiceImpl<DetectionMapper, Detection
         Audio audio = audioMapper.getById(fileId);
         //创建实例
         Detection detection = detectionFactory.create(pid, "音频检测", audio.getName(), audio.getPath(), audio.getLocalpath(), audio.getId());
-        Result result = runDetectionLocal(detection.getLocalpath(), MODEL_PATH, OUTPUT_FOLDER);
+//        Result result = runDetectionLocal(detection.getLocalpath(), MODEL_PATH, OUTPUT_FOLDER);
 
-        return result;
+        return Result.success();
     }
 
     @Override
@@ -228,6 +226,41 @@ public class DetectionServiceImpl extends ServiceImpl<DetectionMapper, Detection
             return Result.success(exitCode);
         } catch (IOException | InterruptedException e) {
             return Result.error("Failed to execute script: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public Detection readTxtFile(String filePath, Detection detection) {
+        File file = new File(filePath);
+        if (!file.exists() || !file.isFile()) {
+            throw new RuntimeException("File not found or is not a file");
+        }
+
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+            int result = 0;
+            String finalResult = null;
+
+            // 读取第一行
+            if ((line = br.readLine()) != null) {
+                result = Integer.parseInt(line.trim());
+            }
+
+            // 读取第二行
+            if ((line = br.readLine()) != null) {
+                finalResult = line.trim();
+            }
+
+            // 处理读取到的数据
+            detection.setResult(result);
+            update(detection);
+            return detection;
+
+            // 在这里你可以将result和finalResult变量保存到类成员变量或其他地方以供后续使用
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error reading file", e);
         }
     }
 
