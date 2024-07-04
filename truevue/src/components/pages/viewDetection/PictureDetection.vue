@@ -3,7 +3,7 @@
     <h1 class="title">图片上传</h1>
     <el-upload
       class="upload-demo"
-      :action="'http://10.195.154.158:9090/api/image/upload?token=' + this.user.token"
+      :action="'http://localhost:9090/api/image/upload?token=' + this.user.token"
       :on-preview="handlePreview"
       :on-remove="handleRemove"
       :on-success="handleSuccess"
@@ -150,7 +150,7 @@ export default {
       request.post('/detection/createForImage',payload).then(res => {
         if (res.code === '200') {
           this.$router.push('/ShowResult');
-          request.post('/detection/makeForImage',payload);
+          // request.post('/detection/createForImage',payload);
         } else {
           this.$notify.error(res.msg);
         }

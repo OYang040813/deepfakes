@@ -49,7 +49,7 @@ public class AudioController {
             User currentUser = TokenUtils.getCurrentUser();
             String token = TokenUtils.genToken(currentUser.getId().toString(), currentUser.getKeynum());
 
-            audio.setPath("http://10.195.154.158:9090/api/audio/download/" + flag + "?token=" + token);
+            audio.setPath("http://localhost:9090/api/audio/download/" + flag + "?token=" + token);
             audio.setStatus("-1");
             audio.setPid(Integer.valueOf(userId));
             audio.setLocalpath(filePath);

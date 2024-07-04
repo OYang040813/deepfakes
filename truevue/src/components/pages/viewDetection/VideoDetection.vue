@@ -5,7 +5,7 @@
     </h1>
     <el-upload
       class="upload-demo"
-      :action="'http://10.195.154.158:9090/api/video/upload?token=' + this.user.token"
+      :action="'http://localhost:9090/api/video/upload?token=' + this.user.token"
       :on-preview="handlePreview"
       :on-remove="handleRemove"
       :on-success="handleSuccess"
@@ -152,7 +152,7 @@ export default {
       request.post('/detection/createForVideo',payload).then(res => {
         if (res.code === '200') {
           this.$router.push('/ShowResult');
-          request.post('/detection/makeForVideo',payload);
+          // request.post('/detection/createForVideo',payload);
         } else {
           this.$notify.error(res.msg);
         }

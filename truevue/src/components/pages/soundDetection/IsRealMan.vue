@@ -5,7 +5,7 @@
     </h1>
     <el-upload
       class="upload-demo"
-      :action="'http://10.195.154.158:9090/api/audio/upload?token=' + this.user.token"
+      :action="'http://localhost:9090/api/audio/upload?token=' + this.user.token"
       :on-preview="handlePreview"
       :on-remove="handleRemove"
       :on-success="handleSuccess"
@@ -148,7 +148,7 @@ export default {
       request.post('/detection/createForAudioSingle', payload).then(res => {
         if (res.code === '200') {
           this.$router.push('/ShowResult');
-          request.post('/detection/makeForAudio',payload);
+          // request.post('/detection/createForAudioSingle',payload);
         } else {
           this.$notify.error(res.msg);
         }

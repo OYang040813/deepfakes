@@ -11,7 +11,7 @@
  Target Server Version : 50735
  File Encoding         : 65001
 
- Date: 04/07/2024 00:24:03
+ Date: 14/10/2024 10:31:23
 */
 
 SET NAMES utf8mb4;
@@ -29,7 +29,7 @@ CREATE TABLE `announcement`  (
   `updatetime` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   `style` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '通知类别',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of announcement
@@ -55,7 +55,7 @@ CREATE TABLE `audio`  (
   `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '已检测？未检测？正在检测？',
   `localpath` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '本地路径',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for detection
@@ -75,13 +75,16 @@ CREATE TABLE `detection`  (
   `cardnum` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '卡号',
   `donepath` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '结果路径',
   `localpath` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '本地路径，用于提供检测路径',
+  `fileid` int(11) NULL DEFAULT NULL COMMENT '对应原文件于数据库中id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 30 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 119 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of detection
 -- ----------------------------
-INSERT INTO `detection` VALUES (29, '1.jpg', '2024-07-03 23:50:53', '2024-07-03 23:50:53', NULL, '图像检测', NULL, 1, '等待检测', 'http://10.195.154.158:9090/api/image/download/1720021850713?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxIiwiZXhwIjoxNzIwNzQxODUwfQ.hxxnjHp6xjpDY_3ZpnOzNIorN1cNS5zp6CYqNGiAXcY', '202407031530483156', NULL, NULL);
+INSERT INTO `detection` VALUES (109, '202407040001.jpg', '2024-07-05 22:09:13', '2024-07-05 22:10:19', 86, '图像检测', NULL, 1, '检测完成', 'http://10.195.154.167:9090/api/image/download/1720188548514?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxIiwiZXhwIjoxNzIwOTA4NTQ4fQ.AjjVrFNSRWClOQzxoz1yyUFA0JmIarOHLAgzj-1PTmE', '202407051273872268', NULL, NULL, 174);
+INSERT INTO `detection` VALUES (110, '202407040000.png', '2024-07-05 22:09:13', '2024-07-05 22:11:25', 26, '图像检测', NULL, 1, '检测完成', 'http://10.195.154.167:9090/api/image/download/1720188551487?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxIiwiZXhwIjoxNzIwOTA4NTUxfQ.2NXmMvf992Q_WJEnn0Pv85r7znq7Geq2x9s1yUY9bRk', '202407052040398076', NULL, NULL, 175);
+INSERT INTO `detection` VALUES (111, '20240704160326.mp4', '2024-07-05 22:09:20', '2024-07-05 22:10:56', 26, '视频检测', NULL, 1, '检测完成', 'http://10.195.154.167:9090/api/video/download/1720188558361?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxIiwiZXhwIjoxNzIwOTA4NTU4fQ.uY_MNO118RnoJgl_sTP1Mzo1jPdoQmwYSdeApjOyr_M', '202407051264574563', NULL, NULL, 49);
 
 -- ----------------------------
 -- Table structure for image
@@ -98,7 +101,7 @@ CREATE TABLE `image`  (
   `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '已检测？未检测？正在检测？',
   `localpath` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '本地路径',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 120 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for message
@@ -113,15 +116,17 @@ CREATE TABLE `message`  (
   `isread` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '是否已读',
   `pid` int(11) NULL DEFAULT NULL COMMENT '父id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 59 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of message
 -- ----------------------------
-INSERT INTO `message` VALUES (1, '系统通知', '您的账户已成功激活', '2024-06-27 11:50:48', '2024-06-27 11:50:48', '0', 1);
-INSERT INTO `message` VALUES (2, '安全提醒', '请定期更改您的密码以确保账户安全', '2024-06-27 11:51:46', '2024-06-29 23:59:01', '1', 1);
-INSERT INTO `message` VALUES (3, '系统通知', '您的最新图像检测已完成', '2024-06-27 12:36:23', '2024-06-27 13:02:24', '1', 1);
-INSERT INTO `message` VALUES (4, '系统通知', '您的最新视频检测已完成', '2024-06-27 13:03:04', '2024-06-27 21:29:36', '1', 2);
+INSERT INTO `message` VALUES (1, '系统通知', '您的账户已成功激活', '2024-06-27 11:50:48', '2024-07-04 15:22:39', '1', 1);
+INSERT INTO `message` VALUES (2, '安全提醒', '请定期更改您的密码以确保账户安全', '2024-06-27 11:51:46', '2024-06-29 23:59:01', '0', 1);
+INSERT INTO `message` VALUES (4, '检测通知', '您的最新视频检测已完成', '2024-06-27 13:03:04', '2024-06-27 21:29:36', '0', 2);
+INSERT INTO `message` VALUES (54, '检测通知', '您的最新图像检测已完成,检测号为202407051273872268', '2024-07-05 22:10:18', '2024-07-05 22:10:18', '0', 1);
+INSERT INTO `message` VALUES (55, '检测通知', '您的最新视频检测已完成,检测号为202407051264574563', '2024-07-05 22:10:56', '2024-07-05 22:10:56', '0', 1);
+INSERT INTO `message` VALUES (56, '检测通知', '您的最新图像检测已完成,检测号为202407052040398076', '2024-07-05 22:11:24', '2024-07-05 22:11:24', '0', 1);
 
 -- ----------------------------
 -- Table structure for user
@@ -144,14 +149,14 @@ CREATE TABLE `user`  (
   `birthday` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '生日',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `name_key`(`name`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (1, 'admin', '123456789@163.com', '123456', '13421594388', '男', 66, '', '2024-04-20 11:17:40', '2024-07-03 23:00:58', '202404201670051966', 00000000001, '', '2004-10-01');
-INSERT INTO `user` VALUES (2, '用户1', 'zhang@163.com', '123456', '13421594386', '男', 22, '西安交通大学', '2024-04-20 11:37:07', '2024-07-03 12:09:50', '20240420443544878', 00000000000, '', NULL);
-INSERT INTO `user` VALUES (3, '用户2', 'kexu@sb.com', '123456', '13421212121', '男', 18, '', '2024-05-07 11:00:49', '2024-07-03 12:10:21', '202405072054057603', 00000000000, '', NULL);
+INSERT INTO `user` VALUES (1, 'admin', '123456789@163.com', '202230351116', '13421594388', '女', 66, '', '2024-04-20 11:17:40', '2024-10-14 10:13:49', '202404201670051966', 00000000001, '', '2004-10-01');
+INSERT INTO `user` VALUES (2, '用户1', 'zhang@163.com', '202230271148', '13421594386', '男', 22, '西安交通大学', '2024-04-20 11:37:07', '2024-10-14 10:07:37', '20240420443544878', 00000000000, '', NULL);
+INSERT INTO `user` VALUES (3, '用户2', 'kexu@sb.com', '202230271148', '13421212121', '男', 18, '', '2024-05-07 11:00:49', '2024-07-03 12:10:21', '202405072054057603', 00000000000, '', NULL);
 
 -- ----------------------------
 -- Table structure for video
@@ -168,6 +173,6 @@ CREATE TABLE `video`  (
   `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '已检测？未检测？正在检测？',
   `localpath` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '本地路径',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 34 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;

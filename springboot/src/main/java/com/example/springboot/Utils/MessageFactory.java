@@ -1,5 +1,6 @@
 package com.example.springboot.Utils;
 
+import com.example.springboot.controller.MessageController;
 import com.example.springboot.entity.Detection;
 import com.example.springboot.entity.Message;
 import com.example.springboot.mapper.DetectionMapper;
@@ -13,7 +14,7 @@ import java.util.UUID;
 
 @Component
 @Slf4j
-public class MessageFactory {
+public class MessageFactory extends MessageController {
 
     @Autowired
     MessageMapper messageMapper;

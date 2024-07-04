@@ -6,7 +6,7 @@
       </div>
       <el-upload
         class="avatar-uploader"
-        :action="'http://10.195.154.158:9090/api/user/upload?token=' + this.userByCookies.token"
+        :action="'http://localhost:9090/api/user/upload?token=' + this.userByCookies.token"
         :show-file-list="false"
         :on-success="handleSuccess"
         :data="{ userId: userByCookies.id }"
@@ -40,6 +40,11 @@
         <label>邮箱：</label>
         <input v-model="user.email" type="email">
       </div>
+
+      <div class="info-item" >
+        <label>密码：</label>
+        <el-input style="margin-left: 10px" v-model="user.keynum" type="password" show-password></el-input>
+      </div>
       <button class="save-btn" @click="update">保存修改</button>
     </div>
   </div>
@@ -67,7 +72,7 @@ export default {
       request.get("/user/" + this.userByCookies.id).then(res =>{
         this.user = res.data;
         // console.log(this.form)
-        if(this.user.cover == ""){
+        if(this.user.cover === "" || this.user.cover == null){
           this.avatar = require('@/assets/second.png'); // default avatar
         }else{
           this.avatar = this.user.cover;

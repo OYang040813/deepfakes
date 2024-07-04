@@ -52,7 +52,7 @@ public class VideoController {
             User currentUser = TokenUtils.getCurrentUser();
             String token = TokenUtils.genToken(currentUser.getId().toString(), currentUser.getKeynum());
 
-            video.setPath("http://10.195.154.158:9090/api/video/download/" + flag + "?token=" + token);
+            video.setPath("http://localhost:9090/api/video/download/" + flag + "?token=" + token);
             video.setStatus("-1");
             video.setPid(Math.toIntExact(Long.parseLong(userId)));
             video.setLocalpath(filePath);

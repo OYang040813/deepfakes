@@ -3,13 +3,12 @@ import router from "../router";
 import Cookies from "js-cookie";
 
 const request = axios.create({
-  baseURL:'http://10.195.154.158:9090/api',  //全局统一加上后台基本前缀，所有接口前面都会有后台的基本地址
+  baseURL:'http://localhost:9090/api',  //全局统一加上后台基本前缀，所有接口前面都会有后台的基本地址
   timeout : 5000
 })
 
 //request 请求拦截器
-//可以在请求发送前对请求做一些处理
-//比如统一加token，对请求参数统一加密
+//统一加token，对请求参数统一加密
 request.interceptors.request.use(config =>{
   config.headers['Content-Type'] = 'application/json;charset=utf-8';
 

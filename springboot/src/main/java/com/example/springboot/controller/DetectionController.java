@@ -39,7 +39,7 @@ public class DetectionController {
     @Autowired
     MessageFactory messageFactory;
 
-    private static final Pattern SUFFIX_PATTERN = Pattern.compile("\\.(jpg|mp4|mp3)$");
+    private static final Pattern SUFFIX_PATTERN = Pattern.compile("\\.(png|jpg|mp4|mp3)$");
     private static final Random RANDOM = new Random();
 
     @PostMapping("/createForImage")
@@ -131,19 +131,20 @@ public class DetectionController {
             Image byId = imageService.getById(fileId);
             Detection detection = dectectionService.getByPath(byId.getPath());
             try {
-                sleep(6000);
+                sleep(100);
                 detection.setStatus("正在检测");
                 dectectionService.update(detection);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
             try {
-                sleep(60000);
+                sleep(1000);
                 detection.setStatus("检测完成");
                 String detectionNameWithoutSuffix = SUFFIX_PATTERN.matcher(detection.getName()).replaceFirst("");
-                int nameAsInt = Integer.parseInt(detectionNameWithoutSuffix);
+                char lastChar = detectionNameWithoutSuffix.charAt(detectionNameWithoutSuffix.length() - 1);
+                int lastDigit = Character.getNumericValue(lastChar);
 
-                if (nameAsInt % 2 == 0) {
+                if (lastDigit % 2 == 0) {
                     int randomResult = 20 + RANDOM.nextInt(21); // 20 to 40 inclusive
                     detection.setResult(randomResult);
                 } else {
@@ -177,9 +178,10 @@ public class DetectionController {
                 sleep(90000);
                 detection.setStatus("检测完成");
                 String detectionNameWithoutSuffix = SUFFIX_PATTERN.matcher(detection.getName()).replaceFirst("");
-                int nameAsInt = Integer.parseInt(detectionNameWithoutSuffix);
+                char lastChar = detectionNameWithoutSuffix.charAt(detectionNameWithoutSuffix.length() - 1);
+                int lastDigit = Character.getNumericValue(lastChar);
 
-                if (nameAsInt % 2 == 0) {
+                if (lastDigit % 2 == 0) {
                     int randomResult = 20 + RANDOM.nextInt(21); // 20 to 40 inclusive
                     detection.setResult(randomResult);
                 } else {
@@ -214,10 +216,11 @@ public class DetectionController {
                 sleep(90000);
                 detection.setStatus("检测完成");
                 String detectionNameWithoutSuffix = SUFFIX_PATTERN.matcher(detection.getName()).replaceFirst("");
-                int nameAsInt = Integer.parseInt(detectionNameWithoutSuffix);
+                char lastChar = detectionNameWithoutSuffix.charAt(detectionNameWithoutSuffix.length() - 1);
+                int lastDigit = Character.getNumericValue(lastChar);
 
                 int randomResult;
-                if (nameAsInt % 2 == 0) {
+                if (lastDigit % 2 == 0) {
                     randomResult = 70 + RANDOM.nextInt(21);
                 } else {
                     randomResult = 20 + RANDOM.nextInt(21);

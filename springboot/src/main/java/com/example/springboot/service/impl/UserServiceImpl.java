@@ -100,7 +100,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
         User user = null;
 
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://10.195.154.158:3306/deepfake",
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/deepfake",
                 "root", "root root")) {
             if (connection != null) {
                 System.out.println("数据库连接成功");

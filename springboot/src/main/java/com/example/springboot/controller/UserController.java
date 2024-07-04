@@ -54,7 +54,7 @@ public class UserController {
             //预先取出旧封面，以于后续删除
             String oldCover = user.getCover();
 
-            user.setCover("http://10.195.154.158:9090/api/user/download/" + flag + "?token=" + token);
+            user.setCover("http://localhost:9090/api/user/download/" + flag + "?token=" + token);
 //            String pathToCover = "../../../../../CoverFiles/" + flag + "_" + originalFilename;
 //            user.setCover(pathToCover);
             userService.update(user);

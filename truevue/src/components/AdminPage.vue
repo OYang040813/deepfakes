@@ -7,7 +7,7 @@
             <span>管理员功能</span>
           </div>
           <el-tabs type="card">
-            <el-tab-pane label="发布系统消息">
+            <el-tab-pane label="发布系统公告">
               <div class="tab-content post-message">
                 <el-form ref="form" :model="form" label-width="120px">
                   <el-form-item label="消息标题">

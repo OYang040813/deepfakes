@@ -91,7 +91,7 @@ export default {
 
       request.get('/user/' + this.user.id).then((res) => {
         this.user = res.data;
-        if (this.user.cover == '') {
+        if (this.user.cover === "" || this.user.cover == null) {
           this.avatar = require('@/assets/second.png'); // default avatar
         } else {
           this.avatar = this.user.cover;
