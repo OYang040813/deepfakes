@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class DectectionPageRequest extends BaseRequest {
-    private String style;
-    private String status;
+    private String cardnum;
     private Integer pid;
 }

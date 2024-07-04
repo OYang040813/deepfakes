@@ -1,14 +1,15 @@
 <template>
   <div class="detection-page">
+
     <h1 class="title">
       <i class="fas fa-table"></i> 检测页面
     </h1>
     <el-table :data="tableData" style="width: 100%">
+      <el-table-column prop="cardnum" label="检测号" width="180"></el-table-column>
       <el-table-column prop="name" label="文件名称" width="100"></el-table-column>
       <el-table-column prop="style" label="文件类型" width="100"></el-table-column>
-      <el-table-column prop="path" label="下载地址"></el-table-column>
-      <el-table-column prop="createtime" label="检测时间" width="180"></el-table-column>
-      <el-table-column prop="result" label="检测结果(真人概率)" min-width="16%">
+      <el-table-column prop="path" label="源文件下载地址"></el-table-column>
+      <el-table-column prop="result" label="检测结果(真人概率)" min-width="23%">
         <template slot-scope="scope">
           <div :class="{'result-high': scope.row.result > 50, 'result-low': scope.row.result <= 50}">
             {{ scope.row.result }}%
@@ -43,8 +44,6 @@ export default {
       params:{
         pageNum:1,
         pageSize:4,
-        style:'',
-        status:'',
         pid:'',
       },
     };
