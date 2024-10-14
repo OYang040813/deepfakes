@@ -64,7 +64,7 @@ public class DetectionServiceImpl extends ServiceImpl<DetectionMapper, Detection
         Image image = imageMapper.getById(fileId);
         //创建实例
         Detection detection = detectionFactory.create(pid, "图像检测", image.getName(), image.getPath(), image.getLocalpath(), image.getId());
-        Result result = runDetectionLocal(detection.getLocalpath(), MODEL_PATH, OUTPUT_FOLDER);
+//        Result result = runDetectionLocal(detection.getLocalpath(), MODEL_PATH, OUTPUT_FOLDER);
 
         return Result.success();
     }
@@ -102,7 +102,7 @@ public class DetectionServiceImpl extends ServiceImpl<DetectionMapper, Detection
         Video video = videoMapper.getById(fileId);
         //创建实例
         Detection detection = detectionFactory.create(pid, "视频检测", video.getName(), video.getPath(), video.getLocalpath(), video.getId());
-        Result result = runDetectionLocal(detection.getLocalpath(), MODEL_PATH, OUTPUT_FOLDER);
+//        Result result = runDetectionLocal(detection.getLocalpath(), MODEL_PATH, OUTPUT_FOLDER);
 
         return Result.success();
     }
@@ -113,7 +113,7 @@ public class DetectionServiceImpl extends ServiceImpl<DetectionMapper, Detection
         Audio audio = audioMapper.getById(fileId);
         //创建实例
         Detection detection = detectionFactory.create(pid, "音频检测", audio.getName(), audio.getPath(), audio.getLocalpath(), audio.getId());
-        Result result = runDetectionLocal(detection.getLocalpath(), MODEL_PATH, OUTPUT_FOLDER);
+//        Result result = runDetectionLocal(detection.getLocalpath(), MODEL_PATH, OUTPUT_FOLDER);
 
         return Result.success();
     }
