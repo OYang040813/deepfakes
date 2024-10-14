@@ -53,9 +53,9 @@ git clone https://github.com/OYang040813/deepfakes.git
 cd deepfakes
 
 # 启动项目前端
-cd vue
+cd truevue
 npm install
-npm run serve
+npm run dev
 
 # 启动项目后端
 cd ../springboot
@@ -65,6 +65,9 @@ mvn spring-boot:run
 # 初始化数据库
 在MySQL中创建一个数据库deepfake，并执行数据库初始化脚本
 deepfake.sql
+
+# 更改模型路径
+于com/example/springboot/service/impl/DetectionServiceImpl.java文件中修改检测模型路径
 
 # 使用根账号登陆系统
 账号：admin
