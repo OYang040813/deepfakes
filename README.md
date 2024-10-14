@@ -67,6 +67,7 @@ mvn spring-boot:run
 deepfake.sql
 
 # 更改模型路径
+因模型大小问题，未在仓库中给出，请先通过联系方式取得模型
 于com/example/springboot/service/impl/DetectionServiceImpl.java文件中修改检测模型路径
 
 # 使用根账号登陆系统
